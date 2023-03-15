@@ -80,11 +80,11 @@ function SignIn({navigation}: SignInScreenProps) {
   return (
     <DismissKeyboardView>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>이메일</Text>
+        <Text style={styles.label}>아이디</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
-          placeholder="이메일을 입력해주세요"
+          placeholder="아이디를 입력해주세요"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           autoComplete="email"
