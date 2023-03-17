@@ -45,15 +45,6 @@ function SignIn({navigation}: SignInScreenProps) {
     }
     try {
       setLoading(true);
-      // const response = await axios.get(
-      //   'https://www.maicosmos.com/RN/login.php',
-      //   {
-      //     params: {
-      //       email: email,
-      //       password: password,
-      //     },
-      //   },
-      // );
       const response = await axios.post('https://maicosmos.com/RN/login.php', {
         email,
         password,
