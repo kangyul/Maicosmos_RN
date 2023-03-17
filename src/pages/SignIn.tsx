@@ -49,9 +49,6 @@ function SignIn({navigation}: SignInScreenProps) {
         email,
         password,
       });
-      console.log('email: ' + response.data.email);
-      console.log('password: ' + response.data.password);
-      console.log('placeholder: ' + response.data.placeholder);
       Alert.alert('알림', '로그인 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
