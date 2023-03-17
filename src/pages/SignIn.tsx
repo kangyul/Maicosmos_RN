@@ -45,22 +45,31 @@ function SignIn({navigation}: SignInScreenProps) {
     }
     try {
       setLoading(true);
-      const response = await axios.post(`${Config.API_URL}/login`, {
-        email,
-        password,
-      });
-      console.log('율 로그인 테스트:' + response.data);
+      const response = await axios.get(
+        'https://www.maicosmos.com/RN/login.php',
+        {
+          params: {
+            email: email,
+            password: password,
+          },
+        },
+      );
+      // const response = await axios.post(
+      //   'https://www.maicosmos.com/RN/login.php',
+      //   data,
+      // );
+      console.log('message: ' + response.data.message);
       Alert.alert('알림', '로그인 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
-          name: response.data.data.name,
-          email: response.data.data.email,
-          accessToken: response.data.data.accessToken,
+          name: response.data.name,
+          email: response.data.email,
+          accessToken: response.data.accessToken,
         }),
       );
       await EncryptedStorage.setItem(
         'refreshToken',
-        response.data.data.refreshToken,
+        response.data.refreshToken,
       );
     } catch (error) {
       const errorResponse = (error as AxiosError).response;

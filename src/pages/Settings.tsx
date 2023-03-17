@@ -13,15 +13,15 @@ function Settings() {
   const dispatch = useAppDispatch();
   const onLogout = useCallback(async () => {
     try {
-      await axios.post(
-        `${Config.API_URL}/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      );
+      // await axios.post(
+      //   `${Config.API_URL}/logout`,
+      //   {},
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   },
+      // );
       Alert.alert('알림', '로그아웃 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
