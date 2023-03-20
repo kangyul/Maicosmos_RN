@@ -86,7 +86,7 @@ function AppInner() {
           <Stack.Screen
             name="SignUp"
             component={SignUp}
-            options={{title: '회원가입'}}
+            options={{title: '마이코스모스 회원가입'}}
           />
         </Stack.Navigator>
       )}

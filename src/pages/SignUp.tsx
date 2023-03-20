@@ -21,14 +21,21 @@ type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 function SignUp({navigation}: SignUpScreenProps) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [name, setName] = useState('');
+  const [nick, setNick] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef<TextInput | null>(null);
+  const idRef = useRef<TextInput | null>(null);
   const nameRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
+  const nickRef = useRef<TextInput | null>(null);
 
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
+  }, []);
+  const onChangeId = useCallback(text => {
+    setId(text.trim());
   }, []);
   const onChangeName = useCallback(text => {
     setName(text.trim());
@@ -36,12 +43,18 @@ function SignUp({navigation}: SignUpScreenProps) {
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
   }, []);
+  const onChangeNick = useCallback(text => {
+    setNick(text.trim());
+  }, []);
   const onSubmit = useCallback(async () => {
     if (loading) {
       return;
     }
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
+    }
+    if (!id || !id.trim()) {
+      return Alert.alert('알림', '아이디를 입력해주세요.');
     }
     if (!name || !name.trim()) {
       return Alert.alert('알림', '이름을 입력해주세요.');
@@ -66,12 +79,18 @@ function SignUp({navigation}: SignUpScreenProps) {
     try {
       setLoading(true);
       // http 메서드: get, put, patch, post, delete, head, options
-      const response = await axios.post(`${Config.API_URL}/user`, {
+      const response = await axios.post('https://maicosmos.com/RN/user.php', {
         email,
+        id,
         name,
+        nick,
         password,
       });
-      console.log(response);
+      console.log('이메일' + response.data.email);
+      console.log('아이디' + response.data.id);
+      console.log('이름' + response.data.name);
+      console.log('닉네임' + response.data.nick);
+      console.log('패스워드' + response.data.password);
       Alert.alert('알림', '회원가입 되었습니다.');
       navigation.navigate('SignIn');
     } catch (error) {
@@ -83,7 +102,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [navigation, loading, email, name, password]);
+  }, [navigation, loading, email, id, name, nick, password]);
 
   const canGoNext = email && name && password;
   return (
@@ -100,6 +119,22 @@ function SignUp({navigation}: SignUpScreenProps) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={emailRef}
+          onSubmitEditing={() => idRef.current?.focus()}
+          blurOnSubmit={false}
+        />
+      </View>
+      <View style={styles.inputWrapper}>
+        <Text style={styles.label}>아이디</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={onChangeId}
+          placeholder="아이디를 입력해주세요"
+          placeholderTextColor="#666"
+          textContentType="username"
+          value={id}
+          returnKeyType="next"
+          clearButtonMode="while-editing"
+          ref={idRef}
           onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
@@ -116,6 +151,22 @@ function SignUp({navigation}: SignUpScreenProps) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={nameRef}
+          onSubmitEditing={() => nickRef.current?.focus()}
+          blurOnSubmit={false}
+        />
+      </View>
+      <View style={styles.inputWrapper}>
+        <Text style={styles.label}>닉네임</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="닉네임을 입력해주세요."
+          placeholderTextColor="#666"
+          onChangeText={onChangeNick}
+          value={nick}
+          textContentType="nickname"
+          returnKeyType="next"
+          clearButtonMode="while-editing"
+          ref={nickRef}
           onSubmitEditing={() => passwordRef.current?.focus()}
           blurOnSubmit={false}
         />
