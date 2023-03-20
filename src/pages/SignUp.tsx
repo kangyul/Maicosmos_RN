@@ -25,10 +25,12 @@ function SignUp({navigation}: SignUpScreenProps) {
   const [name, setName] = useState('');
   const [nick, setNick] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const emailRef = useRef<TextInput | null>(null);
   const idRef = useRef<TextInput | null>(null);
   const nameRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
+  const password2Ref = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
 
   const onChangeEmail = useCallback(text => {
@@ -42,6 +44,9 @@ function SignUp({navigation}: SignUpScreenProps) {
   }, []);
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
+  }, []);
+  const onChangePassword2 = useCallback(text => {
+    setPassword2(text.trim());
   }, []);
   const onChangeNick = useCallback(text => {
     setNick(text.trim());
@@ -61,6 +66,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
+    }
+    if (password.trim() !== password2.trim()) {
+      return Alert.alert('알림', '비밀번호가 일치하지 않습니다.');
     }
     if (
       !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
@@ -85,12 +93,10 @@ function SignUp({navigation}: SignUpScreenProps) {
         name,
         nick,
         password,
+        password2,
       });
-      console.log('이메일:' + response.data.email);
       console.log('아이디:' + response.data.id);
       console.log('이름:' + response.data.name);
-      console.log('닉네임:' + response.data.nick);
-      console.log('패스워드:' + response.data.password);
       Alert.alert('알림:', '회원가입 되었습니다.');
       navigation.navigate('SignIn');
     } catch (error) {
@@ -102,7 +108,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [navigation, loading, email, id, name, nick, password]);
+  }, [navigation, loading, email, id, name, nick, password, password2]);
 
   const canGoNext = email && name && password;
   return (
@@ -185,6 +191,23 @@ function SignUp({navigation}: SignUpScreenProps) {
           returnKeyType="send"
           clearButtonMode="while-editing"
           ref={passwordRef}
+          onSubmitEditing={() => password2Ref.current?.focus()}
+        />
+      </View>
+      <View style={styles.inputWrapper}>
+        <Text style={styles.label}>비밀번호 확인</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="비밀번호를 다시 입력해주세요"
+          placeholderTextColor="#666"
+          onChangeText={onChangePassword2}
+          value={password2}
+          keyboardType={Platform.OS === 'android' ? 'default' : 'ascii-capable'}
+          textContentType="password"
+          secureTextEntry
+          returnKeyType="send"
+          clearButtonMode="while-editing"
+          ref={password2Ref}
           onSubmitEditing={onSubmit}
         />
       </View>
