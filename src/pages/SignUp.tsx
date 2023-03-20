@@ -75,7 +75,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         '비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.',
       );
     }
-    console.log(email, name, password);
+    console.log(email, name, password, id, nick);
     try {
       setLoading(true);
       // http 메서드: get, put, patch, post, delete, head, options
@@ -86,16 +86,16 @@ function SignUp({navigation}: SignUpScreenProps) {
         nick,
         password,
       });
-      console.log('이메일' + response.data.email);
-      console.log('아이디' + response.data.id);
-      console.log('이름' + response.data.name);
-      console.log('닉네임' + response.data.nick);
-      console.log('패스워드' + response.data.password);
-      Alert.alert('알림', '회원가입 되었습니다.');
+      console.log('이메일:' + response.data.email);
+      console.log('아이디:' + response.data.id);
+      console.log('이름:' + response.data.name);
+      console.log('닉네임:' + response.data.nick);
+      console.log('패스워드:' + response.data.password);
+      Alert.alert('알림:', '회원가입 되었습니다.');
       navigation.navigate('SignIn');
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
-      console.error(errorResponse);
+      // console.error(errorResponse);
       if (errorResponse) {
         Alert.alert('알림', errorResponse.data.message);
       }
