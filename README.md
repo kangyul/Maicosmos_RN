@@ -11,3 +11,4 @@
 
 ## Reference
 [제로초 리액트 네이티브 강의](https://github.com/ZeroCho/food-delivery-app) 
+[사진/동영상 업로드](https://www.reactnativeschool.com/how-to-upload-images-in-a-react-native-app)
