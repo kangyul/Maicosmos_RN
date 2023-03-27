@@ -3,6 +3,7 @@ import Orders from './src/pages/Orders';
 import Delivery from './src/pages/Delivery';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
+import ImageUpload from './src/pages/ImageUpload';
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
@@ -61,9 +62,9 @@ function AppInner() {
       {isLoggedIn ? (
         <Tab.Navigator>
           <Tab.Screen
-            name="Orders"
-            component={Orders}
-            options={{title: '오더 목록'}}
+            name="ImageUpload"
+            component={ImageUpload}
+            options={{title: '이미지/동영상 업로드'}}
           />
           <Tab.Screen
             name="Delivery"
