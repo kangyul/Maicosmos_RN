@@ -7,6 +7,7 @@ import {
 } from 'react-native-image-picker';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
+import Video from 'react-native-video';
 
 function ImageUpload() {
   // const [name, setName] = useState('');
@@ -81,6 +82,10 @@ function ImageUpload() {
             source={{uri: photo.assets[0].uri}}
             style={{width: 300, height: 300}}
           />
+          {/* <Video
+            source={{uri: photo.assets[0].uri}}
+            style={{width: 300, height: 300}}
+          /> */}
           <Button title="Upload" onPress={handleUpload} />
         </React.Fragment>
       )}
