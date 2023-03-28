@@ -9,8 +9,11 @@ import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
 
 function ImageUpload() {
+  // const [name, setName] = useState('');
+  // const [title, setTitle] = useState('');
   const [photo, setPhoto] = useState<ImagePickerResponse | null>(null);
   const userId = useSelector((state: RootState) => state.user.email);
+  const name = useSelector((state: RootState) => state.user.name);
 
   const handleChoosePhoto = () => {
     launchImageLibrary(
@@ -21,7 +24,6 @@ function ImageUpload() {
         includeBase64: true,
       },
       res => {
-        console.log('로그: ' + res);
         if (res.didCancel) return;
         setPhoto(res);
       },
@@ -31,6 +33,12 @@ function ImageUpload() {
   };
 
   const handleUpload = async () => {
+    // if (!name || !name.trim()) {
+    //   return Alert.alert('알림', '작가 이름을 입력해주세요.');
+    // }
+    // if (!title || !title.trim()) {
+    //   return Alert.alert('알림', '작품 제목을 입력해주세요.');
+    // }
     try {
       const data = new FormData();
       data.append('photo', {
@@ -40,6 +48,7 @@ function ImageUpload() {
       });
 
       data.append('userId', userId);
+      data.append('name', name);
 
       // http 메서드: get, put, patch, post, delete, head, options
       const response = await axios.post(
@@ -49,8 +58,9 @@ function ImageUpload() {
           headers: {'content-type': 'multipart/form-data'},
         },
       );
-      console.log('파일명: ' + response.data.file);
+      console.log('파일명: ' + response.data.fileName);
       console.log('What happened?' + response.data.message);
+      console.log('logData' + response.data.logData);
       Alert.alert('알림:', '이미지/동영상 업로드 완료!');
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
@@ -58,6 +68,8 @@ function ImageUpload() {
       if (errorResponse) {
         Alert.alert('알림', errorResponse.data.message);
       }
+    } finally {
+      setPhoto(null);
     }
   };
 
