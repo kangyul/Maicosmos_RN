@@ -1,18 +1,19 @@
 import axios, {AxiosError} from 'axios';
 import React, {useState} from 'react';
-import {View, Text, Image, Button, Platform, Alert} from 'react-native';
+import {View, Button, Alert, Image, Platform} from 'react-native';
 import {
   ImagePickerResponse,
   launchImageLibrary,
 } from 'react-native-image-picker';
 import {useSelector} from 'react-redux';
-import {RootState} from './src/store/reducer';
+import {RootState} from '../store/reducer';
 import Video from 'react-native-video';
 
 function ImageUpload() {
   // const [name, setName] = useState('');
   // const [title, setTitle] = useState('');
   const [photo, setPhoto] = useState<ImagePickerResponse | null>(null);
+  const [isPhoto, setIsPhoto] = useState(true);
   const userId = useSelector((state: RootState) => state.user.email);
   const name = useSelector((state: RootState) => state.user.name);
 
@@ -27,9 +28,13 @@ function ImageUpload() {
       res => {
         if (res.didCancel) return;
         setPhoto(res);
+        if (res.assets[0].type?.includes('video')) {
+          setIsPhoto(false);
+        } else {
+          setIsPhoto(true);
+        }
       },
     );
-
     // console.log(photo.assets[0].uri);
   };
 
@@ -45,8 +50,15 @@ function ImageUpload() {
       data.append('photo', {
         name: photo.assets[0].fileName,
         type: photo.assets[0].type,
-        uri: photo.assets[0].uri.replace('file://', ''),
+        uri:
+          Platform.OS === 'android'
+            ? photo.assets[0].uri
+            : photo.assets[0].uri.replace('file://', ''),
       });
+
+      console.log(
+        '기존 파일 위치:' + photo.assets[0].uri.replace('file://', ''),
+      );
 
       data.append('userId', userId);
       data.append('name', name);
@@ -59,9 +71,10 @@ function ImageUpload() {
           headers: {'content-type': 'multipart/form-data'},
         },
       );
-      console.log('파일명: ' + response.data.fileName);
-      console.log('What happened?' + response.data.message);
-      console.log('logData' + response.data.logData);
+      console.log('파일명: ' + response.data.file);
+      console.log('메세지: ' + response.data.message);
+      console.log('Upload flag: ' + response.data.flag);
+      // console.log('파일 타입: ' + response.data.fileType);
       Alert.alert('알림:', '이미지/동영상 업로드 완료!');
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
@@ -78,14 +91,17 @@ function ImageUpload() {
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {photo && (
         <React.Fragment>
-          <Image
-            source={{uri: photo.assets[0].uri}}
-            style={{width: 300, height: 300}}
-          />
-          {/* <Video
-            source={{uri: photo.assets[0].uri}}
-            style={{width: 300, height: 300}}
-          /> */}
+          {isPhoto ? (
+            <Image
+              source={{uri: photo.assets[0].uri}}
+              style={{width: 300, height: 300}}
+            />
+          ) : (
+            <Video
+              source={{uri: photo.assets[0].uri}}
+              style={{width: 300, height: 300}}
+            />
+          )}
           <Button title="Upload" onPress={handleUpload} />
         </React.Fragment>
       )}
