@@ -12,6 +12,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootState} from './src/store/reducer';
 import {useEffect} from 'react';
 import useSocket from './src/hooks/useSocket';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import axios, {AxiosError} from 'axios';
+import userSlice from './src/slices/user';
+import {Alert} from 'react-native';
+import {useAppDispatch} from './src/store';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -29,6 +34,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function AppInner() {
+  const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
   const [socket, disconnect] = useSocket();
 
@@ -56,6 +62,44 @@ function AppInner() {
       disconnect();
     }
   }, [isLoggedIn, disconnect]);
+
+  // 앱 실행 시 토큰 있으면 로그인하는 코드
+  useEffect(() => {
+    const getTokenAndRefresh = async () => {
+      try {
+        const token = await EncryptedStorage.getItem('refreshToken');
+        if (!token) {
+          console.log('토큰이 존재하지 않습니다.');
+          return;
+        } else {
+          console.log('토큰: ' + token);
+        }
+        const response = await axios.post(
+          'https://maicosmos.com/RN/refreshToken.php',
+          {
+            token,
+          },
+        );
+        console.log(response.data.name);
+        console.log(response.data.email);
+        console.log(response.data.accessToken);
+        dispatch(
+          userSlice.actions.setUser({
+            name: response.data.name,
+            email: response.data.email,
+            accessToken: response.data.accessToken,
+          }),
+        );
+      } catch (error) {
+        console.error(error);
+        Alert.alert('알림', '다시 로그인 해주세요.');
+        // if ((error as AxiosError).response?.data.code === 'expired') {
+        //   Alert.alert('알림', '다시 로그인 해주세요.');
+        // }
+      }
+    };
+    getTokenAndRefresh();
+  }, [dispatch]);
 
   return (
     <NavigationContainer>
@@ -96,3 +140,6 @@ function AppInner() {
 }
 
 export default AppInner;
+function dispatch(arg0: {payload: any; type: 'user/setUser'}) {
+  throw new Error('Function not implemented.');
+}
