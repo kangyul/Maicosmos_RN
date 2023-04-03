@@ -92,10 +92,9 @@ function AppInner() {
         );
       } catch (error) {
         console.error(error);
-        Alert.alert('알림', '다시 로그인 해주세요.');
-        // if ((error as AxiosError).response?.data.code === 'expired') {
-        //   Alert.alert('알림', '다시 로그인 해주세요.');
-        // }
+        if ((error as AxiosError).response?.data.code === 'expired') {
+          Alert.alert('알림', '다시 로그인 해주세요.');
+        }
       }
     };
     getTokenAndRefresh();
