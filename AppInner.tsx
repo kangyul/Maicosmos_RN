@@ -17,6 +17,7 @@ import axios, {AxiosError} from 'axios';
 import userSlice from './src/slices/user';
 import {Alert} from 'react-native';
 import {useAppDispatch} from './src/store';
+import SplashScreen from 'react-native-splash-screen';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -69,10 +70,8 @@ function AppInner() {
       try {
         const token = await EncryptedStorage.getItem('refreshToken');
         if (!token) {
-          console.log('토큰이 존재하지 않습니다.');
+          SplashScreen.hide();
           return;
-        } else {
-          console.log('토큰: ' + token);
         }
         const response = await axios.post(
           'https://maicosmos.com/RN/refreshToken.php',
@@ -95,6 +94,9 @@ function AppInner() {
         if ((error as AxiosError).response?.data.code === 'expired') {
           Alert.alert('알림', '다시 로그인 해주세요.');
         }
+      } finally {
+        console.log('finally completed');
+        SplashScreen.hide();
       }
     };
     getTokenAndRefresh();
@@ -139,6 +141,3 @@ function AppInner() {
 }
 
 export default AppInner;
-function dispatch(arg0: {payload: any; type: 'user/setUser'}) {
-  throw new Error('Function not implemented.');
-}
