@@ -16,11 +16,7 @@ import userSlice from './src/slices/user';
 import {Alert} from 'react-native';
 import {useAppDispatch} from './src/store';
 import SplashScreen from 'react-native-splash-screen';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
+import Ionic from 'react-native-vector-icons/Ionicons';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -83,23 +79,41 @@ function AppInner() {
     <NavigationContainer>
       {isLoggedIn ? (
         <Tab.Navigator
-          tabBarOptions={{
-            showLabel: false,
-          }}>
+          screenOptions={({route}) => ({
+            tabBarActiveTintColor: 'black',
+            tabBarInactiveTintColor: 'black',
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              backgroundColor: '#B2A4FF',
+              height: 60,
+            },
+            tabBarIcon: ({focused, size, color}) => {
+              let iconName;
+              if (route.name === 'Community') {
+                iconName = focused ? 'globe' : 'globe-outline';
+                size = focused ? size + 8 : size + 5;
+              } else if (route.name === 'ImageUpload') {
+                iconName = focused ? 'add-circle' : 'add-circle-outline';
+                size = focused ? size + 23 : size + 20;
+              } else if (route.name === 'Settings') {
+                iconName = focused ? 'person-circle' : 'person-circle-outline';
+                size = focused ? size + 8 : size + 5;
+              }
+              return <Ionic name={iconName} size={size} color={color} />;
+            },
+          })}>
           <Tab.Screen
             name="Community"
             component={Community}
             options={{
               title: '커뮤니티',
-              tabBarIcon: () => <Fontisto name="world-o" size={25} />,
             }}
           />
           <Tab.Screen
             name="ImageUpload"
             component={ImageUpload}
             options={{
-              title: '이지/동영상 업로드',
-              tabBarIcon: () => <Octicons name="plus-circle" size={30} />,
+              title: '이미지/동영상 업로드',
             }}
           />
           <Tab.Screen
@@ -107,7 +121,6 @@ function AppInner() {
             component={Settings}
             options={{
               title: '내 정보',
-              tabBarIcon: () => <FontAwesome name="user-circle-o" size={25} />,
             }}
           />
         </Tab.Navigator>
