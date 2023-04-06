@@ -1,9 +1,8 @@
 import Settings from './src/pages/Settings';
-import Orders from './src/pages/Orders';
-import Delivery from './src/pages/Delivery';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import ImageUpload from './src/pages/ImageUpload';
+import Community from './src/pages/Community';
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
@@ -11,7 +10,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootState} from './src/store/reducer';
 import {useEffect} from 'react';
-import useSocket from './src/hooks/useSocket';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios, {AxiosError} from 'axios';
 import userSlice from './src/slices/user';
@@ -37,32 +35,6 @@ const Stack = createNativeStackNavigator();
 function AppInner() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  const [socket, disconnect] = useSocket();
-
-  // 키-값
-
-  useEffect(() => {
-    const helloCallback = (data: any) => {
-      console.log(data);
-    };
-    if (socket && isLoggedIn) {
-      console.log(socket);
-      socket.emit('login', 'hello');
-      socket.on('hello', helloCallback);
-    }
-    return () => {
-      if (socket) {
-        socket.off('hello', helloCallback);
-      }
-    };
-  }, [isLoggedIn, socket]);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      console.log('!isLoggedIn', !isLoggedIn);
-      disconnect();
-    }
-  }, [isLoggedIn, disconnect]);
 
   // 앱 실행 시 토큰 있으면 로그인하는 코드
   useEffect(() => {
@@ -107,14 +79,14 @@ function AppInner() {
       {isLoggedIn ? (
         <Tab.Navigator>
           <Tab.Screen
+            name="커뮤니티"
+            component={Community}
+            options={{title: '커뮤니티'}}
+          />
+          <Tab.Screen
             name="ImageUpload"
             component={ImageUpload}
             options={{title: '이미지/동영상 업로드'}}
-          />
-          <Tab.Screen
-            name="Delivery"
-            component={Delivery}
-            options={{headerShown: false}}
           />
           <Tab.Screen
             name="Settings"
