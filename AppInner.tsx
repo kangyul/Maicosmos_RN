@@ -16,6 +16,11 @@ import userSlice from './src/slices/user';
 import {Alert} from 'react-native';
 import {useAppDispatch} from './src/store';
 import SplashScreen from 'react-native-splash-screen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -77,21 +82,33 @@ function AppInner() {
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <Tab.Navigator>
+        <Tab.Navigator
+          tabBarOptions={{
+            showLabel: false,
+          }}>
           <Tab.Screen
-            name="커뮤니티"
+            name="Community"
             component={Community}
-            options={{title: '커뮤니티'}}
+            options={{
+              title: '커뮤니티',
+              tabBarIcon: () => <Fontisto name="world-o" size={25} />,
+            }}
           />
           <Tab.Screen
             name="ImageUpload"
             component={ImageUpload}
-            options={{title: '이미지/동영상 업로드'}}
+            options={{
+              title: '이지/동영상 업로드',
+              tabBarIcon: () => <Octicons name="plus-circle" size={30} />,
+            }}
           />
           <Tab.Screen
             name="Settings"
             component={Settings}
-            options={{title: '내 정보'}}
+            options={{
+              title: '내 정보',
+              tabBarIcon: () => <FontAwesome name="user-circle-o" size={25} />,
+            }}
           />
         </Tab.Navigator>
       ) : (
