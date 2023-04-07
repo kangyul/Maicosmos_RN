@@ -3,7 +3,7 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import ImageUpload from './src/pages/ImageUpload';
 import Community from './src/pages/Community';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, SafeAreaView} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -36,6 +36,7 @@ const Stack = createNativeStackNavigator();
 function AppInner() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
+  // const insets = useSafeAreaInsets();
 
   // 앱 실행 시 토큰 있으면 로그인하는 코드
   useEffect(() => {
@@ -84,20 +85,19 @@ function AppInner() {
             tabBarInactiveTintColor: 'black',
             tabBarShowLabel: false,
             tabBarStyle: {
-              backgroundColor: '#B2A4FF',
-              height: 60,
+              backgroundColor: '#fff',
             },
             tabBarIcon: ({focused, size, color}) => {
               let iconName;
               if (route.name === 'Community') {
                 iconName = focused ? 'globe' : 'globe-outline';
-                size = focused ? size + 8 : size + 5;
+                size = focused ? size + 18 : size + 15;
               } else if (route.name === 'ImageUpload') {
                 iconName = focused ? 'add-circle' : 'add-circle-outline';
                 size = focused ? size + 23 : size + 20;
               } else if (route.name === 'Settings') {
                 iconName = focused ? 'person-circle' : 'person-circle-outline';
-                size = focused ? size + 8 : size + 5;
+                size = focused ? size + 18 : size + 15;
               }
               return <Ionic name={iconName} size={size} color={color} />;
             },
