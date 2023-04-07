@@ -93,6 +93,7 @@ function Community() {
                 },
                 shadowOpacity: 0.3,
                 shadowRadius: 20,
+                opacity,
                 transform: [{scale}],
               }}>
               <Image style={styles.group} source={{uri: item.logo}} />
