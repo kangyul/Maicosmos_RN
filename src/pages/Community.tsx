@@ -9,6 +9,7 @@ import {
   Alert,
   StatusBar,
   Animated,
+  Platform,
 } from 'react-native';
 
 // const BG_IMAGE = require('../../assets/images/community_wall_paper.jpg');
@@ -95,6 +96,7 @@ function Community() {
                 shadowRadius: 20,
                 opacity,
                 transform: [{scale}],
+                elevation: 9,
               }}>
               <Image style={styles.group} source={{uri: item.logo}} />
               <View>
@@ -140,16 +142,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: '700',
-    fontSize: 22,
+    fontSize: Platform.OS === 'ios' ? 22 : 20,
     marginBottom: 5,
   },
   location: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'ios' ? 18 : 16,
     opacity: 0.7,
     marginBottom: 3,
   },
   galleryCount: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'ios' ? 16 : 14,
     opacity: 0.8,
     color: '#0099cc',
   },
