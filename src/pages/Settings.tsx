@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: 'black',
   },
   loginButtonText: {
     color: 'white',
