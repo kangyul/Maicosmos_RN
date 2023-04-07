@@ -53,9 +53,6 @@ function AppInner() {
             token,
           },
         );
-        console.log(response.data.name);
-        console.log(response.data.email);
-        console.log(response.data.accessToken);
         dispatch(
           userSlice.actions.setUser({
             name: response.data.name,
@@ -69,7 +66,6 @@ function AppInner() {
           Alert.alert('알림', '다시 로그인 해주세요.');
         }
       } finally {
-        console.log('finally completed');
         SplashScreen.hide();
       }
     };
