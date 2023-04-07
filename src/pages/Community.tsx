@@ -84,7 +84,7 @@ function Community() {
                 flexDirection: 'row',
                 padding: SPACING,
                 marginBottom: SPACING,
-                backgroundColor: 'rgba(255,255,255,0.8)',
+                backgroundColor: 'rgba(255,255,255,1)',
                 borderRadius: 16,
                 alignItems: 'center',
                 shadowColor: '#000',
@@ -101,10 +101,10 @@ function Community() {
               <Image style={styles.group} source={{uri: item.logo}} />
               <View>
                 <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.location}>
-                  서울특별시 동대문구 회기로10길 63
+                <Text style={styles.location}>{item.street_address}</Text>
+                <Text style={styles.galleryCount}>
+                  갤러리 수: {item.gallery_cnt}
                 </Text>
-                <Text style={styles.galleryCount}>갤러리 수: 10</Text>
               </View>
             </Animated.View>
           );
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: SPACING,
     marginBottom: SPACING,
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: 'rgba(255,255,255,1)',
     borderRadius: 16,
     alignItems: 'center',
     shadowColor: '#000',
@@ -142,22 +142,22 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: '700',
-    fontSize: Platform.OS === 'ios' ? 22 : 20,
+    fontSize: Platform.OS === 'ios' ? 22 : 14,
     marginBottom: 5,
   },
   location: {
-    fontSize: Platform.OS === 'ios' ? 18 : 16,
+    fontSize: Platform.OS === 'ios' ? 18 : 14,
     opacity: 0.7,
     marginBottom: 3,
   },
   galleryCount: {
-    fontSize: Platform.OS === 'ios' ? 16 : 14,
+    fontSize: Platform.OS === 'ios' ? 16 : 12,
     opacity: 0.8,
     color: '#0099cc',
   },
   group: {
-    height: 70,
-    width: 70,
+    height: Platform.OS === 'ios' ? 70 : 60,
+    width: Platform.OS === 'ios' ? 70 : 60,
     borderRadius: 100,
     marginRight: SPACING / 2,
   },
