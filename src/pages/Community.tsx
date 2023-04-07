@@ -93,12 +93,9 @@ function Community() {
                 },
                 shadowOpacity: 0.3,
                 shadowRadius: 20,
-                opacity,
                 transform: [{scale}],
               }}>
-              <View style={styles.groupContainer}>
-                <Image style={styles.group} source={{uri: item.logo}} />
-              </View>
+              <Image style={styles.group} source={{uri: item.logo}} />
               <View>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.location}>
@@ -154,13 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.8,
     color: '#0099cc',
-  },
-  groupContainer: {
-    borderRadius: 100,
-    height: 89,
-    width: 89,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   group: {
     height: 70,
