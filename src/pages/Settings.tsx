@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -19,8 +19,16 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import {Text} from 'react-native-paper';
 
 function Settings() {
+  const [nick, setNick] = useState('');
+  const [about, setAbout] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [galleryCnt, setGalleryCnt] = useState(0);
+  const [friendCnt, setFriendCnt] = useState(0);
+  const [imageCnt, setImageCnt] = useState(0);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
+  const userId = useSelector((state: RootState) => state.user.email);
+
   const onLogout = useCallback(async () => {
     try {
       // await axios.post(
@@ -47,15 +55,38 @@ function Settings() {
     }
   }, [accessToken, dispatch]);
 
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/userInfo.php',
+          {
+            userId,
+          },
+        );
+
+        setNick(response.data.nick);
+        setAbout(response.data.profile);
+        setProfileImage(response.data.profileImg);
+        setGalleryCnt(response.data.galleryCnt);
+        setFriendCnt(response.data.friendCnt);
+        setImageCnt(response.data.imageCnt);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    };
+    getUserInfo();
+  }, [userId]);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <Image
-          style={styles.userImg}
-          source={require('../../assets/image/community_wall_paper.png')}
-        />
-        <Text style={styles.userName}>제주감귤</Text>
-        <Text style={styles.aboutUser}>Blueberry Bagels are the best.</Text>
+        <Image style={styles.userImg} source={{uri: profileImage}} />
+        <Text style={styles.userName}>{nick}</Text>
+        <Text style={styles.aboutUser}>{about}</Text>
         <View style={styles.userBtnWrapper}>
           <TouchableOpacity style={styles.userBtn}>
             <Text style={styles.userBtnTxt}>정보수정</Text>
@@ -67,15 +98,15 @@ function Settings() {
 
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>3</Text>
+            <Text style={styles.userInfoTitle}>{galleryCnt}</Text>
             <Text style={styles.userInfoSubTitle}>갤러리 수</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>4</Text>
+            <Text style={styles.userInfoTitle}>{friendCnt}</Text>
             <Text style={styles.userInfoSubTitle}>친구 수</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>12</Text>
+            <Text style={styles.userInfoTitle}>{imageCnt}</Text>
             <Text style={styles.userInfoSubTitle}>작품 수</Text>
           </View>
         </View>
