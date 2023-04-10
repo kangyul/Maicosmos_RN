@@ -1,5 +1,14 @@
 import React, {useCallback} from 'react';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import axios, {AxiosError} from 'axios';
 import Config from 'react-native-config';
 import {useAppDispatch} from '../store';
@@ -7,6 +16,7 @@ import userSlice from '../slices/user';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import {Text} from 'react-native-paper';
 
 function Settings() {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
@@ -38,26 +48,179 @@ function Settings() {
   }, [accessToken, dispatch]);
 
   return (
-    <View>
-      <View style={styles.buttonZone}>
-        <Pressable
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <Image
+          style={styles.userImg}
+          source={require('../../assets/image/community_wall_paper.png')}
+        />
+        <Text style={styles.userName}>제주감귤</Text>
+        <Text style={styles.aboutUser}>Blueberry Bagels are the best.</Text>
+        <View style={styles.userBtnWrapper}>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.userBtnTxt}>정보수정</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.userBtnTxt}>로그아웃</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.userInfoWrapper}>
+          <View style={styles.userInfoItem}>
+            <Text style={styles.userInfoTitle}>3</Text>
+            <Text style={styles.userInfoSubTitle}>갤러리 수</Text>
+          </View>
+          <View style={styles.userInfoItem}>
+            <Text style={styles.userInfoTitle}>4</Text>
+            <Text style={styles.userInfoSubTitle}>친구 수</Text>
+          </View>
+          <View style={styles.userInfoItem}>
+            <Text style={styles.userInfoTitle}>12</Text>
+            <Text style={styles.userInfoSubTitle}>작품 수</Text>
+          </View>
+        </View>
+        <View style={{alignContent: 'flex-end', marginBottom: 20}}>
+          <Text style={{fontWeight: 'bold', fontSize: 18}}>개인 갤러리</Text>
+        </View>
+        <View>
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+        </View>
+        <View
+          style={{alignContent: 'flex-end', marginTop: 20, marginBottom: 20}}>
+          <Text style={{fontWeight: 'bold', fontSize: 18}}>작품</Text>
+        </View>
+        <View>
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+          <Image
+            style={{
+              width: '100%',
+              height: 210,
+              borderRadius: 20,
+              marginBottom: 20,
+            }}
+            source={require('../../assets/image/community_wall_paper.png')}
+          />
+        </View>
+        {/* <Pressable
           style={StyleSheet.compose(
             styles.loginButton,
             styles.loginButtonActive,
           )}
           onPress={onLogout}>
           <Text style={styles.loginButtonText}>로그아웃</Text>
-        </Pressable>
-      </View>
-    </View>
+        </Pressable> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonZone: {
-    alignItems: 'center',
-    paddingTop: 20,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 20,
   },
+  userImg: {
+    height: 150,
+    width: 150,
+    borderRadius: 75,
+    alignSelf: 'center',
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  aboutUser: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  userBtnWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 10,
+  },
+  userBtn: {
+    borderColor: '#2e64e5',
+    borderWidth: 2,
+    borderRadius: 3,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginHorizontal: 5,
+  },
+  userBtnTxt: {
+    color: '#2e64e5',
+  },
+  userInfoWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginVertical: 20,
+  },
+  userInfoItem: {
+    justifyContent: 'center',
+  },
+  userInfoTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  userInfoSubTitle: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
+  },
+
   loginButton: {
     backgroundColor: 'gray',
     paddingHorizontal: 20,
