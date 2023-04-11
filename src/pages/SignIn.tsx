@@ -100,7 +100,7 @@ function SignIn({navigation}: SignInScreenProps) {
         <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
+          placeholder="비밀번호를 입력해주세요"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           onChangeText={onChangePassword}
