@@ -41,6 +41,7 @@ function Settings() {
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isListEnd, setIsListEnd] = useState(false);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.email);
@@ -109,9 +110,9 @@ function Settings() {
             offset: currentPage,
           },
         );
-        console.log('현재 페이지: ' + currentPage);
-        console.log(response.data.image[0].url);
-        console.log('마지막 페이지: ' + response.data.listEnd);
+        if (response.data.listEnd) {
+          setIsListEnd(true);
+        }
         setImages([...images, ...response.data.image]);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
@@ -142,7 +143,9 @@ function Settings() {
   };
 
   const loadMoreItem = () => {
-    setCurrentPage(currentPage + 1);
+    if (!isListEnd) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
@@ -215,6 +218,7 @@ const styles = StyleSheet.create({
     width: 150,
     borderRadius: 75,
     alignSelf: 'center',
+    marginTop: 20,
   },
   userName: {
     fontSize: 18,
