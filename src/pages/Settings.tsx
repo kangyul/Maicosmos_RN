@@ -8,15 +8,27 @@ import {
   ScrollView,
   TouchableOpacity,
   View,
+  Text,
+  ActivityIndicator,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
-import Config from 'react-native-config';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/user';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {Text} from 'react-native-paper';
+
+const randomImages = [
+  {
+    url: 'https://www.maicosmos.com/Thumbs/IMG-634627c0544d67.17083191.jpg',
+  },
+  {
+    url: 'https://www.maicosmos.com/Thumbs/IMG-63465ec90cb3e4.02608400.jpeg',
+  },
+  {
+    url: 'https://www.maicosmos.com/Thumbs/VID-63465ee4a36939.30839018.png',
+  },
+];
 
 function Settings() {
   const [nick, setNick] = useState('');
@@ -25,6 +37,10 @@ function Settings() {
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [friendCnt, setFriendCnt] = useState(0);
   const [imageCnt, setImageCnt] = useState(0);
+  const [galleries, setGalleries] = useState([]);
+  const [images, setImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.email);
@@ -71,6 +87,7 @@ function Settings() {
         setGalleryCnt(response.data.galleryCnt);
         setFriendCnt(response.data.friendCnt);
         setImageCnt(response.data.imageCnt);
+        setGalleries(response.data.gallery);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -81,109 +98,109 @@ function Settings() {
     getUserInfo();
   }, [userId]);
 
+  useEffect(() => {
+    const getUserImages = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/artworks.php',
+          {
+            userId,
+            offset: currentPage,
+          },
+        );
+        console.log('현재 페이지: ' + currentPage);
+        console.log(response.data.image[0].url);
+        console.log('마지막 페이지: ' + response.data.listEnd);
+        setImages([...images, ...response.data.image]);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getUserImages();
+  }, [userId, currentPage]);
+
+  const renderItem = ({item}) => {
+    return (
+      <View>
+        <Image style={styles.personalGallery} source={{uri: item.url}} />
+      </View>
+    );
+  };
+
+  const renderLoader = () => {
+    return isLoading ? (
+      <View style={styles.loaderStyle}>
+        <ActivityIndicator size="large" color="#aaa" />
+      </View>
+    ) : null;
+  };
+
+  const loadMoreItem = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <Image style={styles.userImg} source={{uri: profileImage}} />
-        <Text style={styles.userName}>{nick}</Text>
-        <Text style={styles.aboutUser}>{about}</Text>
-        <View style={styles.userBtnWrapper}>
-          <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt}>정보수정</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt}>로그아웃</Text>
-          </TouchableOpacity>
-        </View>
+      <FlatList
+        data={images}
+        ListHeaderComponent={
+          <View>
+            <Image style={styles.userImg} source={{uri: profileImage}} />
+            <Text style={styles.userName}>{nick}</Text>
+            <Text style={styles.aboutUser}>{about}</Text>
+            <View style={styles.userBtnWrapper}>
+              <TouchableOpacity style={styles.userBtn}>
+                <Text style={styles.userBtnTxt}>정보수정</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.userBtn} onPress={onLogout}>
+                <Text style={styles.userBtnTxt}>로그아웃</Text>
+              </TouchableOpacity>
+            </View>
 
-        <View style={styles.userInfoWrapper}>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>{galleryCnt}</Text>
-            <Text style={styles.userInfoSubTitle}>갤러리 수</Text>
+            <View style={styles.userInfoWrapper}>
+              <View style={styles.userInfoItem}>
+                <Text style={styles.userInfoTitle}>{galleryCnt}</Text>
+                <Text style={styles.userInfoSubTitle}>갤러리 수</Text>
+              </View>
+              <View style={styles.userInfoItem}>
+                <Text style={styles.userInfoTitle}>{friendCnt}</Text>
+                <Text style={styles.userInfoSubTitle}>친구 수</Text>
+              </View>
+              <View style={styles.userInfoItem}>
+                <Text style={styles.userInfoTitle}>{imageCnt}</Text>
+                <Text style={styles.userInfoSubTitle}>작품 수</Text>
+              </View>
+            </View>
+            <View style={styles.listTitle}>
+              <Text style={styles.listTitleText}>개인 갤러리</Text>
+            </View>
+            <View style={{paddingHorizontal: 20}}>
+              {galleries.map(gallery => (
+                <Image
+                  key={gallery.key}
+                  style={styles.personalGallery}
+                  source={{uri: gallery.url}}
+                />
+              ))}
+            </View>
+            <View style={styles.listTitle}>
+              <Text style={styles.listTitleText}>작품</Text>
+            </View>
           </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>{friendCnt}</Text>
-            <Text style={styles.userInfoSubTitle}>친구 수</Text>
-          </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>{imageCnt}</Text>
-            <Text style={styles.userInfoSubTitle}>작품 수</Text>
-          </View>
-        </View>
-        <View style={{alignContent: 'flex-end', marginBottom: 20}}>
-          <Text style={{fontWeight: 'bold', fontSize: 18}}>개인 갤러리</Text>
-        </View>
-        <View>
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-        </View>
-        <View
-          style={{alignContent: 'flex-end', marginTop: 20, marginBottom: 20}}>
-          <Text style={{fontWeight: 'bold', fontSize: 18}}>작품</Text>
-        </View>
-        <View>
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-          <Image
-            style={{
-              width: '100%',
-              height: 210,
-              borderRadius: 20,
-              marginBottom: 20,
-            }}
-            source={require('../../assets/image/community_wall_paper.png')}
-          />
-        </View>
-        {/* <Pressable
-          style={StyleSheet.compose(
-            styles.loginButton,
-            styles.loginButtonActive,
-          )}
-          onPress={onLogout}>
-          <Text style={styles.loginButtonText}>로그아웃</Text>
-        </Pressable> */}
-      </ScrollView>
+        }
+        renderItem={renderItem}
+        ListFooterComponent={renderLoader}
+        keyExtractor={item => item.key}
+        onEndReached={loadMoreItem}
+        onEndReachedThreshold={0}
+        showsHorizontalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 }
@@ -192,7 +209,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
   },
   userImg: {
     height: 150,
@@ -251,7 +267,15 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
   },
-
+  listTitle: {
+    alignContent: 'flex-end',
+    marginBottom: 20,
+    paddingHorizontal: 20,
+  },
+  listTitleText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
   loginButton: {
     backgroundColor: 'gray',
     paddingHorizontal: 20,
@@ -265,6 +289,16 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: 'white',
     fontSize: 16,
+  },
+  personalGallery: {
+    width: '100%',
+    height: 210,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  loaderStyle: {
+    marginVertical: 16,
+    alignItems: 'center',
   },
 });
 
