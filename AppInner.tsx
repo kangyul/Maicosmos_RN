@@ -17,6 +17,7 @@ import {Alert} from 'react-native';
 import {useAppDispatch} from './src/store';
 import SplashScreen from 'react-native-splash-screen';
 import Ionic from 'react-native-vector-icons/Ionicons';
+import Foundation from 'react-native-vector-icons/Foundation';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -86,16 +87,18 @@ function AppInner() {
             tabBarIcon: ({focused, size, color}) => {
               let iconName;
               if (route.name === 'Community') {
-                iconName = focused ? 'globe' : 'globe-outline';
-                size = focused ? size + 18 : size + 15;
+                iconName = focused ? 'home' : 'home';
+                // size = focused ? size + 18 : size + 15;
+                return <Foundation name={iconName} size={size} color={color} />;
               } else if (route.name === 'ImageUpload') {
                 iconName = focused ? 'add-circle' : 'add-circle-outline';
-                size = focused ? size + 23 : size + 20;
+                // size = focused ? size + 23 : size + 20;
+                return <Ionic name={iconName} size={size} color={color} />;
               } else if (route.name === 'Settings') {
                 iconName = focused ? 'person-circle' : 'person-circle-outline';
-                size = focused ? size + 18 : size + 15;
+                // size = focused ? size + 18 : size + 15;
+                return <Ionic name={iconName} size={size} color={color} />;
               }
-              return <Ionic name={iconName} size={size} color={color} />;
             },
           })}>
           <Tab.Screen
