@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -77,13 +78,16 @@ function SignIn({navigation}: SignInScreenProps) {
 
   const canGoNext = email && password;
   return (
-    <DismissKeyboardView>
+    <DismissKeyboardView style={styles.backGround}>
+      <Image
+        style={styles.signInImage}
+        source={require('../../assets/image/sign_logo.png')}
+      />
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>아이디</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
-          placeholder="아이디를 입력해주세요"
+          placeholder="아이디"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           autoComplete="email"
@@ -97,10 +101,9 @@ function SignIn({navigation}: SignInScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 입력해주세요"
+          placeholder="비밀번호"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           onChangeText={onChangePassword}
@@ -126,29 +129,40 @@ function SignIn({navigation}: SignInScreenProps) {
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text style={styles.loginButtonText}>로그인</Text>
+            <Text style={styles.loginButtonText}>아이디로 로그인</Text>
           )}
         </Pressable>
-        <Pressable onPress={toSignUp}>
-          <Text>회원가입하기</Text>
-        </Pressable>
+        <View style={styles.optionZone}>
+          <Pressable style={styles.searchPressable}>
+            <Text style={styles.searchText}>비밀번호 찾기</Text>
+          </Pressable>
+          <Pressable style={styles.searchPressable}>
+            <Text style={styles.searchText}>아이디 찾기</Text>
+          </Pressable>
+          <Pressable onPress={toSignUp}>
+            <Text style={styles.signUpText}>회원가입 </Text>
+          </Pressable>
+        </View>
       </View>
     </DismissKeyboardView>
   );
 }
 
 const styles = StyleSheet.create({
+  backGround: {
+    backgroundColor: '#fff',
+  },
   textInput: {
-    padding: 5,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 15,
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: 'rgba(224, 224, 224, 1)',
+    height: 50,
+    fontSize: 15,
   },
   inputWrapper: {
-    padding: 20,
-  },
-  label: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
   },
   buttonZone: {
     alignItems: 'center',
@@ -156,16 +170,48 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: 'gray',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 16,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 20,
+    marginTop: 10,
+    width: '90%',
   },
   loginButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: 'rgba(0, 196, 255, 1)',
   },
   loginButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  optionZone: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  signUpText: {
+    color: 'rgba(0, 196, 255, 1)',
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  searchPressable: {
+    borderRightWidth: 1,
+    borderColor: 'rgba(218, 218, 218, 1)',
+    paddingRight: 10,
+    marginRight: 10,
+  },
+  searchText: {
+    marginRight: 0,
+    color: '#757575',
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  signInImage: {
+    width: 124,
+    height: 124,
+    alignSelf: 'center',
+    marginTop: '50%',
+    marginBottom: '5%',
   },
 });
 
