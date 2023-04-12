@@ -9,6 +9,7 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../AppInner';
@@ -110,15 +111,18 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
   }, [navigation, loading, email, id, name, nick, password, password2]);
 
-  const canGoNext = email && name && password;
+  const canGoNext = email && id && name && password && nick && password2;
   return (
-    <DismissKeyboardView>
+    <DismissKeyboardView style={styles.backGround}>
+      <Image
+        style={styles.signInImage}
+        source={require('../../assets/image/sign_logo.png')}
+      />
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>이메일</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
-          placeholder="이메일을 입력해주세요"
+          placeholder="이메일"
           placeholderTextColor="#666"
           textContentType="emailAddress"
           value={email}
@@ -130,11 +134,10 @@ function SignUp({navigation}: SignUpScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>아이디</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeId}
-          placeholder="아이디를 입력해주세요"
+          placeholder="아이디"
           placeholderTextColor="#666"
           textContentType="username"
           value={id}
@@ -146,10 +149,9 @@ function SignUp({navigation}: SignUpScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>이름</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="이름을 입력해주세요."
+          placeholder="이름"
           placeholderTextColor="#666"
           onChangeText={onChangeName}
           value={name}
@@ -162,10 +164,9 @@ function SignUp({navigation}: SignUpScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>닉네임</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="닉네임을 입력해주세요."
+          placeholder="닉네임"
           placeholderTextColor="#666"
           onChangeText={onChangeNick}
           value={nick}
@@ -178,16 +179,16 @@ function SignUp({navigation}: SignUpScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
+          placeholder="비밀번호"
           placeholderTextColor="#666"
           onChangeText={onChangePassword}
           value={password}
           keyboardType={Platform.OS === 'android' ? 'default' : 'ascii-capable'}
-          textContentType="password"
-          secureTextEntry
+          secureTextEntry={true}
+          textContentType="oneTimeCode"
+          blurOnSubmit={false}
           returnKeyType="send"
           clearButtonMode="while-editing"
           ref={passwordRef}
@@ -195,16 +196,15 @@ function SignUp({navigation}: SignUpScreenProps) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>비밀번호 확인</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 다시 입력해주세요"
+          placeholder="비밀번호 확인"
           placeholderTextColor="#666"
           onChangeText={onChangePassword2}
           value={password2}
           keyboardType={Platform.OS === 'android' ? 'default' : 'ascii-capable'}
-          textContentType="password"
-          secureTextEntry
+          secureTextEntry={true}
+          textContentType="oneTimeCode"
           returnKeyType="send"
           clearButtonMode="while-editing"
           ref={password2Ref}
@@ -232,12 +232,27 @@ function SignUp({navigation}: SignUpScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  backGround: {
+    backgroundColor: '#fff',
+  },
+  signInImage: {
+    width: 124,
+    height: 124,
+    alignSelf: 'center',
+    marginTop: '10%',
+    marginBottom: '5%',
+  },
   textInput: {
-    padding: 5,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 15,
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: 'rgba(224, 224, 224, 1)',
+    height: 50,
+    fontSize: 15,
   },
   inputWrapper: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
   label: {
     fontWeight: 'bold',
@@ -250,16 +265,20 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: 'gray',
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 16,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 20,
+    marginTop: 10,
+    width: '90%',
   },
   loginButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: 'rgba(0, 196, 255, 1)',
   },
   loginButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });
 
