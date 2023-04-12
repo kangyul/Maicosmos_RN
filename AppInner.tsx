@@ -128,12 +128,12 @@ function AppInner() {
           <Stack.Screen
             name="SignIn"
             component={SignIn}
-            options={{title: '로그인'}}
+            options={{title: '로그인', headerShown: false}}
           />
           <Stack.Screen
             name="SignUp"
             component={SignUp}
-            options={{title: '마이코스모스 회원가입'}}
+            options={{title: '회원가입'}}
           />
         </Stack.Navigator>
       )}
