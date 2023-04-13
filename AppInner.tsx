@@ -3,7 +3,7 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import ImageUpload from './src/pages/ImageUpload';
 import Community from './src/pages/Community';
-import {NavigationContainer, SafeAreaView} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -18,6 +18,8 @@ import {useAppDispatch} from './src/store';
 import SplashScreen from 'react-native-splash-screen';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {DrawerContent} from './src/components/DrawerContent';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -33,6 +35,7 @@ export type RootStackParamList = {
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 function AppInner() {
   const dispatch = useAppDispatch();
@@ -73,56 +76,49 @@ function AppInner() {
     getTokenAndRefresh();
   }, [dispatch]);
 
+  const HomeScreen = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'black',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#fff',
+          },
+          tabBarIcon: ({focused, size, color}) => {
+            let iconName;
+            if (route.name === 'Community') {
+              iconName = focused ? 'home' : 'home';
+              // size = focused ? size + 18 : size + 15;
+              return <Foundation name={iconName} size={size} color={color} />;
+            } else if (route.name === 'ImageUpload') {
+              iconName = focused ? 'add-circle' : 'add-circle-outline';
+              // size = focused ? size + 23 : size + 20;
+              return <Ionic name={iconName} size={size} color={color} />;
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'person-circle' : 'person-circle-outline';
+              // size = focused ? size + 18 : size + 15;
+              return <Ionic name={iconName} size={size} color={color} />;
+            }
+          },
+        })}>
+        <Tab.Screen name="Community" component={Community} />
+        <Tab.Screen name="ImageUpload" component={ImageUpload} />
+        <Tab.Screen name="Settings" component={Settings} />
+      </Tab.Navigator>
+    );
+  };
+
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <Tab.Navigator
-          screenOptions={({route}) => ({
-            tabBarActiveTintColor: 'black',
-            tabBarInactiveTintColor: 'black',
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              backgroundColor: '#fff',
-            },
-            tabBarIcon: ({focused, size, color}) => {
-              let iconName;
-              if (route.name === 'Community') {
-                iconName = focused ? 'home' : 'home';
-                // size = focused ? size + 18 : size + 15;
-                return <Foundation name={iconName} size={size} color={color} />;
-              } else if (route.name === 'ImageUpload') {
-                iconName = focused ? 'add-circle' : 'add-circle-outline';
-                // size = focused ? size + 23 : size + 20;
-                return <Ionic name={iconName} size={size} color={color} />;
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'person-circle' : 'person-circle-outline';
-                // size = focused ? size + 18 : size + 15;
-                return <Ionic name={iconName} size={size} color={color} />;
-              }
-            },
-          })}>
-          <Tab.Screen
-            name="Community"
-            component={Community}
-            options={{
-              title: '커뮤니티',
-            }}
-          />
-          <Tab.Screen
-            name="ImageUpload"
-            component={ImageUpload}
-            options={{
-              title: '이미지/동영상 업로드',
-            }}
-          />
-          <Tab.Screen
-            name="Settings"
-            component={Settings}
-            options={{
-              title: '내 정보',
-            }}
-          />
-        </Tab.Navigator>
+        <Drawer.Navigator
+          initialRouteName="Home"
+          drawerContent={props => <DrawerContent {...props} />}>
+          <Drawer.Screen name="마이코스모스" component={HomeScreen} />
+        </Drawer.Navigator>
       ) : (
         <Stack.Navigator>
           <Stack.Screen
