@@ -10,6 +10,7 @@ import {
   View,
   Text,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import {useAppDispatch} from '../store';
@@ -18,17 +19,27 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-const randomImages = [
-  {
-    url: 'https://www.maicosmos.com/Thumbs/IMG-634627c0544d67.17083191.jpg',
-  },
-  {
-    url: 'https://www.maicosmos.com/Thumbs/IMG-63465ec90cb3e4.02608400.jpeg',
-  },
-  {
-    url: 'https://www.maicosmos.com/Thumbs/VID-63465ee4a36939.30839018.png',
-  },
-];
+const numColumns = 3;
+
+const formatData = (data, numColumns) => {
+  let numberOfElementsLastRow = data.length % 3;
+  let cnt = 0;
+  while (
+    numberOfElementsLastRow !== 0 &&
+    numberOfElementsLastRow !== numColumns
+  ) {
+    data.push({
+      key: 'blank',
+      empty: true,
+    });
+    numberOfElementsLastRow++;
+    cnt += 1;
+  }
+
+  console.log('추가 개수: ' + cnt);
+
+  return data;
+};
 
 function Settings() {
   const [nick, setNick] = useState('');
@@ -114,6 +125,7 @@ function Settings() {
           setIsListEnd(true);
         }
         setImages([...images, ...response.data.image]);
+        console.log('비동기 요청');
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -127,9 +139,12 @@ function Settings() {
   }, [userId, currentPage]);
 
   const renderItem = ({item}) => {
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.itemInvisible]} />;
+    }
     return (
-      <View>
-        <Image style={styles.personalGallery} source={{uri: item.url}} />
+      <View style={styles.item}>
+        <Image style={styles.personalImage} source={{uri: item.url}} />
       </View>
     );
   };
@@ -151,7 +166,7 @@ function Settings() {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <FlatList
-        data={images}
+        data={formatData(images, numColumns)}
         ListHeaderComponent={
           <View>
             <Image style={styles.userImg} source={{uri: profileImage}} />
@@ -203,12 +218,19 @@ function Settings() {
         onEndReached={loadMoreItem}
         onEndReachedThreshold={0}
         showsHorizontalScrollIndicator={false}
+        numColumns={3}
+        key={3}
       />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  item: {
+    flex: 1,
+    margin: 1,
+    height: Dimensions.get('window').width / numColumns,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -300,9 +322,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
   },
+  personalImage: {
+    width: '100%',
+    height: Dimensions.get('window').width / numColumns,
+  },
   loaderStyle: {
     marginVertical: 16,
     alignItems: 'center',
+  },
+  itemInvisible: {
+    backgroundColor: 'transparent',
   },
 });
 
