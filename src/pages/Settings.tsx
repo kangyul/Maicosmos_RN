@@ -11,6 +11,7 @@ import {
   Text,
   ActivityIndicator,
   Dimensions,
+  Pressable,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import {useAppDispatch} from '../store';
@@ -56,32 +57,6 @@ function Settings() {
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.email);
-
-  const onLogout = useCallback(async () => {
-    try {
-      // await axios.post(
-      //   `${Config.API_URL}/logout`,
-      //   {},
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${accessToken}`,
-      //     },
-      //   },
-      // );
-      Alert.alert('알림', '로그아웃 되었습니다.');
-      dispatch(
-        userSlice.actions.setUser({
-          name: '',
-          email: '',
-          accessToken: '',
-        }),
-      );
-      await EncryptedStorage.removeItem('refreshToken');
-    } catch (error) {
-      const errorResponse = (error as AxiosError).response;
-      console.error(errorResponse);
-    }
-  }, [accessToken, dispatch]);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -172,14 +147,13 @@ function Settings() {
             <Image style={styles.userImg} source={{uri: profileImage}} />
             <Text style={styles.userName}>{nick}</Text>
             <Text style={styles.aboutUser}>{about}</Text>
-            <View style={styles.userBtnWrapper}>
-              <TouchableOpacity style={styles.userBtn}>
-                <Text style={styles.userBtnTxt}>정보수정</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.userBtn} onPress={onLogout}>
-                <Text style={styles.userBtnTxt}>로그아웃</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.editBtn}
+              onPress={() => {
+                navigation.navigate('EditProfile');
+              }}>
+              <Text style={styles.editBtnText}>개인 정보</Text>
+            </TouchableOpacity>
 
             <View style={styles.userInfoWrapper}>
               <View style={styles.userInfoItem}>
@@ -256,23 +230,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
-  userBtnWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-    marginBottom: 10,
-  },
-  userBtn: {
-    borderColor: '#2e64e5',
-    borderWidth: 2,
-    borderRadius: 3,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginHorizontal: 5,
-  },
-  userBtnTxt: {
-    color: '#2e64e5',
-  },
   userInfoWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -332,6 +289,21 @@ const styles = StyleSheet.create({
   },
   itemInvisible: {
     backgroundColor: 'transparent',
+  },
+  editBtn: {
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 30,
+    marginTop: 10,
+    marginBottom: 5,
+    borderWidth: 1,
+    width: 100,
+    alignSelf: 'center',
+  },
+  editBtnText: {
+    color: 'black',
+    fontSize: 15,
   },
 });
 
