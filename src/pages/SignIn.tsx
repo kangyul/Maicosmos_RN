@@ -39,7 +39,7 @@ function SignIn({navigation}: SignInScreenProps) {
       return;
     }
     if (!email || !email.trim()) {
-      return Alert.alert('알림', '이메일을 입력해주세요.');
+      return Alert.alert('알림', '아이디를 입력해주세요.');
     }
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     width: 124,
     height: 124,
     alignSelf: 'center',
-    marginTop: '50%',
+    marginTop: '30%',
     marginBottom: '5%',
   },
 });
