@@ -1,8 +1,5 @@
-import Settings from './src/pages/Settings';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
-import ImageUpload from './src/pages/ImageUpload';
-import Community from './src/pages/Community';
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
@@ -16,10 +13,9 @@ import userSlice from './src/slices/user';
 import {Alert} from 'react-native';
 import {useAppDispatch} from './src/store';
 import SplashScreen from 'react-native-splash-screen';
-import Ionic from 'react-native-vector-icons/Ionicons';
-import Foundation from 'react-native-vector-icons/Foundation';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {DrawerContent} from './src/components/DrawerContent';
+import HomeScreen from './src/pages/HomeScreen';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -75,41 +71,6 @@ function AppInner() {
     };
     getTokenAndRefresh();
   }, [dispatch]);
-
-  const HomeScreen = () => {
-    return (
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarActiveTintColor: 'black',
-          tabBarInactiveTintColor: 'black',
-          tabBarShowLabel: false,
-          headerShown: false,
-          tabBarStyle: {
-            backgroundColor: '#fff',
-          },
-          tabBarIcon: ({focused, size, color}) => {
-            let iconName;
-            if (route.name === 'Community') {
-              iconName = focused ? 'home' : 'home';
-              // size = focused ? size + 18 : size + 15;
-              return <Foundation name={iconName} size={size} color={color} />;
-            } else if (route.name === 'ImageUpload') {
-              iconName = focused ? 'add-circle' : 'add-circle-outline';
-              // size = focused ? size + 23 : size + 20;
-              return <Ionic name={iconName} size={size} color={color} />;
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'person-circle' : 'person-circle-outline';
-              // size = focused ? size + 18 : size + 15;
-              return <Ionic name={iconName} size={size} color={color} />;
-            }
-          },
-        })}>
-        <Tab.Screen name="Community" component={Community} />
-        <Tab.Screen name="ImageUpload" component={ImageUpload} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
-    );
-  };
 
   return (
     <NavigationContainer>

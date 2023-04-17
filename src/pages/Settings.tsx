@@ -42,7 +42,7 @@ const formatData = (data, numColumns) => {
   return data;
 };
 
-function Settings() {
+function Settings({navigation: {navigate}}) {
   const [nick, setNick] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState('');
@@ -149,9 +149,7 @@ function Settings() {
             <Text style={styles.aboutUser}>{about}</Text>
             <TouchableOpacity
               style={styles.editBtn}
-              onPress={() => {
-                navigation.navigate('EditProfile');
-              }}>
+              onPress={() => navigate('EditProfile', {userId: userId})}>
               <Text style={styles.editBtnText}>개인 정보</Text>
             </TouchableOpacity>
 
@@ -172,13 +170,18 @@ function Settings() {
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>개인 갤러리</Text>
             </View>
-            <View style={{paddingHorizontal: 20}}>
+            <View>
               {galleries.map(gallery => (
-                <Image
-                  key={gallery.key}
-                  style={styles.personalGallery}
-                  source={{uri: gallery.url}}
-                />
+                <TouchableOpacity
+                  onPress={() =>
+                    navigate('PersonalGallery', {galleryId: gallery.key})
+                  }>
+                  <Image
+                    key={gallery.key}
+                    style={styles.personalGallery}
+                    source={{uri: gallery.url}}
+                  />
+                </TouchableOpacity>
               ))}
             </View>
             <View style={styles.listTitle}>
