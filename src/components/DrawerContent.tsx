@@ -95,7 +95,7 @@ export function DrawerContent(props) {
               )}
               label="개인 정보 수정"
               onPress={() => {
-                props.navigation.navigate('Home');
+                props.navigation.navigate('EditProfile');
               }}
             />
           </Drawer.Section>
