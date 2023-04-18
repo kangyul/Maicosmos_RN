@@ -36,7 +36,7 @@ function ImageUpload() {
     name: string;
     type: string;
   }>();
-  const userId = useSelector((state: RootState) => state.user.email);
+  const userId = useSelector((state: RootState) => state.user.id);
   const name = useSelector((state: RootState) => state.user.name);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

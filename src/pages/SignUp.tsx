@@ -189,7 +189,7 @@ function SignUp({navigation}: SignUpScreenProps) {
           secureTextEntry={true}
           textContentType="oneTimeCode"
           blurOnSubmit={false}
-          returnKeyType="send"
+          returnKeyType="next"
           clearButtonMode="while-editing"
           ref={passwordRef}
           onSubmitEditing={() => password2Ref.current?.focus()}

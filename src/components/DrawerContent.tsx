@@ -29,7 +29,9 @@ export function DrawerContent(props) {
       Alert.alert('알림', '로그아웃 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
+          id: '',
           name: '',
+          desc: '',
           email: '',
           accessToken: '',
         }),

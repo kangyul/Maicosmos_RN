@@ -23,13 +23,13 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 function SignIn({navigation}: SignInScreenProps) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const emailRef = useRef<TextInput | null>(null);
+  const idRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
 
-  const onChangeEmail = useCallback(text => {
-    setEmail(text.trim());
+  const onChangeId = useCallback(text => {
+    setId(text.trim());
   }, []);
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
@@ -38,7 +38,7 @@ function SignIn({navigation}: SignInScreenProps) {
     if (loading) {
       return;
     }
-    if (!email || !email.trim()) {
+    if (!id || !id.trim()) {
       return Alert.alert('알림', '아이디를 입력해주세요.');
     }
     if (!password || !password.trim()) {
@@ -47,14 +47,16 @@ function SignIn({navigation}: SignInScreenProps) {
     try {
       setLoading(true);
       const response = await axios.post('https://maicosmos.com/RN/login.php', {
-        email,
+        id,
         password,
       });
       Alert.alert('알림', '로그인 되었습니다.');
       dispatch(
         userSlice.actions.setUser({
+          id: response.data.id,
           name: response.data.name,
           email: response.data.email,
+          desc: response.data.desc,
           accessToken: response.data.accessToken,
         }),
       );
@@ -70,13 +72,13 @@ function SignIn({navigation}: SignInScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [loading, dispatch, email, password]);
+  }, [loading, dispatch, id, password]);
 
   const toSignUp = useCallback(() => {
     navigation.navigate('SignUp');
   }, [navigation]);
 
-  const canGoNext = email && password;
+  const canGoNext = id && password;
   return (
     <DismissKeyboardView style={styles.backGround}>
       <Image
@@ -86,16 +88,16 @@ function SignIn({navigation}: SignInScreenProps) {
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.textInput}
-          onChangeText={onChangeEmail}
+          onChangeText={onChangeId}
           placeholder="아이디"
           placeholderTextColor="#666"
           importantForAutofill="yes"
-          autoComplete="email"
-          textContentType="emailAddress"
-          value={email}
+          autoComplete="username"
+          textContentType="username"
+          value={id}
           returnKeyType="next"
           clearButtonMode="while-editing"
-          ref={emailRef}
+          ref={idRef}
           onSubmitEditing={() => passwordRef.current?.focus()}
           blurOnSubmit={false}
         />
