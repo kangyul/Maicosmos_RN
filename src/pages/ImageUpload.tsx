@@ -33,6 +33,7 @@ function ImageUpload() {
   }>();
   const [thumbnail, setThumbnail] = useState<{
     uri: string;
+    name: string;
     type: string;
   }>();
   const userId = useSelector((state: RootState) => state.user.email);
@@ -99,6 +100,7 @@ function ImageUpload() {
       .then(thumb => {
         setThumbnail({
           uri: thumb.path,
+          name: 'thumbnail.jpeg',
           type: thumb.mime,
         });
       })
@@ -128,18 +130,16 @@ function ImageUpload() {
         uri: image!.uri,
       });
     } else {
-      // formData.append('media', {
-      //   name: video!.name,
-      //   type: video!.type,
-      //   uri: video!.uri,
-      // });
-      // 썸네일
-
-      console.log('썸네일 타입' + thumbnail?.type);
+      formData.append('video', {
+        name: video!.name,
+        type: video!.type,
+        uri: video!.uri,
+      });
 
       formData.append('photo', {
-        type: thumbnail.type,
-        uri: thumbnail.uri,
+        name: thumbnail?.name,
+        type: thumbnail?.type,
+        uri: thumbnail?.uri,
       });
     }
 
@@ -164,7 +164,16 @@ function ImageUpload() {
     } finally {
       // setPhoto(null);
     }
-  }, [image, video]);
+  }, [
+    image,
+    isPhoto,
+    name,
+    thumbnail?.name,
+    thumbnail?.type,
+    thumbnail?.uri,
+    userId,
+    video,
+  ]);
   return (
     <DismissKeyboardView>
       {(image || video) && (
