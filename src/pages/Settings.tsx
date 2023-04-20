@@ -43,7 +43,6 @@ const formatData = (data, numColumns) => {
 };
 
 function Settings({navigation: {navigate}}) {
-  const [nick, setNick] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [galleryCnt, setGalleryCnt] = useState(0);
@@ -56,7 +55,8 @@ function Settings({navigation: {navigate}}) {
   const [isListEnd, setIsListEnd] = useState(false);
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
-  const userId = useSelector((state: RootState) => state.user.email);
+  const userId = useSelector((state: RootState) => state.user.id);
+  const nick = useSelector((state: RootState) => state.user.nick);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -68,7 +68,6 @@ function Settings({navigation: {navigate}}) {
           },
         );
 
-        setNick(response.data.nick);
         setAbout(response.data.profile);
         setProfileImage(response.data.profileImg);
         setGalleryCnt(response.data.galleryCnt);

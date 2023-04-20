@@ -3,7 +3,6 @@ import SignUp from './src/pages/SignUp';
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RootState} from './src/store/reducer';
 import {useEffect} from 'react';
@@ -29,14 +28,12 @@ export type RootStackParamList = {
   SignUp: undefined;
 };
 
-const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function AppInner() {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  // const insets = useSafeAreaInsets();
+  const isLoggedIn = useSelector((state: RootState) => !!state.user.id);
 
   // 앱 실행 시 토큰 있으면 로그인하는 코드
   useEffect(() => {
@@ -55,8 +52,11 @@ function AppInner() {
         );
         dispatch(
           userSlice.actions.setUser({
+            id: response.data.id,
             name: response.data.name,
             email: response.data.email,
+            desc: response.data.desc,
+            nick: response.data.nick,
             accessToken: response.data.accessToken,
           }),
         );

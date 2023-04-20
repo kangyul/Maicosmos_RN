@@ -15,6 +15,9 @@ export function DrawerContent(props) {
   const dispatch = useAppDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
 
+  const nick = useSelector((state: RootState) => state.user.nick);
+  const id = useSelector((state: RootState) => state.user.id);
+
   const onLogout = useCallback(async () => {
     try {
       // await axios.post(
@@ -56,8 +59,8 @@ export function DrawerContent(props) {
                 size={50}
               />
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                <Title style={styles.title}>제주감귤</Title>
-                <Caption style={styles.caption}>@yulkang</Caption>
+                <Title style={styles.title}>{nick}</Title>
+                <Caption style={styles.caption}>@{id}</Caption>
               </View>
             </View>
           </View>

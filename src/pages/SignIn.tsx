@@ -13,7 +13,6 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 import axios, {AxiosError} from 'axios';
-import Config from 'react-native-config';
 import {RootStackParamList} from '../../AppInner';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/user';
@@ -23,13 +22,13 @@ type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 function SignIn({navigation}: SignInScreenProps) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const idRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
 
   const onChangeId = useCallback(text => {
-    setId(text.trim());
+    setUserId(text.trim());
   }, []);
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
@@ -38,7 +37,7 @@ function SignIn({navigation}: SignInScreenProps) {
     if (loading) {
       return;
     }
-    if (!id || !id.trim()) {
+    if (!userId || !userId.trim()) {
       return Alert.alert('알림', '아이디를 입력해주세요.');
     }
     if (!password || !password.trim()) {
@@ -47,7 +46,7 @@ function SignIn({navigation}: SignInScreenProps) {
     try {
       setLoading(true);
       const response = await axios.post('https://maicosmos.com/RN/login.php', {
-        id,
+        userId,
         password,
       });
       Alert.alert('알림', '로그인 되었습니다.');
@@ -57,9 +56,11 @@ function SignIn({navigation}: SignInScreenProps) {
           name: response.data.name,
           email: response.data.email,
           desc: response.data.desc,
+          nick: response.data.nick,
           accessToken: response.data.accessToken,
         }),
       );
+      console.log(response.data.refreshToken);
       await EncryptedStorage.setItem(
         'refreshToken',
         response.data.refreshToken,
@@ -72,13 +73,13 @@ function SignIn({navigation}: SignInScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [loading, dispatch, id, password]);
+  }, [loading, dispatch, userId, password]);
 
   const toSignUp = useCallback(() => {
     navigation.navigate('SignUp');
   }, [navigation]);
 
-  const canGoNext = id && password;
+  const canGoNext = userId && password;
   return (
     <DismissKeyboardView style={styles.backGround}>
       <Image
@@ -94,7 +95,7 @@ function SignIn({navigation}: SignInScreenProps) {
           importantForAutofill="yes"
           autoComplete="username"
           textContentType="username"
-          value={id}
+          value={userId}
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={idRef}

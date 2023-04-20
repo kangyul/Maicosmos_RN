@@ -1,7 +1,7 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  Button,
+  Alert,
   Platform,
   Pressable,
   StyleSheet,
@@ -10,13 +10,25 @@ import {
   View,
 } from 'react-native';
 import DismissKeyboardView from '../components/DismissKeyboardView';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store/reducer';
+import axios, {AxiosError} from 'axios';
+import {useAppDispatch} from '../store';
+import userSlice from '../slices/user';
 
-function Edit() {
+function Edit({navigation}) {
+  const dispatch = useAppDispatch();
+
+  const idDefault = useSelector((state: RootState) => state.user.id);
+  const nameDefault = useSelector((state: RootState) => state.user.name);
+  const emailDefault = useSelector((state: RootState) => state.user.email);
+  const nickDefault = useSelector((state: RootState) => state.user.nick);
+
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [id, setId] = useState('');
-  const [name, setName] = useState('');
-  const [nick, setNick] = useState('');
+  const [email, setEmail] = useState(emailDefault);
+  const [id, setId] = useState(idDefault);
+  const [name, setName] = useState(nameDefault);
+  const [nick, setNick] = useState(nickDefault);
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const emailRef = useRef<TextInput | null>(null);
@@ -45,13 +57,49 @@ function Edit() {
     setNick(text.trim());
   }, []);
 
-  const onSubmit = useCallback(async () => {}, []);
+  const onSubmit = useCallback(async () => {
+    if (loading) {
+      return;
+    }
 
-  const canGoNext = email && id && name && password && nick && password2;
+    if (password !== password2) {
+      Alert.alert('알림', '패스워드가 일치하지 않습니다.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        'https://maicosmos.com/RN/editUserInfo.php',
+        {
+          userId: idDefault,
+          password: password,
+          nick: nick,
+        },
+      );
+
+      dispatch(userSlice.actions.setNick(response.data.nick));
+
+      console.log('바뀐 닉네임: ' + nickDefault);
+
+      Alert.alert('알림', response.data.message);
+
+      navigation.goBack(); // \프로필 페이지로 이동하기
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [idDefault, loading, navigation, nick, password, password2]);
+
+  const canGoNext = password && nick && password2;
 
   return (
     <DismissKeyboardView style={styles.backGround}>
-      <View style={styles.inputWrapper}>
+      {/* <View style={styles.inputWrapper}>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
@@ -79,6 +127,7 @@ function Edit() {
           ref={idRef}
           onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
+          editable={false}
         />
       </View>
       <View style={styles.inputWrapper}>
@@ -95,7 +144,7 @@ function Edit() {
           onSubmitEditing={() => nickRef.current?.focus()}
           blurOnSubmit={false}
         />
-      </View>
+      </View> */}
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.textInput}
@@ -156,7 +205,7 @@ function Edit() {
           {loading ? (
             <ActivityIndicator color="blue" />
           ) : (
-            <Text style={styles.loginButtonText}>회원가입</Text>
+            <Text style={styles.loginButtonText}>정보수정</Text>
           )}
         </Pressable>
       </View>
