@@ -15,7 +15,11 @@ const Stack = createNativeStackNavigator();
 function SettingsStackScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{headerShown: false}}
+      />
       <Stack.Screen name="PersonalGallery" component={PersonalGallery} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
