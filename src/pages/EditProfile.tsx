@@ -2,11 +2,13 @@ import React, {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
+  ImageBackground,
   Platform,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import DismissKeyboardView from '../components/DismissKeyboardView';
@@ -15,8 +17,14 @@ import {RootState} from '../store/reducer';
 import axios, {AxiosError} from 'axios';
 import {useAppDispatch} from '../store';
 import userSlice from '../slices/user';
+import ImagePicker from 'react-native-image-crop-picker';
+import ImageResizer from 'react-native-image-resizer';
 
-function Edit({navigation}) {
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+function Edit({navigation, route}) {
+  const {profImg} = route.params;
+
   const dispatch = useAppDispatch();
 
   const idDefault = useSelector((state: RootState) => state.user.id);
@@ -37,6 +45,15 @@ function Edit({navigation}) {
   const passwordRef = useRef<TextInput | null>(null);
   const password2Ref = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
+
+  const [profilePic, setProfileImage] = useState(profImg);
+  const [preview, setPreview] = useState<{uri: string}>();
+
+  const [image, setImage] = useState<{
+    uri: string;
+    name: string;
+    type: string;
+  }>();
 
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
@@ -67,14 +84,26 @@ function Edit({navigation}) {
       return;
     }
 
+    const formData = new FormData();
+    formData.append('userId', idDefault);
+    formData.append('password', password);
+    formData.append('nick', nick);
+
+    if (image) {
+      formData.append('photo', {
+        name: image!.name,
+        type: image!.type,
+        uri: image!.uri,
+      });
+    }
+
     try {
       setLoading(true);
       const response = await axios.post(
         'https://maicosmos.com/RN/editUserInfo.php',
+        formData,
         {
-          userId: idDefault,
-          password: password,
-          nick: nick,
+          headers: {'content-type': 'multipart/form-data'},
         },
       );
 
@@ -93,12 +122,98 @@ function Edit({navigation}) {
     } finally {
       setLoading(false);
     }
-  }, [idDefault, loading, navigation, nick, password, password2]);
+  }, [
+    dispatch,
+    idDefault,
+    image,
+    loading,
+    navigation,
+    nick,
+    nickDefault,
+    password,
+    password2,
+  ]);
 
   const canGoNext = password && nick && password2;
 
+  const onResponse = useCallback(async response => {
+    console.log(response.width, response.height, response.exif);
+    setPreview({uri: `data:${response.mime};base64,${response.data}`});
+    const orientation = (response.exif as any)?.Orientation;
+    console.log('orientation', orientation);
+    return ImageResizer.createResizedImage(
+      response.path,
+      100,
+      100,
+      response.mime.includes('jpeg') ? 'JPEG' : 'PNG',
+      100,
+      0,
+    ).then(r => {
+      console.log(r.uri, r.name);
+
+      setImage({
+        uri: r.uri,
+        name: r.name,
+        type: response.mime,
+      });
+
+      setProfileImage(r.uri);
+    });
+  }, []);
+
+  const onChangeImageFile = useCallback(() => {
+    return ImagePicker.openPicker({
+      includeExif: true,
+      includeBase64: true,
+      cropping: true,
+      mediaType: 'any',
+    })
+      .then(onResponse)
+      .catch(console.log);
+  }, [onResponse]);
+
   return (
     <DismissKeyboardView style={styles.backGround}>
+      <View style={{alignItems: 'center', marginVertical: 20}}>
+        <TouchableOpacity onPress={onChangeImageFile}>
+          <View
+            style={{
+              height: 100,
+              width: 100,
+              borderRadius: 15,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ImageBackground
+              source={{
+                uri: profilePic,
+              }}
+              style={{height: 100, width: 100}}
+              imageStyle={{borderRadius: 15}}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Icon
+                  name="camera"
+                  size={35}
+                  color="#fff"
+                  style={{
+                    opacity: 0.7,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    borderRadius: 10,
+                  }}
+                />
+              </View>
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
+      </View>
       {/* <View style={styles.inputWrapper}>
         <TextInput
           style={styles.textInput}
@@ -218,13 +333,6 @@ export default Edit;
 const styles = StyleSheet.create({
   backGround: {
     backgroundColor: '#fff',
-  },
-  signInImage: {
-    width: 124,
-    height: 124,
-    alignSelf: 'center',
-    marginTop: '10%',
-    marginBottom: '5%',
   },
   textInput: {
     paddingHorizontal: 15,
