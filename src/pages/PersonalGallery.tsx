@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Image, StyleSheet, Text, View} from 'react-native';
 
 function PersonalGallery({navigation: {navigate}, route}) {
-  const [galleryId, setGalleryId] = useState(331);
+  const [galleryId, setGalleryId] = useState(route.params.galleryId);
   const [images, setImages] = useState([]);
 
   useEffect(() => {
