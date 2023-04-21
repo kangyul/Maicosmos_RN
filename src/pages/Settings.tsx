@@ -44,7 +44,6 @@ const formatData = (data, numColumns) => {
 
 function Settings({navigation: {navigate}}) {
   const [about, setAbout] = useState('');
-  const [profileImage, setProfileImage] = useState('');
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [friendCnt, setFriendCnt] = useState(0);
   const [imageCnt, setImageCnt] = useState(0);
@@ -57,6 +56,7 @@ function Settings({navigation: {navigate}}) {
   const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.id);
   const nick = useSelector((state: RootState) => state.user.nick);
+  const profileImage = useSelector((state: RootState) => state.user.img);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -69,7 +69,6 @@ function Settings({navigation: {navigate}}) {
         );
 
         setAbout(response.data.profile);
-        setProfileImage(response.data.profileImg);
         setGalleryCnt(response.data.galleryCnt);
         setFriendCnt(response.data.friendCnt);
         setImageCnt(response.data.imageCnt);

@@ -25,7 +25,7 @@ function Community() {
     const getGroupList = async () => {
       try {
         const response = await axios.get(
-          'https://maicosmos.com/RN/community.php',
+          'https://maicosmos.com/RN/communityList.php',
         );
 
         setGroups(response.data.data);

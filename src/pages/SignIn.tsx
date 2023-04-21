@@ -58,6 +58,7 @@ function SignIn({navigation}: SignInScreenProps) {
           desc: response.data.desc,
           nick: response.data.nick,
           accessToken: response.data.accessToken,
+          img: response.data.img,
         }),
       );
       console.log(response.data.refreshToken);

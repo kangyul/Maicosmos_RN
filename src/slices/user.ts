@@ -7,6 +7,7 @@ const initialState = {
   email: '',
   desc: '',
   accessToken: '',
+  img: '',
 };
 const userSlice = createSlice({
   name: 'user',
@@ -19,9 +20,13 @@ const userSlice = createSlice({
       state.desc = action.payload.desc;
       state.nick = action.payload.nick;
       state.accessToken = action.payload.accessToken;
+      state.img = action.payload.img;
     },
     setNick(state, action) {
       state.nick = action.payload;
+    },
+    setImg(state, action) {
+      state.img = action.payload;
     },
   },
   extraReducers: builder => {},

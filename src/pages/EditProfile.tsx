@@ -108,6 +108,7 @@ function Edit({navigation, route}) {
       );
 
       dispatch(userSlice.actions.setNick(response.data.nick));
+      dispatch(userSlice.actions.setImg(response.data.img));
 
       console.log('바뀐 닉네임: ' + nickDefault);
 
@@ -143,8 +144,8 @@ function Edit({navigation, route}) {
     console.log('orientation', orientation);
     return ImageResizer.createResizedImage(
       response.path,
-      100,
-      100,
+      256,
+      256,
       response.mime.includes('jpeg') ? 'JPEG' : 'PNG',
       100,
       0,
