@@ -148,7 +148,9 @@ function Settings({navigation: {navigate}}) {
             <Text style={styles.aboutUser}>{about}</Text>
             <TouchableOpacity
               style={styles.editBtn}
-              onPress={() => navigate('EditProfile', {userId: userId})}>
+              onPress={() =>
+                navigate('EditProfile', {userId: userId, profImg: profileImage})
+              }>
               <Text style={styles.editBtnText}>개인 정보</Text>
             </TouchableOpacity>
 
