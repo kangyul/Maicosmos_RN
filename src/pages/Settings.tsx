@@ -171,7 +171,7 @@ function Settings({navigation: {navigate}}) {
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>개인 갤러리</Text>
             </View>
-            <View>
+            <View style={{paddingHorizontal: 20}}>
               {galleries.map(gallery => (
                 <TouchableOpacity
                   onPress={() =>
