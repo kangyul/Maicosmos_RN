@@ -1,13 +1,11 @@
 import axios, {AxiosError} from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  FlatList,
   StyleSheet,
   Text,
   View,
   Image,
   Alert,
-  StatusBar,
   Animated,
   Platform,
   TouchableOpacity,
