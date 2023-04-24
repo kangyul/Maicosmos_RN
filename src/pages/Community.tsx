@@ -16,7 +16,7 @@ import {
 const SPACING = 20;
 const ITEM_SIZE = 70 + SPACING * 3;
 
-function Community() {
+function Community({navigation: {navigate}}) {
   const [groups, setGroups] = useState([]);
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -77,7 +77,8 @@ function Community() {
           });
 
           return (
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate('CommunityMain', {groupId: item.key})}>
               <Animated.View
                 style={{
                   flex: 1,
