@@ -10,6 +10,7 @@ import {
   StatusBar,
   Animated,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 
 // const BG_IMAGE = require('../../assets/images/community_wall_paper.jpg');
@@ -78,35 +79,37 @@ function Community() {
           });
 
           return (
-            <Animated.View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                padding: SPACING,
-                marginBottom: SPACING,
-                backgroundColor: 'rgba(255,255,255,1)',
-                borderRadius: 16,
-                alignItems: 'center',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 10,
-                },
-                shadowOpacity: 0.3,
-                shadowRadius: 20,
-                opacity,
-                transform: [{scale}],
-                elevation: 9,
-              }}>
-              <Image style={styles.group} source={{uri: item.logo}} />
-              <View>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.location}>{item.street_address}</Text>
-                <Text style={styles.galleryCount}>
-                  갤러리 수: {item.gallery_cnt}
-                </Text>
-              </View>
-            </Animated.View>
+            <TouchableOpacity>
+              <Animated.View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  padding: SPACING,
+                  marginBottom: SPACING,
+                  backgroundColor: 'rgba(255,255,255,1)',
+                  borderRadius: 16,
+                  alignItems: 'center',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 20,
+                  opacity,
+                  transform: [{scale}],
+                  elevation: 9,
+                }}>
+                <Image style={styles.group} source={{uri: item.logo}} />
+                <View>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.location}>{item.street_address}</Text>
+                  <Text style={styles.galleryCount}>
+                    갤러리 수: {item.gallery_cnt}
+                  </Text>
+                </View>
+              </Animated.View>
+            </TouchableOpacity>
           );
         }}
         keyExtractor={item => item.key}

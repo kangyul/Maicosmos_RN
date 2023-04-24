@@ -4,6 +4,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Community from './Community';
+import CommunityMain from './CommunityMain';
 import Settings from './Settings';
 import ImageUpload from './ImageUpload';
 import PersonalGallery from './PersonalGallery';
@@ -11,6 +12,19 @@ import EditProfile from './EditProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function CommunityStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Community"
+        component={Community}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="CommunityMain" component={CommunityMain} />
+    </Stack.Navigator>
+  );
+}
 
 function SettingsStackScreen() {
   return (
@@ -39,7 +53,7 @@ function HomeScreen() {
         },
         tabBarIcon: ({focused, size, color}) => {
           let iconName;
-          if (route.name === 'Community') {
+          if (route.name === 'CommunityStackScreen') {
             iconName = focused ? 'home' : 'home';
             // size = focused ? size + 18 : size + 15;
             return <Foundation name={iconName} size={size} color={color} />;
@@ -54,7 +68,10 @@ function HomeScreen() {
           }
         },
       })}>
-      <Tab.Screen name="Community" component={Community} />
+      <Tab.Screen
+        name="CommunityStackScreen"
+        component={CommunityStackScreen}
+      />
       <Tab.Screen name="ImageUpload" component={ImageUpload} />
       <Tab.Screen name="SettingsStackScreen" component={SettingsStackScreen} />
     </Tab.Navigator>
