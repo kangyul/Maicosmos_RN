@@ -14,6 +14,7 @@ export function DrawerContent(props) {
   const paperTheme = useTheme();
   const dispatch = useAppDispatch();
   const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const profileImg = useSelector((state: RootState) => state.user.img);
 
   const nick = useSelector((state: RootState) => state.user.nick);
   const id = useSelector((state: RootState) => state.user.id);
@@ -36,6 +37,8 @@ export function DrawerContent(props) {
           name: '',
           desc: '',
           email: '',
+          nick: '',
+          img: '',
           accessToken: '',
         }),
       );
@@ -54,7 +57,7 @@ export function DrawerContent(props) {
             <View style={{flexDirection: 'row', marginTop: 15}}>
               <Avatar.Image
                 source={{
-                  uri: 'https://api.adorable.io/avatars/50/abott@adorable.png',
+                  uri: profileImg,
                 }}
                 size={50}
               />
