@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import BottomTabView from '../components/BottomTabView';
 
 function CommunityMain({navigation, route}) {
   const {groupId} = route.params;
@@ -52,51 +53,28 @@ function CommunityMain({navigation, route}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <ScrollView>
-        <Image style={styles.groupImg} source={{uri: logo}} />
-        <Text style={styles.groupName}>{name}</Text>
-        <Text style={styles.groupAddress}>{address}</Text>
-        <View style={styles.groupInfoWrapper}>
-          <View style={styles.groupInfoItem}>
-            <Text style={styles.groupInfoTitle}>{galleryCnt}</Text>
-            <Text style={styles.groupInfoSubTitle}>갤러리</Text>
-          </View>
-          <View style={styles.groupInfoItem}>
-            <Text style={styles.groupInfoTitle}>{memberCnt}</Text>
-            <Text style={styles.groupInfoSubTitle}>구성원</Text>
-          </View>
+      <Image style={styles.groupImg} source={{uri: logo}} />
+      <Text style={styles.groupName}>{name}</Text>
+      <Text style={styles.groupAddress}>{address}</Text>
+      <View style={styles.groupInfoWrapper}>
+        <View style={styles.groupInfoItem}>
+          <Text style={styles.groupInfoTitle}>{galleryCnt}</Text>
+          <Text style={styles.groupInfoSubTitle}>갤러리</Text>
         </View>
-        <View style={styles.listTitle}>
-          <Text style={styles.listTitleText}>학급 갤러리</Text>
+        <View style={styles.groupInfoItem}>
+          <Text style={styles.groupInfoTitle}>{memberCnt}</Text>
+          <Text style={styles.groupInfoSubTitle}>구성원</Text>
         </View>
-        <View style={{paddingHorizontal: 20}}>
-          {galleries.map(gallery => (
-            <TouchableOpacity>
-              <Image
-                key={gallery.key}
-                style={styles.groupGallery}
-                source={{uri: gallery.thumbnail}}
-              />
-            </TouchableOpacity>
-          ))}
+        <View style={styles.groupInfoItem}>
+          <Text style={styles.groupInfoTitle}>45</Text>
+          <Text style={styles.groupInfoSubTitle}>작품수</Text>
         </View>
-        <View style={styles.listTitle}>
-          <Text style={styles.listTitleText}>공지 게시판</Text>
-        </View>
-        <View style={{paddingHorizontal: 20, marginBottom: 20}}>
-          {boardAN.map(board => (
-            <Text>🔖 {board.wr_subject}</Text>
-          ))}
-        </View>
-        <View style={styles.listTitle}>
-          <Text style={styles.listTitleText}>자유 게시판</Text>
-        </View>
-        <View style={{paddingHorizontal: 20, marginBottom: 20}}>
-          {boardFR.map(board => (
-            <Text>🔖 {board.wr_subject}</Text>
-          ))}
-        </View>
-      </ScrollView>
+      </View>
+      <BottomTabView
+        galleries={galleries}
+        boardAN={boardAN}
+        boardFR={boardFR}
+      />
     </SafeAreaView>
   );
 }
@@ -108,6 +86,8 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 75,
+    borderWidth: 2,
+    borderColor: '#dbdbdb',
     alignSelf: 'center',
     marginTop: 20,
   },
