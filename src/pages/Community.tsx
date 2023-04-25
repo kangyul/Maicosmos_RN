@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: '700',
-    fontSize: Platform.OS === 'ios' ? 22 : 14,
+    fontSize: Platform.OS === 'ios' ? 18 : 14,
     marginBottom: 5,
   },
   location: {

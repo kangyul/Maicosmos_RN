@@ -43,7 +43,6 @@ const formatData = (data, numColumns) => {
 };
 
 function Settings({navigation: {navigate}}) {
-  const [about, setAbout] = useState('');
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [friendCnt, setFriendCnt] = useState(0);
   const [imageCnt, setImageCnt] = useState(0);
@@ -57,6 +56,9 @@ function Settings({navigation: {navigate}}) {
   const userId = useSelector((state: RootState) => state.user.id);
   const nick = useSelector((state: RootState) => state.user.nick);
   const profileImage = useSelector((state: RootState) => state.user.img);
+  const about = useSelector((state: RootState) => state.user.desc);
+
+  console.log('about', about);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -68,7 +70,6 @@ function Settings({navigation: {navigate}}) {
           },
         );
 
-        setAbout(response.data.profile);
         setGalleryCnt(response.data.galleryCnt);
         setFriendCnt(response.data.friendCnt);
         setImageCnt(response.data.imageCnt);
@@ -148,7 +149,10 @@ function Settings({navigation: {navigate}}) {
             <TouchableOpacity
               style={styles.editBtn}
               onPress={() =>
-                navigate('EditProfile', {userId: userId, profImg: profileImage})
+                navigate('EditProfile', {
+                  userId: userId,
+                  profImg: profileImage,
+                })
               }>
               <Text style={styles.editBtnText}>개인 정보</Text>
             </TouchableOpacity>
