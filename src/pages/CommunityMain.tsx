@@ -1,28 +1,19 @@
 import axios, {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Alert, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import BottomTabView from '../components/BottomTabView';
 
 function CommunityMain({navigation, route}) {
   const {groupId} = route.params;
 
   const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
   const [logo, setLogo] = useState('');
   const [memberCnt, setMemberCnt] = useState(0);
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [galleries, setGalleries] = useState([]);
   const [boardAN, setBoardAN] = useState([]);
   const [boardFR, setBoardFR] = useState([]);
+  const [members, setMembers] = useState([]);
 
   useEffect(() => {
     const getGroupInfo = async () => {
@@ -32,15 +23,13 @@ function CommunityMain({navigation, route}) {
         );
 
         setName(response.data.name);
-        setAddress(response.data.address);
         setLogo(response.data.logo);
         setMemberCnt(response.data.memberCnt);
         setGalleryCnt(response.data.galleryCnt);
         setGalleries(response.data.gallery);
         setBoardAN(response.data.board_an);
         setBoardFR(response.data.board_fr);
-
-        console.log('테스트: ' + response.data.name);
+        setMembers(response.data.members);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -53,10 +42,19 @@ function CommunityMain({navigation, route}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <Image style={styles.groupImg} source={{uri: logo}} />
-      <Text style={styles.groupName}>{name}</Text>
-      <Text style={styles.groupAddress}>{address}</Text>
-      <View style={styles.groupInfoWrapper}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          {logo && <Image style={styles.groupImg} source={{uri: logo}} />}
+          <Text style={styles.groupName}>{name}</Text>
+        </View>
         <View style={styles.groupInfoItem}>
           <Text style={styles.groupInfoTitle}>{galleryCnt}</Text>
           <Text style={styles.groupInfoSubTitle}>갤러리</Text>
@@ -74,6 +72,7 @@ function CommunityMain({navigation, route}) {
         galleries={galleries}
         boardAN={boardAN}
         boardFR={boardFR}
+        members={members}
       />
     </SafeAreaView>
   );
@@ -83,16 +82,15 @@ export default CommunityMain;
 
 const styles = StyleSheet.create({
   groupImg: {
-    height: 150,
-    width: 150,
-    borderRadius: 75,
-    borderWidth: 2,
+    height: 80,
+    width: 80,
+    borderRadius: 100,
+    borderWidth: 0.5,
     borderColor: '#dbdbdb',
     alignSelf: 'center',
     marginTop: 20,
   },
   groupName: {
-    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
@@ -105,14 +103,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
-  groupInfoWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginVertical: 20,
-  },
   groupInfoItem: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
   },
   groupInfoTitle: {
     fontSize: 20,
