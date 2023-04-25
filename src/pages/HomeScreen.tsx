@@ -1,6 +1,5 @@
 import React from 'react';
 import Ionic from 'react-native-vector-icons/Ionicons';
-import Foundation from 'react-native-vector-icons/Foundation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Community from './Community';
@@ -54,18 +53,18 @@ function HomeScreen() {
         tabBarIcon: ({focused, size, color}) => {
           let iconName;
           if (route.name === 'CommunityStackScreen') {
-            iconName = focused ? 'home' : 'home';
-            // size = focused ? size + 18 : size + 15;
-            return <Foundation name={iconName} size={size} color={color} />;
+            iconName = focused ? 'ios-home' : 'ios-home-outline';
           } else if (route.name === 'ImageUpload') {
-            iconName = focused ? 'add-circle' : 'add-circle-outline';
-            // size = focused ? size + 23 : size + 20;
-            return <Ionic name={iconName} size={size} color={color} />;
+            iconName = focused ? 'ios-image' : 'ios-image-outline';
           } else if (route.name === 'SettingsStackScreen') {
-            iconName = focused ? 'person-circle' : 'person-circle-outline';
-            // size = focused ? size + 18 : size + 15;
-            return <Ionic name={iconName} size={size} color={color} />;
+            iconName = focused
+              ? 'ios-person-circle'
+              : 'ios-person-circle-outline';
           }
+
+          size = 25;
+
+          return <Ionic name={iconName} size={size} color={color} />;
         },
       })}>
       <Tab.Screen
