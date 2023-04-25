@@ -8,6 +8,8 @@ import {
   View,
   TextInput,
   Platform,
+  TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -17,6 +19,8 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import Video from 'react-native-video';
 import DismissKeyboardView from '../components/DismissKeyboardView';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function ImageUpload() {
   const [isPhoto, setIsPhoto] = useState(true);
@@ -192,8 +196,48 @@ function ImageUpload() {
           <Button title="Upload" onPress={onFileUpload} />
         </React.Fragment>
       )}
-      <Button title="이미지 선택" onPress={onChangeImageFile} />
-      <Button title="동영상 선택" onPress={onChangeVideoFile} />
+      <View style={{alignItems: 'center', marginVertical: 20}}>
+        <TouchableOpacity onPress={onChangeImageFile}>
+          <View
+            style={{
+              height: 300,
+              width: 300,
+              borderRadius: 15,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ImageBackground
+              source={{
+                uri: 'https://www.maicosmos.com/g5/data/member_image/yu/yulkang.gif?1682394385',
+              }}
+              style={{height: 300, width: 300}}
+              imageStyle={{borderRadius: 15}}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Icon
+                  name="camera"
+                  size={50}
+                  color="#fff"
+                  style={{
+                    opacity: 0.7,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    borderRadius: 10,
+                  }}
+                />
+              </View>
+            </ImageBackground>
+          </View>
+        </TouchableOpacity>
+      </View>
+      {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
+      <Button title="동영상 선택" onPress={onChangeVideoFile} /> */}
       <View style={styles.inputWrapper}>
         <Text style={styles.label}>작품제목</Text>
         <TextInput
