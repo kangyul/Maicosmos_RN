@@ -16,17 +16,18 @@ function Galleries(props) {
       <View style={styles.tabTitle}>
         <Text style={styles.tabTitleText}>학급 갤러리</Text>
       </View>
-      <View style={{paddingHorizontal: 20}}>
-        {galleries.map(gallery => (
-          <TouchableOpacity>
-            <Image
-              key={gallery.key}
-              style={styles.groupGallery}
-              source={{uri: gallery.thumbnail}}
-            />
-          </TouchableOpacity>
-        ))}
-      </View>
+      {galleries && (
+        <View style={{paddingHorizontal: 20}}>
+          {galleries.map(gallery => (
+            <TouchableOpacity key={gallery.key}>
+              <Image
+                style={styles.groupGallery}
+                source={{uri: gallery.thumbnail}}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   },
   tabTitle: {
     alignContent: 'flex-end',
-    marginVertical: 20,
+    marginVertical: 15,
     paddingHorizontal: 20,
   },
   tabTitleText: {
