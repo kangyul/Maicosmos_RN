@@ -44,7 +44,11 @@ function BottomTabView(props) {
           <Boards boardAN={props.boardAN} boardFR={props.boardFR} />
         )}
       />
-      <Tab.Screen name="Members" component={Members} />
+      {/* <Tab.Screen name="Members" component={Members} /> */}
+      <Tab.Screen
+        name="Members"
+        children={() => <Members members={props.members} />}
+      />
     </Tab.Navigator>
   );
 }
