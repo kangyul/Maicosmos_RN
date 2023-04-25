@@ -7,7 +7,6 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Platform,
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
@@ -198,38 +197,19 @@ function ImageUpload() {
       )}
       <View style={{alignItems: 'center', marginVertical: 20}}>
         <TouchableOpacity onPress={onChangeImageFile}>
-          <View
-            style={{
-              height: 300,
-              width: 300,
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.imageView}>
             <ImageBackground
               source={{
                 uri: 'https://www.maicosmos.com/g5/data/member_image/yu/yulkang.gif?1682394385',
               }}
               style={{height: 300, width: 300}}
               imageStyle={{borderRadius: 15}}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <View style={styles.cameraIconView}>
                 <Icon
                   name="camera"
                   size={50}
                   color="#fff"
-                  style={{
-                    opacity: 0.7,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    borderRadius: 10,
-                  }}
+                  style={styles.cameraIcon}
                 />
               </View>
             </ImageBackground>
@@ -285,5 +265,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 20,
+  },
+  cameraIcon: {
+    opacity: 0.7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 10,
+  },
+  cameraIconView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageView: {
+    height: 300,
+    width: 300,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
