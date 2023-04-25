@@ -28,6 +28,9 @@ const userSlice = createSlice({
     setImg(state, action) {
       state.img = action.payload;
     },
+    setDesc(state, action) {
+      state.desc = action.payload;
+    },
   },
   extraReducers: builder => {},
 });
