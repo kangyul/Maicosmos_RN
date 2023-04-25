@@ -28,26 +28,19 @@ function Edit({navigation, route}) {
   const dispatch = useAppDispatch();
 
   const idDefault = useSelector((state: RootState) => state.user.id);
-  const nameDefault = useSelector((state: RootState) => state.user.name);
-  const emailDefault = useSelector((state: RootState) => state.user.email);
   const nickDefault = useSelector((state: RootState) => state.user.nick);
+  const aboutDefault = useSelector((state: RootState) => state.user.desc);
 
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState(emailDefault);
-  const [id, setId] = useState(idDefault);
-  const [name, setName] = useState(nameDefault);
   const [nick, setNick] = useState(nickDefault);
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const emailRef = useRef<TextInput | null>(null);
-  const idRef = useRef<TextInput | null>(null);
-  const nameRef = useRef<TextInput | null>(null);
+  const [about, setAbout] = useState(aboutDefault);
   const passwordRef = useRef<TextInput | null>(null);
   const password2Ref = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
 
   const [profilePic, setProfileImage] = useState(profImg);
-  const [preview, setPreview] = useState<{uri: string}>();
 
   const [image, setImage] = useState<{
     uri: string;
@@ -55,15 +48,6 @@ function Edit({navigation, route}) {
     type: string;
   }>();
 
-  const onChangeEmail = useCallback(text => {
-    setEmail(text.trim());
-  }, []);
-  const onChangeId = useCallback(text => {
-    setId(text.trim());
-  }, []);
-  const onChangeName = useCallback(text => {
-    setName(text.trim());
-  }, []);
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
   }, []);
@@ -72,6 +56,9 @@ function Edit({navigation, route}) {
   }, []);
   const onChangeNick = useCallback(text => {
     setNick(text.trim());
+  }, []);
+  const onChangeAbout = useCallback(text => {
+    setAbout(text.trim());
   }, []);
 
   const onSubmit = useCallback(async () => {
@@ -88,6 +75,7 @@ function Edit({navigation, route}) {
     formData.append('userId', idDefault);
     formData.append('password', password);
     formData.append('nick', nick);
+    formData.append('about', about);
 
     if (image) {
       formData.append('photo', {
@@ -109,6 +97,7 @@ function Edit({navigation, route}) {
 
       dispatch(userSlice.actions.setNick(response.data.nick));
       dispatch(userSlice.actions.setImg(response.data.img));
+      dispatch(userSlice.actions.setDesc(response.data.about));
 
       console.log('바뀐 닉네임: ' + nickDefault);
 
@@ -124,6 +113,7 @@ function Edit({navigation, route}) {
       setLoading(false);
     }
   }, [
+    about,
     dispatch,
     idDefault,
     image,
@@ -179,8 +169,8 @@ function Edit({navigation, route}) {
         <TouchableOpacity onPress={onChangeImageFile}>
           <View
             style={{
-              height: 100,
-              width: 100,
+              height: 200,
+              width: 200,
               borderRadius: 15,
               justifyContent: 'center',
               alignItems: 'center',
@@ -189,78 +179,20 @@ function Edit({navigation, route}) {
               source={{
                 uri: profilePic,
               }}
-              style={{height: 100, width: 100}}
+              style={{height: 200, width: 200}}
               imageStyle={{borderRadius: 15}}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <View style={styles.cameraIconView}>
                 <Icon
                   name="camera"
-                  size={35}
+                  size={50}
                   color="#fff"
-                  style={{
-                    opacity: 0.7,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    borderRadius: 10,
-                  }}
+                  style={styles.cameraIcon}
                 />
               </View>
             </ImageBackground>
           </View>
         </TouchableOpacity>
       </View>
-      {/* <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeEmail}
-          placeholder="이메일"
-          placeholderTextColor="#666"
-          textContentType="emailAddress"
-          value={email}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={emailRef}
-          onSubmitEditing={() => idRef.current?.focus()}
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeId}
-          placeholder="아이디"
-          placeholderTextColor="#666"
-          textContentType="username"
-          value={id}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={idRef}
-          onSubmitEditing={() => nameRef.current?.focus()}
-          blurOnSubmit={false}
-          editable={false}
-        />
-      </View>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="이름"
-          placeholderTextColor="#666"
-          onChangeText={onChangeName}
-          value={name}
-          textContentType="name"
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={nameRef}
-          onSubmitEditing={() => nickRef.current?.focus()}
-          blurOnSubmit={false}
-        />
-      </View> */}
       <View style={styles.inputWrapper}>
         <TextInput
           style={styles.textInput}
@@ -274,6 +206,16 @@ function Edit({navigation, route}) {
           ref={nickRef}
           onSubmitEditing={() => passwordRef.current?.focus()}
           blurOnSubmit={false}
+        />
+      </View>
+      <View style={{paddingHorizontal: 20, paddingVertical: 5}}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="자기소개 글"
+          placeholderTextColor="#666"
+          clearButtonMode="while-editing"
+          value={about}
+          onChangeText={onChangeAbout}
         />
       </View>
       <View style={styles.inputWrapper}>
@@ -372,5 +314,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  cameraIconView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cameraIcon: {
+    opacity: 0.7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 10,
   },
 });
