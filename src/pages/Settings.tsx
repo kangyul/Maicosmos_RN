@@ -174,20 +174,22 @@ function Settings({navigation: {navigate}}) {
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>개인 갤러리</Text>
             </View>
-            <View style={{paddingHorizontal: 20}}>
-              {galleries.map(gallery => (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigate('PersonalGallery', {galleryId: gallery.key})
-                  }>
-                  <Image
-                    key={gallery.key}
-                    style={styles.personalGallery}
-                    source={{uri: gallery.url}}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
+            {galleryCnt > 0 ? (
+              <View style={{paddingHorizontal: 20}}>
+                {galleries.map(gallery => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigate('PersonalGallery', {galleryId: gallery.key})
+                    }>
+                    <Image
+                      key={gallery.key}
+                      style={styles.personalGallery}
+                      source={{uri: gallery.url}}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : null}
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>작품</Text>
             </View>
