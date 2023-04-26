@@ -20,6 +20,7 @@ import Video from 'react-native-video';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Directions} from 'react-native-gesture-handler';
 
 function ImageUpload() {
   const [isPhoto, setIsPhoto] = useState(true);
@@ -45,6 +46,10 @@ function ImageUpload() {
   const [description, setDescription] = useState('');
   const titleRef = useRef<TextInput | null>(null);
   const descriptionRef = useRef<TextInput | null>(null);
+
+  const imageBackGroundURI = image
+    ? image.uri
+    : 'https://www.maicosmos.com/g5/data/member_image/yu/yulkang.gif?1682394385';
 
   const onChangeTitle = useCallback(text => {
     setTitle(text);
@@ -126,6 +131,9 @@ function ImageUpload() {
     const formData = new FormData();
     formData.append('userId', userId);
     formData.append('name', name);
+    formData.append('title', title);
+    formData.append('description', description);
+
     if (isPhoto) {
       formData.append('photo', {
         name: image!.name,
@@ -147,6 +155,7 @@ function ImageUpload() {
     }
 
     try {
+      console.log('테스트 로깅');
       const response = await axios.post(
         'https://maicosmos.com/RN/image.php',
         formData,
@@ -154,8 +163,6 @@ function ImageUpload() {
           headers: {'content-type': 'multipart/form-data'},
         },
       );
-
-      console.log('파일 이름: ' + response.data.name);
 
       Alert.alert('알림:', '이미지/동영상 업로드 완료!');
     } catch (error) {
@@ -168,19 +175,21 @@ function ImageUpload() {
       // setPhoto(null);
     }
   }, [
+    description,
     image,
     isPhoto,
     name,
     thumbnail?.name,
     thumbnail?.type,
     thumbnail?.uri,
+    title,
     userId,
     video,
   ]);
   return (
     <DismissKeyboardView>
-      {(image || video) && (
-        <React.Fragment>
+      {/* {(image || video) && (
+        <View>
           {isPhoto ? (
             <Image
               source={{uri: image.uri}}
@@ -192,15 +201,15 @@ function ImageUpload() {
               style={{width: 300, height: 300, alignSelf: 'center'}}
             />
           )}
-          <Button title="Upload" onPress={onFileUpload} />
-        </React.Fragment>
-      )}
+          <Button title="업로드" onPress={onFileUpload} />
+        </View>
+      )} */}
       <View style={{alignItems: 'center', marginVertical: 20}}>
         <TouchableOpacity onPress={onChangeImageFile}>
           <View style={styles.imageView}>
             <ImageBackground
               source={{
-                uri: 'https://www.maicosmos.com/g5/data/member_image/yu/yulkang.gif?1682394385',
+                uri: imageBackGroundURI,
               }}
               style={{height: 300, width: 300}}
               imageStyle={{borderRadius: 15}}>
@@ -216,10 +225,54 @@ function ImageUpload() {
           </View>
         </TouchableOpacity>
       </View>
+      <View
+        style={{
+          marginHorizontal: 20,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              width: 80,
+              borderRadius: 30,
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+              marginRight: 20,
+            }}>
+            <Text>이미지</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              width: 80,
+              borderRadius: 30,
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+            onPress={onChangeVideoFile}>
+            <Text>동영상</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            width: 80,
+            borderRadius: 30,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+          }}
+          onPress={onFileUpload}>
+          <Text>업로드</Text>
+        </TouchableOpacity>
+      </View>
       {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
       <Button title="동영상 선택" onPress={onChangeVideoFile} /> */}
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>작품제목</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeTitle}
@@ -234,7 +287,6 @@ function ImageUpload() {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>작품설명</Text>
         <TextInput
           style={styles.textInput}
           placeholder="작품설명"
