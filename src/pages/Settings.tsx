@@ -154,7 +154,6 @@ function Settings({navigation: {navigate}}) {
     return isLoading ? (
       <View style={styles.loaderStyle}>
         <ActivityIndicator size="large" color="#aaa" />
-        x``
       </View>
     ) : null;
   };
