@@ -75,7 +75,7 @@ function Settings({navigation: {navigate}}) {
   const _renderItem = ({item}) => {
     return (
       <Pressable
-        style={[styles.tag, activeTagIndex === item.key && styles.activeTag]}
+        style={[styles.tag, activeTagIndex == item.key && styles.activeTag]}
         onPress={() => setActiveTagIndex(item.key)}>
         <Text style={styles.tagText}>{item.albumname}</Text>
       </Pressable>
