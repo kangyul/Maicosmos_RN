@@ -205,25 +205,32 @@ function ImageUpload() {
         </View>
       )} */}
       <View style={{alignItems: 'center', marginVertical: 20}}>
-        <TouchableOpacity onPress={onChangeImageFile}>
-          <View style={styles.imageView}>
-            <ImageBackground
-              source={{
-                uri: imageBackGroundURI,
-              }}
-              style={{height: 300, width: 300}}
-              imageStyle={{borderRadius: 15}}>
-              <View style={styles.cameraIconView}>
-                <Icon
-                  name="camera"
-                  size={50}
-                  color="#fff"
-                  style={styles.cameraIcon}
-                />
-              </View>
-            </ImageBackground>
-          </View>
-        </TouchableOpacity>
+        {isPhoto ? (
+          <TouchableOpacity onPress={onChangeImageFile}>
+            <View style={styles.imageView}>
+              <ImageBackground
+                source={{
+                  uri: imageBackGroundURI,
+                }}
+                style={{height: 300, width: 300}}
+                imageStyle={{borderRadius: 15}}>
+                <View style={styles.cameraIconView}>
+                  <Icon
+                    name="camera"
+                    size={50}
+                    color="#fff"
+                    style={styles.cameraIcon}
+                  />
+                </View>
+              </ImageBackground>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <Video
+            source={{uri: video.uri}}
+            style={{width: 300, height: 300, alignSelf: 'center'}}
+          />
+        )}
       </View>
       <View
         style={{
@@ -243,7 +250,8 @@ function ImageUpload() {
               paddingHorizontal: 20,
               paddingVertical: 10,
               marginRight: 20,
-            }}>
+            }}
+            onPress={onChangeImageFile}>
             <Text>이미지</Text>
           </TouchableOpacity>
           <TouchableOpacity
