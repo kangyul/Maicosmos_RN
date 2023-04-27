@@ -19,6 +19,7 @@ import userSlice from '../slices/user';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import Swiper from 'react-native-swiper';
 
 const numColumns = 3;
 
@@ -48,6 +49,7 @@ function Settings({navigation: {navigate}}) {
   const [imageCnt, setImageCnt] = useState(0);
   const [galleries, setGalleries] = useState([]);
   const [images, setImages] = useState([]);
+  const [albums, setAlbums] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isListEnd, setIsListEnd] = useState(false);
@@ -58,7 +60,27 @@ function Settings({navigation: {navigate}}) {
   const profileImage = useSelector((state: RootState) => state.user.img);
   const about = useSelector((state: RootState) => state.user.desc);
 
-  console.log('about', about);
+  const [activeTagIndex, setActiveTagIndex] = useState(0);
+
+  const tags = [
+    'All',
+    'Profiles',
+    'Photos',
+    'Videos',
+    'Text',
+    'Links',
+    'People',
+  ];
+
+  const _renderItem = ({item}) => {
+    return (
+      <Pressable
+        style={[styles.tag, activeTagIndex === item.key && styles.activeTag]}
+        onPress={() => setActiveTagIndex(item.key)}>
+        <Text style={styles.tagText}>{item.albumname}</Text>
+      </Pressable>
+    );
+  };
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -74,6 +96,7 @@ function Settings({navigation: {navigate}}) {
         setFriendCnt(response.data.friendCnt);
         setImageCnt(response.data.imageCnt);
         setGalleries(response.data.gallery);
+        setAlbums(response.data.album);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -86,6 +109,10 @@ function Settings({navigation: {navigate}}) {
 
   useEffect(() => {
     const getUserImages = async () => {
+      if (isListEnd) {
+        return;
+      }
+
       setIsLoading(true);
       try {
         const response = await axios.post(
@@ -127,6 +154,7 @@ function Settings({navigation: {navigate}}) {
     return isLoading ? (
       <View style={styles.loaderStyle}>
         <ActivityIndicator size="large" color="#aaa" />
+        x``
       </View>
     ) : null;
   };
@@ -160,39 +188,52 @@ function Settings({navigation: {navigate}}) {
             <View style={styles.userInfoWrapper}>
               <View style={styles.userInfoItem}>
                 <Text style={styles.userInfoTitle}>{galleryCnt}</Text>
-                <Text style={styles.userInfoSubTitle}>갤러리 수</Text>
+                <Text style={styles.userInfoSubTitle}>갤러리</Text>
               </View>
               <View style={styles.userInfoItem}>
                 <Text style={styles.userInfoTitle}>{friendCnt}</Text>
-                <Text style={styles.userInfoSubTitle}>친구 수</Text>
+                <Text style={styles.userInfoSubTitle}>친구</Text>
               </View>
               <View style={styles.userInfoItem}>
                 <Text style={styles.userInfoTitle}>{imageCnt}</Text>
-                <Text style={styles.userInfoSubTitle}>작품 수</Text>
+                <Text style={styles.userInfoSubTitle}>작품</Text>
               </View>
             </View>
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>개인 갤러리</Text>
             </View>
             {galleryCnt > 0 ? (
-              <View style={{paddingHorizontal: 20}}>
+              <Swiper showsButtons={false} style={{height: 270}}>
                 {galleries.map(gallery => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigate('PersonalGallery', {galleryId: gallery.key})
-                    }>
-                    <Image
-                      key={gallery.key}
-                      style={styles.personalGallery}
-                      source={{uri: gallery.url}}
-                    />
-                  </TouchableOpacity>
+                  <View style={{paddingHorizontal: 20}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigate('PersonalGallery', {galleryId: gallery.key})
+                      }>
+                      <Image
+                        key={gallery.key}
+                        style={styles.personalGallery}
+                        source={{uri: gallery.url}}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 ))}
-              </View>
+              </Swiper>
             ) : null}
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>작품</Text>
             </View>
+            <FlatList
+              data={albums}
+              renderItem={_renderItem}
+              horizontal
+              contentContainerStyle={{
+                paddingHorizontal: 20,
+                marginBottom: 20,
+              }}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={item => item.key}
+            />
           </View>
         }
         renderItem={renderItem}
@@ -313,6 +354,23 @@ const styles = StyleSheet.create({
   editBtnText: {
     color: 'black',
     fontSize: 15,
+  },
+  tag: {
+    // backgroundColor: SOCIAL_BLUE,
+    borderColor: '#727477',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    height: 35,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagText: {
+    fontSize: 15,
+  },
+  activeTag: {
+    backgroundColor: '#2E8AF6',
   },
 });
 
