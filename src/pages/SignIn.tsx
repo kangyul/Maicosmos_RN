@@ -27,6 +27,10 @@ function SignIn({navigation}: SignInScreenProps) {
   const idRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
 
+  const onDevelopment = useCallback(text => {
+    Alert.alert('알림', '개발중인 기능입니다.');
+  }, []);
+
   const onChangeId = useCallback(text => {
     setUserId(text.trim());
   }, []);
@@ -137,10 +141,10 @@ function SignIn({navigation}: SignInScreenProps) {
           )}
         </Pressable>
         <View style={styles.optionZone}>
-          <Pressable style={styles.searchPressable}>
+          <Pressable style={styles.searchPressable} onPress={onDevelopment}>
             <Text style={styles.searchText}>비밀번호 찾기</Text>
           </Pressable>
-          <Pressable style={styles.searchPressable}>
+          <Pressable style={styles.searchPressable} onPress={onDevelopment}>
             <Text style={styles.searchText}>아이디 찾기</Text>
           </Pressable>
           <Pressable onPress={toSignUp}>
