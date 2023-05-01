@@ -27,7 +27,6 @@ function Members(props) {
                 padding: 10,
                 marginBottom: 2,
                 backgroundColor: 'rgba(255,255,255,1)',
-                borderRadius: 16,
                 alignItems: 'center',
               }}>
               <Image style={styles.memberImg} source={{uri: member.img}} />
@@ -72,16 +71,16 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 100,
-    marginRight: 10,
+    marginRight: 20,
   },
   name: {
-    fontWeight: '700',
-    fontSize: 18,
+    fontWeight: '500',
+    fontSize: 16,
     marginBottom: 5,
   },
   nick: {
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 5,
   },
 });
