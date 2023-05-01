@@ -113,10 +113,10 @@ function ImageUpload() {
         });
       })
       .catch(err => console.log({err}));
+    setIsPhoto(false);
   }, []);
 
   const onChangeVideoFile = useCallback(() => {
-    setIsPhoto(false);
     ImagePicker.openPicker({
       mediaType: 'video',
     }).then(createVideoThumbnail);
@@ -188,22 +188,6 @@ function ImageUpload() {
   ]);
   return (
     <DismissKeyboardView>
-      {/* {(image || video) && (
-        <View>
-          {isPhoto ? (
-            <Image
-              source={{uri: image.uri}}
-              style={{width: 300, height: 300, alignSelf: 'center'}}
-            />
-          ) : (
-            <Video
-              source={{uri: video.uri}}
-              style={{width: 300, height: 300, alignSelf: 'center'}}
-            />
-          )}
-          <Button title="업로드" onPress={onFileUpload} />
-        </View>
-      )} */}
       <View style={{alignItems: 'center', marginVertical: 20}}>
         {isPhoto ? (
           <TouchableOpacity onPress={onChangeImageFile}>
