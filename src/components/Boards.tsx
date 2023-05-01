@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 function Boards(props) {
   const boardAN = props.boardAN;
@@ -10,19 +10,39 @@ function Boards(props) {
       <View style={styles.tabTitle}>
         <Text style={styles.tabTitleText}>공지 게시판</Text>
       </View>
-      <View style={{paddingHorizontal: 20, marginBottom: 20}}>
-        {boardAN.map(board => (
-          <Text key={board.wr_id}>🔖 {board.wr_subject}</Text>
-        ))}
-      </View>
+      {boardAN.length !== 0 ? (
+        <View style={styles.boardTitleContainer}>
+          {boardAN.map((board, index) => (
+            <Text
+              style={[styles.boardTitle, index === 0 && styles.bold]}
+              key={board.wr_id}>
+              {board.wr_subject}
+            </Text>
+          ))}
+        </View>
+      ) : (
+        <View style={styles.boardTitleContainer}>
+          <Text>공지 게시글이 없습니다.</Text>
+        </View>
+      )}
       <View style={styles.tabTitle}>
         <Text style={styles.tabTitleText}>자유 게시판</Text>
       </View>
-      <View style={{paddingHorizontal: 20, marginBottom: 20}}>
-        {boardFR.map(board => (
-          <Text key={board.wr_id}>🔖 {board.wr_subject}</Text>
-        ))}
-      </View>
+      {boardFR.length !== 0 ? (
+        <View style={styles.boardTitleContainer}>
+          {boardFR.map((board, index) => (
+            <Text
+              style={[styles.boardTitle, index === 0 && styles.bold]}
+              key={board.wr_id}>
+              {board.wr_subject}
+            </Text>
+          ))}
+        </View>
+      ) : (
+        <View style={styles.boardTitleContainer}>
+          <Text>자유 게시글이 없습니다</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -30,6 +50,17 @@ function Boards(props) {
 export default Boards;
 
 const styles = StyleSheet.create({
+  boardTitle: {
+    marginBottom: 5,
+    fontSize: 15,
+  },
+  boardTitleContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 10,
+    marginHorizontal: 20,
+  },
   scrollView: {
     width: '100%',
     height: '100%',
@@ -51,5 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 5,
     justifyContent: 'space-between',
+  },
+  bold: {
+    fontWeight: 'bold',
   },
 });
