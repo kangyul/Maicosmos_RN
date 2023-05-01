@@ -16,16 +16,24 @@ function Galleries(props) {
       <View style={styles.tabTitle}>
         <Text style={styles.tabTitleText}>학급 갤러리</Text>
       </View>
-      {galleries && (
+      {galleries.length !== 0 ? (
         <View style={{paddingHorizontal: 20}}>
           {galleries.map(gallery => (
-            <TouchableOpacity key={gallery.key}>
+            <TouchableOpacity key={gallery.key} style={{marginBottom: 20}}>
               <Image
                 style={styles.groupGallery}
                 source={{uri: gallery.thumbnail}}
               />
+              <View style={{alignItems: 'center'}}>
+                <Text style={styles.galleryNameText}>{gallery.name}</Text>
+                <Text style={styles.galleryOwnerText}>{gallery.owner}</Text>
+              </View>
             </TouchableOpacity>
           ))}
+        </View>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text>학급 갤러리가 없습니다</Text>
         </View>
       )}
     </ScrollView>
@@ -35,6 +43,17 @@ function Galleries(props) {
 export default Galleries;
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderRadius: 10,
+    marginHorizontal: 20,
+  },
+  galleryNameText: {
+    fontWeight: 'bold',
+  },
+  galleryOwnerText: {},
   scrollView: {
     width: '100%',
     height: '100%',
@@ -52,6 +71,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 210,
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
 });
