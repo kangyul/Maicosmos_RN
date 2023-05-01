@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Image,
-  ScrollView,
   TouchableOpacity,
   View,
   Text,
@@ -15,10 +14,8 @@ import {
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import {useAppDispatch} from '../store';
-import userSlice from '../slices/user';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import Swiper from 'react-native-swiper';
 
 const numColumns = 3;
@@ -60,22 +57,12 @@ function Settings({navigation: {navigate}}) {
   const profileImage = useSelector((state: RootState) => state.user.img);
   const about = useSelector((state: RootState) => state.user.desc);
 
-  const [activeTagIndex, setActiveTagIndex] = useState(0);
-
-  const tags = [
-    'All',
-    'Profiles',
-    'Photos',
-    'Videos',
-    'Text',
-    'Links',
-    'People',
-  ];
+  const [activeTagIndex, setActiveTagIndex] = useState('0');
 
   const _renderItem = ({item}) => {
     return (
       <Pressable
-        style={[styles.tag, activeTagIndex == item.key && styles.activeTag]}
+        style={[styles.tag, activeTagIndex === item.key && styles.activeTag]}
         onPress={() => setActiveTagIndex(item.key)}>
         <Text style={styles.tagText}>{item.albumname}</Text>
       </Pressable>
@@ -204,13 +191,12 @@ function Settings({navigation: {navigate}}) {
             {galleryCnt > 0 ? (
               <Swiper showsButtons={false} style={{height: 270}}>
                 {galleries.map(gallery => (
-                  <View style={{paddingHorizontal: 20}}>
+                  <View style={{paddingHorizontal: 20}} key={gallery.key}>
                     <TouchableOpacity
                       onPress={() =>
                         navigate('PersonalGallery', {galleryId: gallery.key})
                       }>
                       <Image
-                        key={gallery.key}
                         style={styles.personalGallery}
                         source={{uri: gallery.url}}
                       />
