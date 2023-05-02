@@ -226,39 +226,14 @@ function ImageUpload() {
           style={{
             flexDirection: 'row',
           }}>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              width: 80,
-              borderRadius: 30,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-              marginRight: 20,
-            }}
-            onPress={onChangeImageFile}>
+          <TouchableOpacity style={styles.tag} onPress={onChangeImageFile}>
             <Text>이미지</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              width: 80,
-              borderRadius: 30,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-            onPress={onChangeVideoFile}>
+          <TouchableOpacity style={styles.tag} onPress={onChangeVideoFile}>
             <Text>동영상</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            width: 80,
-            borderRadius: 30,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-          }}
-          onPress={onFileUpload}>
+        <TouchableOpacity style={styles.tag} onPress={onFileUpload}>
           <Text>업로드</Text>
         </TouchableOpacity>
       </View>
@@ -329,5 +304,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  tag: {
+    // backgroundColor: SOCIAL_BLUE,
+    borderColor: '#727477',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    height: 35,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
