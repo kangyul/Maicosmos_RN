@@ -29,7 +29,10 @@ function Members(props) {
                 backgroundColor: 'rgba(255,255,255,1)',
                 alignItems: 'center',
               }}>
-              <Image style={styles.memberImg} source={{uri: member.img}} />
+              <Image
+                style={styles.memberImg}
+                source={{uri: 'https://www.maicosmos.com' + member.img}}
+              />
               <View>
                 <Text style={styles.nick}>{member.nick}</Text>
                 <Text style={styles.name}>{member.name}</Text>

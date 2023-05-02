@@ -132,7 +132,10 @@ function Settings({navigation: {navigate}}) {
     }
     return (
       <View style={styles.item}>
-        <Image style={styles.personalImage} source={{uri: item.url}} />
+        <Image
+          style={styles.personalImage}
+          source={{uri: 'https://www.maicosmos.com' + item.url}}
+        />
       </View>
     );
   };
@@ -198,7 +201,9 @@ function Settings({navigation: {navigate}}) {
                       }>
                       <Image
                         style={styles.personalGallery}
-                        source={{uri: gallery.url}}
+                        source={{
+                          uri: 'https://www.maicosmos.com' + gallery.url,
+                        }}
                       />
                     </TouchableOpacity>
                   </View>
@@ -333,7 +338,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     borderWidth: 1,
-    width: 100,
     alignSelf: 'center',
   },
   editBtnText: {

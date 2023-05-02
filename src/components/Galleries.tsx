@@ -22,7 +22,7 @@ function Galleries(props) {
             <TouchableOpacity key={gallery.key} style={{marginBottom: 20}}>
               <Image
                 style={styles.groupGallery}
-                source={{uri: gallery.thumbnail}}
+                source={{uri: 'https://www.maicosmos.com' + gallery.thumbnail}}
               />
               <View style={{alignItems: 'center'}}>
                 <Text style={styles.galleryNameText}>{gallery.name}</Text>

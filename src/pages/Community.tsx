@@ -99,7 +99,10 @@ function Community({navigation: {navigate}}) {
                   transform: [{scale}],
                   elevation: 9,
                 }}>
-                <Image style={styles.group} source={{uri: item.logo}} />
+                <Image
+                  style={styles.group}
+                  source={{uri: 'https://www.maicosmos.com' + item.logo}}
+                />
                 <View>
                   <Text style={styles.name}>{item.name}</Text>
                   <Text style={styles.location}>{item.street_address}</Text>
