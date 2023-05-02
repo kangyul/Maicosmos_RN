@@ -10,6 +10,7 @@ function CommunityMain({navigation, route}) {
   const [logo, setLogo] = useState('');
   const [memberCnt, setMemberCnt] = useState(0);
   const [galleryCnt, setGalleryCnt] = useState(0);
+  const [slotCnt, setSlotCnt] = useState(0);
   const [galleries, setGalleries] = useState([]);
   const [boardAN, setBoardAN] = useState([]);
   const [boardFR, setBoardFR] = useState([]);
@@ -30,6 +31,7 @@ function CommunityMain({navigation, route}) {
         setBoardAN(response.data.board_an);
         setBoardFR(response.data.board_fr);
         setMembers(response.data.members);
+        setSlotCnt(response.data.slotCnt);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -52,7 +54,12 @@ function CommunityMain({navigation, route}) {
           style={{
             alignItems: 'center',
           }}>
-          {logo && <Image style={styles.groupImg} source={{uri: logo}} />}
+          {logo && (
+            <Image
+              style={styles.groupImg}
+              source={{uri: 'https://www.maicosmos.com' + logo}}
+            />
+          )}
           <Text style={styles.groupName}>{name}</Text>
         </View>
         <View style={styles.groupInfoItem}>
@@ -64,8 +71,8 @@ function CommunityMain({navigation, route}) {
           <Text style={styles.groupInfoSubTitle}>구성원</Text>
         </View>
         <View style={styles.groupInfoItem}>
-          <Text style={styles.groupInfoTitle}>45</Text>
-          <Text style={styles.groupInfoSubTitle}>작품수</Text>
+          <Text style={styles.groupInfoTitle}>{slotCnt}</Text>
+          <Text style={styles.groupInfoSubTitle}>작품</Text>
         </View>
       </View>
       <BottomTabView
