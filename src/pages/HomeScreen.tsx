@@ -22,7 +22,13 @@ function CommunityStackScreen() {
         component={Community}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="CommunityMain" component={CommunityMain} />
+      <Stack.Screen
+        name="CommunityMain"
+        component={CommunityMain}
+        options={route => ({
+          title: '커뮤니티',
+        })}
+      />
     </Stack.Navigator>
   );
 }
@@ -77,13 +83,13 @@ function HomeScreen() {
           return <Ionic name={iconName} size={size} color={color} />;
         },
       })}>
-      <Tab.Screen name="Home" component={Home} />
+      {/* <Tab.Screen name="Home" component={Home} /> */}
       <Tab.Screen
         name="CommunityStackScreen"
         component={CommunityStackScreen}
       />
       <Tab.Screen name="ImageUpload" component={ImageUpload} />
-      <Tab.Screen name="Notification" component={Notification} />
+      {/* <Tab.Screen name="Notification" component={Notification} /> */}
       <Tab.Screen name="SettingsStackScreen" component={SettingsStackScreen} />
     </Tab.Navigator>
   );
