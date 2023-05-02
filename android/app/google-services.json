@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "259797098024",
+    "project_id": "maicosmos-81746",
+    "storage_bucket": "maicosmos-81746.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259797098024:android:79e56c4c75751efac19f1d",
+        "android_client_info": {
+          "package_name": "com.maicosmos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259797098024-7v8gd8ftlak2mbu843japf5rd8t58kpq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuab6ANak9qC_et7XPc_oJ-TfXL5wWljU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259797098024-7v8gd8ftlak2mbu843japf5rd8t58kpq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
