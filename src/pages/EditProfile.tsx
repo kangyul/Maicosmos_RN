@@ -22,14 +22,13 @@ import ImageResizer from 'react-native-image-resizer';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-function Edit({navigation, route}) {
-  const {profImg} = route.params;
-
+function Edit({navigation}) {
   const dispatch = useAppDispatch();
 
   const idDefault = useSelector((state: RootState) => state.user.id);
   const nickDefault = useSelector((state: RootState) => state.user.nick);
   const aboutDefault = useSelector((state: RootState) => state.user.desc);
+  const imgDefault = useSelector((state: RootState) => state.user.img);
 
   const [loading, setLoading] = useState(false);
   const [nick, setNick] = useState(nickDefault);
@@ -40,7 +39,7 @@ function Edit({navigation, route}) {
   const password2Ref = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
 
-  const [profilePic, setProfileImage] = useState(profImg);
+  const [profilePic, setProfileImage] = useState(imgDefault);
 
   const [image, setImage] = useState<{
     uri: string;
