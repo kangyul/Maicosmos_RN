@@ -1,8 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {
-  Button,
   Alert,
-  Image,
   Text,
   StyleSheet,
   View,
@@ -20,9 +18,8 @@ import Video from 'react-native-video';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Directions} from 'react-native-gesture-handler';
 
-function ImageUpload() {
+function ImageUpload({navigation}) {
   const [isPhoto, setIsPhoto] = useState(true);
   const [preview, setPreview] = useState<{uri: string}>();
   const [image, setImage] = useState<{
@@ -173,12 +170,19 @@ function ImageUpload() {
       }
     } finally {
       // setPhoto(null);
+      // navigate to Settings.tsx
+      navigation.navigate('SettingsStackScreen', {
+        screen: 'Settings',
+      });
+      setTitle('');
+      setDescription('');
     }
   }, [
     description,
     image,
     isPhoto,
     name,
+    navigation,
     thumbnail?.name,
     thumbnail?.type,
     thumbnail?.uri,
@@ -240,6 +244,7 @@ function ImageUpload() {
       {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
       <Button title="동영상 선택" onPress={onChangeVideoFile} /> */}
       <View style={styles.inputWrapper}>
+        <Text style={styles.label}>작품 제목</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeTitle}
@@ -254,6 +259,7 @@ function ImageUpload() {
         />
       </View>
       <View style={styles.inputWrapper}>
+        <Text style={styles.label}>작품 제목</Text>
         <TextInput
           style={styles.textInput}
           placeholder="작품설명"

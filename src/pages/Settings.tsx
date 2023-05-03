@@ -50,8 +50,6 @@ function Settings({navigation: {navigate}}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isListEnd, setIsListEnd] = useState(false);
-  const accessToken = useSelector((state: RootState) => state.user.accessToken);
-  const dispatch = useAppDispatch();
   const userId = useSelector((state: RootState) => state.user.id);
   const nick = useSelector((state: RootState) => state.user.nick);
   const profileImage = useSelector((state: RootState) => state.user.img);
