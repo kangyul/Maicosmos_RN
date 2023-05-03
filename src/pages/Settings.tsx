@@ -213,7 +213,7 @@ function Settings({navigation: {navigate}}) {
             <View style={styles.listTitle}>
               <Text style={styles.listTitleText}>작품</Text>
             </View>
-            <FlatList
+            {/* <FlatList
               data={albums}
               renderItem={_renderItem}
               horizontal
@@ -223,7 +223,7 @@ function Settings({navigation: {navigate}}) {
               }}
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => item.key}
-            />
+            /> */}
           </View>
         }
         renderItem={renderItem}
