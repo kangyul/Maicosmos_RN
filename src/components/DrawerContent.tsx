@@ -92,7 +92,9 @@ export function DrawerContent(props) {
               )}
               label="마이 페이지"
               onPress={() => {
-                props.navigation.navigate('Settings');
+                props.navigation.navigate('SettingsStackScreen', {
+                  screen: 'Settings',
+                });
               }}
             />
           </Drawer.Section>
@@ -103,7 +105,9 @@ export function DrawerContent(props) {
               )}
               label="개인 정보 수정"
               onPress={() => {
-                props.navigation.navigate('EditProfile');
+                props.navigation.navigate('SettingsStackScreen', {
+                  screen: 'EditProfile',
+                });
               }}
             />
           </Drawer.Section>
