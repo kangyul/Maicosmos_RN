@@ -50,12 +50,46 @@ function Settings({navigation: {navigate}}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isListEnd, setIsListEnd] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   const userId = useSelector((state: RootState) => state.user.id);
   const nick = useSelector((state: RootState) => state.user.nick);
   const profileImage = useSelector((state: RootState) => state.user.img);
   const about = useSelector((state: RootState) => state.user.desc);
 
   const [activeTagIndex, setActiveTagIndex] = useState('0');
+
+  const RefreshDataFetch = async () => {
+    try {
+      const response = await axios.post(
+        'https://maicosmos.com/RN/artworks.php',
+        {
+          userId,
+          offset: 0,
+        },
+      );
+      setCurrentPage(0);
+      setIsListEnd(false);
+      setImages([...response.data.image]);
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
+    }
+  };
+
+  const getRefreshData = async () => {
+    setRefreshing(true);
+    await RefreshDataFetch();
+    setRefreshing(false);
+  };
+
+  const onRefresh = () => {
+    if (!refreshing) {
+      getRefreshData();
+    }
+  };
 
   const _renderItem = ({item}) => {
     return (
@@ -110,7 +144,13 @@ function Settings({navigation: {navigate}}) {
         if (response.data.listEnd) {
           setIsListEnd(true);
         }
-        setImages([...images, ...response.data.image]);
+
+        if (currentPage === 0) {
+          setImages([...response.data.image]);
+        } else {
+          setImages([...images, ...response.data.image]);
+        }
+
         console.log('비동기 요청');
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
@@ -232,6 +272,8 @@ function Settings({navigation: {navigate}}) {
         showsHorizontalScrollIndicator={false}
         numColumns={3}
         key={3}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
       />
     </SafeAreaView>
   );
