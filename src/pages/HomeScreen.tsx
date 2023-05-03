@@ -42,7 +42,13 @@ function SettingsStackScreen() {
         options={{headerShown: false}}
       />
       <Stack.Screen name="PersonalGallery" component={PersonalGallery} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={route => ({
+          title: '계정관리',
+        })}
+      />
     </Stack.Navigator>
   );
 }
