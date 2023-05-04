@@ -10,6 +10,7 @@ import PersonalGallery from './PersonalGallery';
 import EditProfile from './EditProfile';
 import Home from './Home';
 import Notification from './Notification';
+import {SvgUri} from 'react-native-svg';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -68,25 +69,29 @@ function HomeScreen() {
           let iconName;
           if (route.name === 'CommunityStackScreen') {
             iconName = focused
-              ? 'md-people-circle'
-              : 'md-people-circle-outline';
+              ? 'https://maicosmos.com/Mobile/blackcommunity.svg'
+              : 'https://maicosmos.com/Mobile/community.svg';
           } else if (route.name === 'ImageUpload') {
-            iconName = focused ? 'ios-image' : 'ios-image-outline';
+            iconName = focused
+              ? 'https://maicosmos.com/Mobile/blackupload.svg'
+              : 'https://maicosmos.com/Mobile/upload.svg';
           } else if (route.name === 'SettingsStackScreen') {
             iconName = focused
-              ? 'ios-person-circle'
-              : 'ios-person-circle-outline';
+              ? 'https://maicosmos.com/Mobile/blackmypage.svg'
+              : 'https://maicosmos.com/Mobile/mypage.svg';
           } else if (route.name === 'Home') {
-            iconName = focused ? 'ios-home' : 'ios-home-outline';
+            iconName = focused
+              ? 'https://maicosmos.com/Mobile/blackhome.svg'
+              : 'https://maicosmos.com/Mobile/home.svg';
           } else if (route.name === 'Notification') {
             iconName = focused
-              ? 'md-notifications'
-              : 'md-notifications-outline';
+              ? 'https://maicosmos.com/Mobile/blacknotification.svg'
+              : 'https://maicosmos.com/Mobile/notification.svg';
           }
 
           size = 25;
 
-          return <Ionic name={iconName} size={size} color={color} />;
+          return <SvgUri width="25" height="25" uri={iconName} />;
         },
       })}>
       {/* <Tab.Screen name="Home" component={Home} /> */}
