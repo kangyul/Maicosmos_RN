@@ -17,6 +17,7 @@ import {useAppDispatch} from '../store';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
 import Swiper from 'react-native-swiper';
+import {useFocusEffect} from '@react-navigation/native';
 
 const numColumns = 3;
 
@@ -59,7 +60,7 @@ function Settings({navigation: {navigate}}) {
 
   const [activeTagIndex, setActiveTagIndex] = useState('0');
 
-  const RefreshDataFetch = async () => {
+  const RefreshDataFetch = useCallback(async () => {
     try {
       const response = await axios.post(
         'https://maicosmos.com/RN/artworks.php',
@@ -77,7 +78,33 @@ function Settings({navigation: {navigate}}) {
         Alert.alert('알림', errorResponse.data.message);
       }
     }
-  };
+
+    try {
+      const response = await axios.post(
+        'https://maicosmos.com/RN/userInfo.php',
+        {
+          userId,
+        },
+      );
+
+      setGalleryCnt(response.data.galleryCnt);
+      setFriendCnt(response.data.friendCnt);
+      setImageCnt(response.data.imageCnt);
+      setGalleries(response.data.gallery);
+      setAlbums(response.data.album);
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
+    }
+  }, [userId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      RefreshDataFetch();
+    }, [RefreshDataFetch]),
+  );
 
   const getRefreshData = async () => {
     setRefreshing(true);
