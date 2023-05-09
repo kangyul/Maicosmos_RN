@@ -46,7 +46,7 @@ function ImageUpload({navigation}) {
 
   const imageBackGroundURI = image
     ? image.uri
-    : 'https://www.maicosmos.com/g5/data/member_image/yu/yulkang.gif?1682394385';
+    : 'https://www.maicosmos.com/Mobile/starry_night.jpg';
 
   const onChangeTitle = useCallback(text => {
     setTitle(text);
@@ -248,7 +248,7 @@ function ImageUpload({navigation}) {
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeTitle}
-          placeholder="작품제목"
+          placeholder="예) 별이 빛나는 밤"
           placeholderTextColor="#666"
           value={title}
           returnKeyType="next"
@@ -259,10 +259,10 @@ function ImageUpload({navigation}) {
         />
       </View>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>작품 제목</Text>
+        <Text style={styles.label}>작품 설명</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="작품설명"
+          placeholder="예) 빈센트 반 고흐의 가장 널리 알려진 작품"
           placeholderTextColor="#666"
           onChangeText={onChangeDescription}
           value={description}
