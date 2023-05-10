@@ -223,7 +223,7 @@ function SignUp({navigation}: SignUpScreenProps) {
           {loading ? (
             <ActivityIndicator color="blue" />
           ) : (
-            <Text style={styles.loginButtonText}>회원가입</Text>
+            <Text style={styles.loginButtonText}>회원 가입하기</Text>
           )}
         </Pressable>
       </View>
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: 'rgba(224, 224, 224, 1)',
     height: 50,
-    fontSize: 15,
+    fontSize: 16,
   },
   inputWrapper: {
     paddingHorizontal: 20,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: '700',
     textAlign: 'center',
   },
