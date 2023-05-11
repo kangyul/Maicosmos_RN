@@ -22,7 +22,6 @@ import {
   login,
   getProfile as getKakaoProfile,
 } from '@react-native-seoul/kakao-login';
-import ResultView from '../components/IntroView';
 
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
@@ -67,6 +66,7 @@ function SignIn({navigation}: SignInScreenProps) {
             img: response.data.img,
           }),
         );
+        console.log(response.data.id);
         await EncryptedStorage.setItem(
           'refreshToken',
           response.data.refreshToken,
@@ -86,7 +86,7 @@ function SignIn({navigation}: SignInScreenProps) {
     }
   };
 
-  const onDevelopment = useCallback(text => {
+  const onDevelopment = useCallback(() => {
     Alert.alert('알림', '개발중인 기능입니다.');
   }, []);
 
@@ -139,8 +139,8 @@ function SignIn({navigation}: SignInScreenProps) {
     }
   }, [loading, dispatch, userId, password]);
 
-  const toSignUp = useCallback(() => {
-    navigation.navigate('SignUp');
+  const toSignUpList = useCallback(() => {
+    navigation.navigate('SignUpList');
   }, [navigation]);
 
   const canGoNext = userId && password;
@@ -206,7 +206,7 @@ function SignIn({navigation}: SignInScreenProps) {
           <Pressable style={styles.searchPressable} onPress={onDevelopment}>
             <Text style={styles.searchText}>아이디 찾기</Text>
           </Pressable>
-          <Pressable onPress={toSignUp}>
+          <Pressable onPress={toSignUpList}>
             <Text style={styles.signUpText}>회원가입 </Text>
           </Pressable>
         </View>
@@ -248,7 +248,6 @@ function SignIn({navigation}: SignInScreenProps) {
             네이버로 시작하기
           </Text>
         </TouchableOpacity>
-        <ResultView result={result} />
       </View>
     </DismissKeyboardView>
   );
@@ -318,7 +317,7 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     alignSelf: 'center',
-    marginTop: '30%',
+    // marginTop: '10%',
     marginBottom: '5%',
   },
   google: {

@@ -34,22 +34,22 @@ function SignUp({navigation}: SignUpScreenProps) {
   const password2Ref = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
 
-  const onChangeEmail = useCallback(text => {
+  const onChangeEmail = useCallback((text: string) => {
     setEmail(text.trim());
   }, []);
-  const onChangeId = useCallback(text => {
+  const onChangeId = useCallback((text: string) => {
     setId(text.trim());
   }, []);
-  const onChangeName = useCallback(text => {
+  const onChangeName = useCallback((text: string) => {
     setName(text.trim());
   }, []);
-  const onChangePassword = useCallback(text => {
+  const onChangePassword = useCallback((text: string) => {
     setPassword(text.trim());
   }, []);
-  const onChangePassword2 = useCallback(text => {
+  const onChangePassword2 = useCallback((text: string) => {
     setPassword2(text.trim());
   }, []);
-  const onChangeNick = useCallback(text => {
+  const onChangeNick = useCallback((text: string) => {
     setNick(text.trim());
   }, []);
   const onSubmit = useCallback(async () => {
