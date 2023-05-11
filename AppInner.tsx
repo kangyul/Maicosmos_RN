@@ -1,5 +1,6 @@
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
+import SignUpList from './src/pages/SignUpList';
 import {NavigationContainer} from '@react-navigation/native';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
@@ -27,6 +28,7 @@ export type LoggedInParamList = {
 export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
+  SignUpList: undefined;
 };
 
 const Stack = createNativeStackNavigator();
@@ -102,9 +104,14 @@ function AppInner({navigation}) {
             options={{title: '로그인', headerShown: false}}
           />
           <Stack.Screen
+            name="SignUpList"
+            component={SignUpList}
+            options={{title: '회원가입'}}
+          />
+          <Stack.Screen
             name="SignUp"
             component={SignUp}
-            options={{title: '회원가입'}}
+            options={{title: '마이코스모스 회원가입'}}
           />
         </Stack.Navigator>
       )}
