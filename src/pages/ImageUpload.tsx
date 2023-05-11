@@ -20,7 +20,7 @@ import DismissKeyboardView from '../components/DismissKeyboardView';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 function ImageUpload({navigation}) {
-  const [isPhoto, setIsPhoto] = useState(true);
+  const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [preview, setPreview] = useState<{uri: string}>();
   const [image, setImage] = useState<{
     uri: string;

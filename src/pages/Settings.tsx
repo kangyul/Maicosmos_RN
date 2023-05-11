@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Pressable,
+  Modal,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import {useAppDispatch} from '../store';
@@ -59,6 +60,40 @@ function Settings({navigation: {navigate}}) {
   const about = useSelector((state: RootState) => state.user.desc);
 
   const [activeTagIndex, setActiveTagIndex] = useState('0');
+
+  // 모달
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [modalName, setModalName] = useState<string>('');
+  const [modalDate, setModalDate] = useState<string>('');
+  const [modalDesc, setModalDesc] = useState<string>('');
+  const [modalImage, setModalImage] = useState<string>('');
+
+  const showModal = useCallback(async (id: string) => {
+    console.log('작품 ID: ' + id);
+
+    try {
+      const response = await axios.post(
+        'https://maicosmos.com/RN/artworkModal.php',
+        {
+          id,
+        },
+      );
+
+      setModalTitle(response.data.image.title);
+      setModalDesc(response.data.image.description);
+      setModalDate(response.data.image.date);
+      setModalName(response.data.image.name);
+      setModalImage('https://maicosmos.com' + response.data.image.imageurl);
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
+    }
+
+    setModalVisible(true);
+  }, []);
 
   const RefreshDataFetch = useCallback(async () => {
     try {
@@ -196,12 +231,12 @@ function Settings({navigation: {navigate}}) {
       return <View style={[styles.item, styles.itemInvisible]} />;
     }
     return (
-      <View style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={() => showModal(item.key)}>
         <Image
           style={styles.personalImage}
           source={{uri: 'https://www.maicosmos.com' + item.url}}
         />
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -225,6 +260,41 @@ function Settings({navigation: {navigate}}) {
         data={formatData(images, numColumns)}
         ListHeaderComponent={
           <View>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Image
+                    style={{
+                      width: 300,
+                      height: 300,
+                      borderRadius: 20,
+                      marginBottom: 20,
+                    }}
+                    source={{
+                      uri: modalImage,
+                    }}
+                  />
+                  <View>
+                    <Text>작품 제목: {modalTitle}</Text>
+                    <Text>작가 이름: {modalName}</Text>
+                    <Text>날짜: {modalDate}</Text>
+                    <Text>작품 설명: {modalDesc}</Text>
+                  </View>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    <Text style={styles.textStyle}>작품 닫기</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
             <Image style={styles.userImg} source={{uri: profileImage}} />
             <Text style={styles.userName}>{nick}</Text>
             <Text style={styles.aboutUser}>{about}</Text>
@@ -427,6 +497,44 @@ const styles = StyleSheet.create({
   },
   activeTag: {
     backgroundColor: '#2E8AF6',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    marginTop: 20,
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
