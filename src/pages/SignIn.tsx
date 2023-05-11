@@ -336,7 +336,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 20,
     height: 20,
-    marginRight: '30%',
+    position: 'absolute',
+    left: 20,
   },
   socialBtn: {
     borderRadius: 5,
@@ -346,12 +347,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 10,
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   socialText: {
     alignSelf: 'center',
     fontSize: 17,
     fontWeight: '500',
-    textAlign: 'center',
   },
   naverText: {
     color: '#FFFFFF',
