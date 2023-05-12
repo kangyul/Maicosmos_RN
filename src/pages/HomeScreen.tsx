@@ -94,13 +94,20 @@ function HomeScreen() {
           return <SvgUri width="25" height="25" uri={iconName} />;
         },
       })}>
-      {/* <Tab.Screen name="Home" component={Home} /> */}
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
         name="CommunityStackScreen"
         component={CommunityStackScreen}
       />
       <Tab.Screen name="ImageUpload" component={ImageUpload} />
-      {/* <Tab.Screen name="Notification" component={Notification} /> */}
+      <Tab.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          tabBarBadge: 3,
+          tabBarBadgeStyle: {backgroundColor: '#00b9ef', color: '#fff'},
+        }}
+      />
       <Tab.Screen name="SettingsStackScreen" component={SettingsStackScreen} />
     </Tab.Navigator>
   );

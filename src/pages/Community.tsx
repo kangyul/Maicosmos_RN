@@ -9,6 +9,7 @@ import {
   Animated,
   Platform,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 
 // const BG_IMAGE = require('../../assets/images/community_wall_paper.jpg');
@@ -39,12 +40,25 @@ function Community({navigation: {navigate}}) {
   }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       {/* <Image
         source={require('../../assets/image/community_wall_paper.png')}
         style={styles.backgroundImage}
         blurRadius={90}
       /> */}
+      <Text style={styles.title}>커뮤니티</Text>
+      <View
+        style={{
+          borderBottomWidth: 1,
+          width: '90%',
+          marginVertical: 20,
+          borderColor: 'rgba(218, 218, 218, 1)',
+          marginLeft: 20,
+        }}
+      />
+      <Text style={{marginLeft: 20, fontSize: 15, marginBottom: 20}}>
+        전체 {groups.length}개
+      </Text>
       <Animated.FlatList
         data={groups}
         onScroll={Animated.event(
@@ -76,43 +90,85 @@ function Community({navigation: {navigate}}) {
             outputRange: [1, 1, 1, 0],
           });
 
-          return (
-            <TouchableOpacity
-              onPress={() => navigate('CommunityMain', {groupId: item.key})}>
-              <Animated.View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  padding: SPACING,
-                  marginBottom: SPACING,
-                  backgroundColor: 'rgba(255,255,255,1)',
-                  borderRadius: 16,
-                  alignItems: 'center',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 10,
-                  },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 20,
-                  opacity,
-                  transform: [{scale}],
-                  elevation: 9,
-                }}>
-                <Image
-                  style={styles.group}
-                  source={{uri: 'https://www.maicosmos.com' + item.logo}}
-                />
-                <View>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.location}>{item.street_address}</Text>
-                  <Text style={styles.galleryCount}>
-                    갤러리 수: {item.gallery_cnt}
-                  </Text>
-                </View>
-              </Animated.View>
-            </TouchableOpacity>
-          );
+          if (index < 3) {
+            return (
+              <TouchableOpacity
+                onPress={() => navigate('CommunityMain', {groupId: item.key})}>
+                <Animated.View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    padding: SPACING,
+                    marginBottom: SPACING,
+                    backgroundColor: '#AA74FF',
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 20,
+                    opacity,
+                    transform: [{scale}],
+                    elevation: 9,
+                  }}>
+                  <Image
+                    style={styles.group}
+                    source={{uri: 'https://www.maicosmos.com' + item.logo}}
+                  />
+                  <View>
+                    <Text style={styles.bestName}>{item.name}</Text>
+                    <Text style={styles.bestLocation}>
+                      {item.street_address}
+                    </Text>
+                    <Text style={styles.bestGalleryCount}>
+                      갤러리: {item.gallery_cnt}개
+                    </Text>
+                  </View>
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          } else {
+            return (
+              <TouchableOpacity
+                onPress={() => navigate('CommunityMain', {groupId: item.key})}>
+                <Animated.View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    padding: SPACING,
+                    marginBottom: SPACING,
+                    backgroundColor: 'rgba(255,255,255,1)',
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 20,
+                    opacity,
+                    transform: [{scale}],
+                    elevation: 9,
+                  }}>
+                  <Image
+                    style={styles.group}
+                    source={{uri: 'https://www.maicosmos.com' + item.logo}}
+                  />
+                  <View>
+                    <Text style={styles.name}>{item.name}</Text>
+                    <Text style={styles.location}>{item.street_address}</Text>
+                    <Text style={styles.galleryCount}>
+                      갤러리: {item.gallery_cnt}개
+                    </Text>
+                  </View>
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          }
         }}
         keyExtractor={item => item.key}
         contentContainerStyle={{
@@ -123,11 +179,33 @@ function Community({navigation: {navigate}}) {
         // }}
         onEndReachedThreshold={0.5}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  bestName: {
+    fontWeight: '700',
+    fontSize: Platform.OS === 'ios' ? 18 : 14,
+    marginBottom: 5,
+    color: '#fff',
+  },
+  bestLocation: {
+    fontSize: Platform.OS === 'ios' ? 14 : 14,
+    marginBottom: 3,
+    color: '#fff',
+  },
+  bestGalleryCount: {
+    fontSize: Platform.OS === 'ios' ? 14 : 14,
+    opacity: 0.8,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
   item: {
     flex: 1,
     flexDirection: 'row',
@@ -158,7 +236,7 @@ const styles = StyleSheet.create({
   galleryCount: {
     fontSize: Platform.OS === 'ios' ? 16 : 12,
     opacity: 0.8,
-    color: '#0099cc',
+    color: '#000',
   },
   group: {
     height: Platform.OS === 'ios' ? 70 : 60,

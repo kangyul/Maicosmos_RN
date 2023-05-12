@@ -146,108 +146,114 @@ function SignIn({navigation}: SignInScreenProps) {
   const canGoNext = userId && password;
   return (
     <DismissKeyboardView style={styles.backGround}>
-      <Image
-        style={styles.signInImage}
-        source={require('../../assets/image/sign_logo.png')}
-      />
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeId}
-          placeholder="아이디"
-          placeholderTextColor="#666"
-          importantForAutofill="yes"
-          autoComplete="username"
-          textContentType="username"
-          value={userId}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={idRef}
-          onSubmitEditing={() => passwordRef.current?.focus()}
-          blurOnSubmit={false}
+      <View style={{flex: 1}}>
+        <Image
+          style={styles.signInImage}
+          source={require('../../assets/image/sign_logo.png')}
         />
-      </View>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="비밀번호"
-          placeholderTextColor="#666"
-          importantForAutofill="yes"
-          onChangeText={onChangePassword}
-          value={password}
-          autoComplete="password"
-          textContentType="password"
-          secureTextEntry
-          returnKeyType="send"
-          clearButtonMode="while-editing"
-          ref={passwordRef}
-          onSubmitEditing={onSubmit}
-        />
-      </View>
-      <View style={styles.buttonZone}>
-        <Pressable
-          style={
-            canGoNext
-              ? StyleSheet.compose(styles.loginButton, styles.loginButtonActive)
-              : styles.loginButton
-          }
-          disabled={!canGoNext || loading}
-          onPress={onSubmit}>
-          {loading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text style={styles.loginButtonText}>로그인하기</Text>
-          )}
-        </Pressable>
-        <View style={styles.optionZone}>
-          <Pressable style={styles.searchPressable} onPress={onDevelopment}>
-            <Text style={styles.searchText}>비밀번호 찾기</Text>
-          </Pressable>
-          <Pressable style={styles.searchPressable} onPress={onDevelopment}>
-            <Text style={styles.searchText}>아이디 찾기</Text>
-          </Pressable>
-          <Pressable onPress={toSignUpList}>
-            <Text style={styles.signUpText}>회원가입 </Text>
-          </Pressable>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={onChangeId}
+            placeholder="아이디"
+            placeholderTextColor="#666"
+            importantForAutofill="yes"
+            autoComplete="username"
+            textContentType="username"
+            value={userId}
+            returnKeyType="next"
+            clearButtonMode="while-editing"
+            ref={idRef}
+            onSubmitEditing={() => passwordRef.current?.focus()}
+            blurOnSubmit={false}
+          />
         </View>
-        <View
-          style={{
-            borderBottomWidth: 1,
-            width: '90%',
-            marginVertical: 20,
-            borderColor: 'rgba(218, 218, 218, 1)',
-          }}></View>
-        <TouchableOpacity
-          style={[styles.socialBtn, styles.google]}
-          onPress={onDevelopment}>
-          <Image
-            style={styles.socialIcon}
-            source={require('../../assets/image/google_logo.png')}
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="비밀번호"
+            placeholderTextColor="#666"
+            importantForAutofill="yes"
+            onChangeText={onChangePassword}
+            value={password}
+            autoComplete="password"
+            textContentType="password"
+            secureTextEntry
+            returnKeyType="send"
+            clearButtonMode="while-editing"
+            ref={passwordRef}
+            onSubmitEditing={onSubmit}
           />
-          <Text style={styles.socialText}>Google로 시작하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.socialBtn, styles.kakao]}
-          onPress={() => {
-            signInWithKakao();
-          }}>
-          <Image
-            style={styles.socialIcon}
-            source={require('../../assets/image/kakao_logo.png')}
+        </View>
+        <View style={styles.buttonZone}>
+          <Pressable
+            style={
+              canGoNext
+                ? StyleSheet.compose(
+                    styles.loginButton,
+                    styles.loginButtonActive,
+                  )
+                : styles.loginButton
+            }
+            disabled={!canGoNext || loading}
+            onPress={onSubmit}>
+            {loading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.loginButtonText}>로그인하기</Text>
+            )}
+          </Pressable>
+          <View style={styles.optionZone}>
+            <Pressable style={styles.searchPressable} onPress={onDevelopment}>
+              <Text style={styles.searchText}>비밀번호 찾기</Text>
+            </Pressable>
+            <Pressable style={styles.searchPressable} onPress={onDevelopment}>
+              <Text style={styles.searchText}>아이디 찾기</Text>
+            </Pressable>
+            <Pressable onPress={toSignUpList}>
+              <Text style={styles.signUpText}>회원가입 </Text>
+            </Pressable>
+          </View>
+          <View
+            style={{
+              borderBottomWidth: 1,
+              width: '90%',
+              marginVertical: 20,
+              borderColor: 'rgba(218, 218, 218, 1)',
+            }}
           />
-          <Text style={styles.socialText}>카카오로 시작하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.socialBtn, styles.naver]}
-          onPress={onDevelopment}>
-          <Image
-            style={styles.socialIcon}
-            source={require('../../assets/image/naver_logo.png')}
-          />
-          <Text style={[styles.socialText, styles.naverText]}>
-            네이버로 시작하기
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.socialBtn, styles.google]}
+            onPress={onDevelopment}>
+            <Image
+              style={styles.socialIcon}
+              source={require('../../assets/image/google_logo.png')}
+            />
+            <Text style={styles.socialText}>Google로 시작하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.socialBtn, styles.kakao]}
+            onPress={() => {
+              signInWithKakao();
+            }}>
+            <Image
+              style={styles.socialIcon}
+              source={require('../../assets/image/kakao_logo.png')}
+            />
+            <Text style={styles.socialText}>카카오로 시작하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.socialBtn, styles.naver]}
+            onPress={onDevelopment}>
+            <Image
+              style={styles.socialIcon}
+              source={require('../../assets/image/naver_logo.png')}
+            />
+            <Text style={[styles.socialText, styles.naverText]}>
+              네이버로 시작하기
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </DismissKeyboardView>
   );
@@ -317,7 +323,7 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     alignSelf: 'center',
-    // marginTop: '10%',
+    marginTop: '10%',
     marginBottom: '5%',
   },
   google: {

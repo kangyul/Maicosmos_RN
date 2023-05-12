@@ -16,7 +16,6 @@ import SplashScreen from 'react-native-splash-screen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {DrawerContent} from './src/components/DrawerContent';
 import HomeScreen from './src/pages/HomeScreen';
-import Ionic from 'react-native-vector-icons/Ionicons';
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -79,23 +78,24 @@ function AppInner({navigation}) {
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <Drawer.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            drawerType: 'front',
-          }}
-          // screenOptions={({navigation}) => ({
-          //   headerLeft: props => (
-          // <Ionic
-          //   name={'menu'}
-          //   size={30}
-          //   onPresss={navigation.toggleDrawer}
-          // />
-          //   ),
-          // })}
-          drawerContent={props => <DrawerContent {...props} />}>
-          <Drawer.Screen name="마이코스모스" component={HomeScreen} />
-        </Drawer.Navigator>
+        // <Drawer.Navigator
+        //   initialRouteName="Home"
+        //   screenOptions={{
+        //     drawerType: 'front',
+        //   }}
+        //   // screenOptions={({navigation}) => ({
+        //   //   headerLeft: props => (
+        //   // <Ionic
+        //   //   name={'menu'}
+        //   //   size={30}
+        //   //   onPresss={navigation.toggleDrawer}
+        //   // />
+        //   //   ),
+        //   // })}
+        //   drawerContent={props => <DrawerContent {...props} />}>
+        //   <Drawer.Screen name="마이코스모스" component={HomeScreen} />
+        // </Drawer.Navigator>
+        <HomeScreen />
       ) : (
         <Stack.Navigator>
           <Stack.Screen
