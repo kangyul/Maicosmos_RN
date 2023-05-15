@@ -1,51 +1,148 @@
-import React from 'react';
-import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper';
+import ArtWork from '../components/Artwork';
+import Prop from '../components/Prop';
+import DismissKeyboardView from '../components/DismissKeyboardView';
 
 function Home() {
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={{margin: 20}}>
-          <Image
-            style={{width: 30, height: 30}}
-            source={require('../../assets/image/smallLogo.png')}
-          />
-        </View>
-        <Swiper style={styles.mainSwiper} activeDotColor="black">
-          <View>
+    <SafeAreaView style={{backgroundColor: '#fff'}}>
+      <DismissKeyboardView>
+        <ScrollView>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 10,
+              paddingVertical: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <Image
-              style={styles.mainImage}
-              source={require('../../assets/image/background01.png')}
+              style={{width: 30, height: 30}}
+              source={require('../../assets/image/smallLogo.png')}
             />
+            <View style={{left: 0, right: 0}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={require('../../assets/image/search.png')}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    position: 'absolute',
+                    zIndex: 3,
+                    left: 20,
+                  }}
+                />
+                <TextInput
+                  style={{
+                    height: 35,
+                    width: '92%',
+                    marginHorizontal: 10,
+                    borderRadius: 20,
+                    paddingHorizontal: 10,
+                    backgroundColor: '#f1f2f5',
+                    fontSize: 15,
+                    fontWeight: 'bold',
+                    color: '#000',
+                    paddingLeft: 40,
+                  }}
+                  placeholderTextColor={'#aaa'}
+                  placeholder="다른 학교들과 소통해 보세요!"
+                />
+              </View>
+            </View>
           </View>
-          <View>
-            <Image
-              style={styles.mainImage}
-              source={require('../../assets/image/background02.png')}
-            />
+          <Swiper style={styles.mainSwiper} activeDotColor="black">
+            <View>
+              <Image
+                style={styles.mainImage}
+                source={require('../../assets/image/background01.png')}
+              />
+            </View>
+            <View>
+              <Image
+                style={styles.mainImage}
+                source={require('../../assets/image/background02.png')}
+              />
+            </View>
+            <View>
+              <Image
+                style={styles.mainImage}
+                source={require('../../assets/image/background03.png')}
+              />
+            </View>
+            <View>
+              <Image
+                style={styles.mainImage}
+                source={require('../../assets/image/background04.png')}
+              />
+            </View>
+            <View>
+              <Image
+                style={styles.mainImage}
+                source={require('../../assets/image/background05.png')}
+              />
+            </View>
+          </Swiper>
+          <View style={(styles.container, {marginHorizontal: 10})}>
+            <Text
+              style={{
+                fontSize: 23,
+                fontWeight: 'bold',
+                marginTop: 50,
+                marginBottom: 30,
+                marginLeft: 10,
+              }}>
+              이달의 작품들
+            </Text>
+            <View style={{flexDirection: 'column'}}>
+              <View style={{flex: 1, flexDirection: 'row', marginBottom: 0}}>
+                <ArtWork backgroundColor="#B5EAEA" />
+                <ArtWork backgroundColor="lightblue" />
+                <ArtWork backgroundColor="#EDF6E5" />
+              </View>
+              <View style={{flex: 1, flexDirection: 'row', marginBottom: 0}}>
+                <ArtWork backgroundColor="#FFBCBC" />
+                <ArtWork backgroundColor="#F38BA0" />
+                <ArtWork backgroundColor="white" />
+              </View>
+            </View>
           </View>
-          <View>
-            <Image
-              style={styles.mainImage}
-              source={require('../../assets/image/background03.png')}
-            />
+          <View
+            style={
+              (styles.container, {marginHorizontal: 10, marginBottom: 50})
+            }>
+            <Text
+              style={{
+                fontSize: 23,
+                fontWeight: 'bold',
+                marginTop: 50,
+                marginBottom: 30,
+                marginLeft: 10,
+              }}>
+              새로운 프랍 출시
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, flexDirection: 'column', marginBottom: 0}}>
+                <Prop backgroundColor="#F9F7F7" height="300" />
+                <Prop backgroundColor="lightblue" height="150" />
+              </View>
+              <View style={{flex: 1, flexDirection: 'column', marginBottom: 0}}>
+                <Prop backgroundColor="#3F72AF" height="150" />
+                <Prop backgroundColor="#112D4E" height="150" />
+              </View>
+            </View>
           </View>
-          <View>
-            <Image
-              style={styles.mainImage}
-              source={require('../../assets/image/background04.png')}
-            />
-          </View>
-          <View>
-            <Image
-              style={styles.mainImage}
-              source={require('../../assets/image/background05.png')}
-            />
-          </View>
-        </Swiper>
-        <View style={styles.container}>
+          {/* <View style={styles.container}>
           <Text style={styles.title}>이달의 작품들</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View
@@ -75,17 +172,9 @@ function Home() {
               }}
             />
           </ScrollView>
-        </View>
-        <View style={styles.container}>
-          <Text style={styles.title}>새로운 프랍 출시</Text>
-          <Swiper style={{height: 300}}>
-            <Image source={require('../../assets/image/props01.png')} />
-            <Image source={require('../../assets/image/props02.png')} />
-            <Image source={require('../../assets/image/props03.png')} />
-            <Image source={require('../../assets/image/props04.png')} />
-          </Swiper>
-        </View>
-      </ScrollView>
+        </View> */}
+        </ScrollView>
+      </DismissKeyboardView>
     </SafeAreaView>
   );
 }
