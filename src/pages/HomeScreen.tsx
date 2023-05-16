@@ -4,13 +4,15 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Community from './Community';
 import CommunityMain from './CommunityMain';
-import Settings from './Settings';
+import MyPage from './MyPage';
 import ImageUpload from './ImageUpload';
 import PersonalGallery from './PersonalGallery';
 import EditProfile from './EditProfile';
 import Home from './Home';
 import Notification from './Notification';
 import {SvgUri} from 'react-native-svg';
+import Settings from './Settings';
+import FinishButton from '../components/FinishButton';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -38,8 +40,8 @@ function SettingsStackScreen() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Settings"
-        component={Settings}
+        name="MyPage"
+        component={MyPage}
         options={{headerShown: false}}
       />
       <Stack.Screen name="PersonalGallery" component={PersonalGallery} />
@@ -47,7 +49,15 @@ function SettingsStackScreen() {
         name="EditProfile"
         component={EditProfile}
         options={route => ({
-          title: '계정관리',
+          title: '프로필 편집',
+          // headerRight: () => <FinishButton />,
+        })}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={route => ({
+          title: '설정',
         })}
       />
     </Stack.Navigator>
