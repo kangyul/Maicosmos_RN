@@ -33,7 +33,7 @@ function Home() {
               style={{width: 30, height: 30}}
               source={require('../../assets/image/smallLogo.png')}
             />
-            <View style={{left: 0, right: 0}}>
+            <View style={{flex: 1, left: 0, right: 0}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
                   source={require('../../assets/image/search.png')}
@@ -48,7 +48,7 @@ function Home() {
                 <TextInput
                   style={{
                     height: 35,
-                    width: '92%',
+                    width: '90%',
                     marginHorizontal: 10,
                     borderRadius: 20,
                     backgroundColor: '#f5f5f5',
@@ -68,7 +68,7 @@ function Home() {
             activeDotColor="#3B3E44"
             dotColor="#dbdde0"
             autoplay={true}
-            autoplayTimeout={3}>
+            autoplayTimeout={4}>
             <View>
               <Image
                 style={styles.mainImage}
@@ -128,7 +128,7 @@ function Home() {
                       source={require('../../assets/image/image01.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>소풍</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <View
@@ -144,7 +144,7 @@ function Home() {
                       source={require('../../assets/image/image02.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>집</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <View
@@ -160,7 +160,7 @@ function Home() {
                       source={require('../../assets/image/image03.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>우리 가족</Text>
                 </View>
               </View>
               <View style={{flex: 1, flexDirection: 'row', marginBottom: 30}}>
@@ -178,7 +178,7 @@ function Home() {
                       source={require('../../assets/image/image04.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>강아지</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <View
@@ -194,7 +194,7 @@ function Home() {
                       source={require('../../assets/image/image05.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>무당벌레</Text>
                 </View>
                 <View style={{flex: 1}}>
                   <View
@@ -210,7 +210,7 @@ function Home() {
                       source={require('../../assets/image/image06.png')}
                     />
                   </View>
-                  <Text style={styles.imageText}>제목</Text>
+                  <Text style={styles.imageText}>버스</Text>
                 </View>
               </View>
             </View>
