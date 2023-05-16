@@ -90,10 +90,10 @@ function SignIn({navigation}: SignInScreenProps) {
     Alert.alert('알림', '개발중인 기능입니다.');
   }, []);
 
-  const onChangeId = useCallback(text => {
+  const onChangeId = useCallback((text: string) => {
     setUserId(text.trim());
   }, []);
-  const onChangePassword = useCallback(text => {
+  const onChangePassword = useCallback((text: string) => {
     setPassword(text.trim());
   }, []);
   const onSubmit = useCallback(async () => {
