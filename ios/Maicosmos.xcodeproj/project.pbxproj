@@ -49,6 +49,7 @@
 		AB67250D29E7B71800CC6CDE /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		AB807C462A01E2980036D521 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AB9DFC9629DEA7F800A66855 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		ABD0793D2A130E440021D11F /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		E0A5275FBF311C9F42C1F1AF /* Pods-Maicosmos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Maicosmos.debug.xcconfig"; path = "Target Support Files/Pods-Maicosmos/Pods-Maicosmos.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F9717E23EEB41DE3827E6919 /* libPods-Maicosmos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Maicosmos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,6 +153,7 @@
 		AB9DFC9329DEA50000A66855 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				ABD0793D2A130E440021D11F /* Feather.ttf */,
 				AB67250D29E7B71800CC6CDE /* MaterialCommunityIcons.ttf */,
 				AB1B566C29E5229100EF218D /* Foundation.ttf */,
 				AB9DFC9629DEA7F800A66855 /* Ionicons.ttf */,
