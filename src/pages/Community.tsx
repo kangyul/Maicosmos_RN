@@ -1,5 +1,5 @@
 import axios, {AxiosError} from 'axios';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,9 @@ import {
   Platform,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
+  Pressable,
+  FlatList,
 } from 'react-native';
 
 // const BG_IMAGE = require('../../assets/images/community_wall_paper.jpg');
@@ -17,9 +20,47 @@ import {
 const SPACING = 20;
 const ITEM_SIZE = 70 + SPACING * 3;
 
+const tags = ['전체', '서울', '경기도', '부산', '제주도'];
+
 function Community({navigation: {navigate}}) {
   const [groups, setGroups] = useState([]);
+  const [temp, setTemp] = useState([]);
   const scrollY = useRef(new Animated.Value(0)).current;
+
+  const [activeTagIndex, setActiveTagIndex] = useState('0');
+
+  const _renderItem = ({item, index}) => {
+    return (
+      <Pressable
+        style={[styles.tag, activeTagIndex === index && styles.activeTag]}
+        onPress={() => setActiveTagIndex(index)}
+        key={index}>
+        <Text
+          style={[
+            styles.tagText,
+            activeTagIndex === index && styles.activeText,
+          ]}>
+          {tags[index]}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  const onChangeText = useCallback(
+    (text: string) => {
+      if (text === '') {
+        console.log('temp', temp);
+        setGroups([...temp]);
+        console.log('groups', groups);
+        console.log('empty');
+        return;
+      }
+      // setGroups([]);
+      setGroups(temp.filter(group => group.name.includes(text)));
+      // console.log(groups.filter(group => group.name.includes(text)));
+    },
+    [groups],
+  );
 
   useEffect(() => {
     const getGroupList = async () => {
@@ -29,6 +70,7 @@ function Community({navigation: {navigate}}) {
         );
 
         setGroups(response.data.data);
+        setTemp(response.data.data);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -41,12 +83,64 @@ function Community({navigation: {navigate}}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      {/* <Image
-        source={require('../../assets/image/community_wall_paper.png')}
-        style={styles.backgroundImage}
-        blurRadius={90}
-      /> */}
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginVertical: 20,
+        }}>
+        <Image
+          style={{width: 30, height: 30}}
+          source={require('../../assets/image/smallLogo.png')}
+        />
+        <View style={{left: 0, right: 0}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={require('../../assets/image/search.png')}
+              style={{
+                height: 25,
+                width: 25,
+                position: 'absolute',
+                zIndex: 3,
+                left: 20,
+              }}
+            />
+            <TextInput
+              style={{
+                height: 35,
+                width: '92%',
+                marginHorizontal: 10,
+                borderRadius: 20,
+                paddingHorizontal: 10,
+                backgroundColor: '#f1f2f5',
+                fontSize: 15,
+                fontWeight: 'bold',
+                color: '#000',
+                paddingLeft: 40,
+                padding: 0,
+              }}
+              placeholderTextColor={'#aaa'}
+              placeholder="다른 학교들과 소통해 보세요!"
+              onChangeText={onChangeText}
+            />
+          </View>
+        </View>
+      </View>
       <Text style={styles.title}>커뮤니티</Text>
+      <FlatList
+        data={tags}
+        renderItem={_renderItem}
+        horizontal
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          marginBottom: 20,
+        }}
+        showsHorizontalScrollIndicator={false}
+        // keyExtractor={item => item.key}
+      />
       <View
         style={{
           borderBottomWidth: 1,
@@ -56,7 +150,7 @@ function Community({navigation: {navigate}}) {
           marginLeft: 20,
         }}
       />
-      <Text style={{marginLeft: 20, fontSize: 15, marginBottom: 20}}>
+      <Text style={{marginLeft: SPACING, fontSize: 17, marginBottom: SPACING}}>
         전체 {groups.length}개
       </Text>
       <Animated.FlatList
@@ -99,8 +193,8 @@ function Community({navigation: {navigate}}) {
                     flex: 1,
                     flexDirection: 'row',
                     padding: SPACING,
-                    marginBottom: SPACING,
-                    backgroundColor: '#AA74FF',
+                    marginBottom: SPACING / 2,
+                    backgroundColor: '#rgba(115,82,255,1)',
                     borderRadius: 8,
                     alignItems: 'center',
                     shadowColor: '#000',
@@ -108,11 +202,6 @@ function Community({navigation: {navigate}}) {
                       width: 0,
                       height: 10,
                     },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 20,
-                    opacity,
-                    transform: [{scale}],
-                    elevation: 9,
                   }}>
                   <Image
                     style={styles.group}
@@ -123,9 +212,22 @@ function Community({navigation: {navigate}}) {
                     <Text style={styles.bestLocation}>
                       {item.street_address}
                     </Text>
-                    <Text style={styles.bestGalleryCount}>
-                      갤러리: {item.gallery_cnt}개
-                    </Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Text style={styles.bestGalleryCount}>
+                        갤러리: {item.gallery_cnt}개
+                      </Text>
+                      <Image
+                        style={{width: 20, height: 20, marginRight: 5}}
+                        source={require('../../assets/image/best.png')}
+                      />
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: 'rgba(255,193,92,1)',
+                        }}>
+                        BEST
+                      </Text>
+                    </View>
                   </View>
                 </Animated.View>
               </TouchableOpacity>
@@ -139,8 +241,8 @@ function Community({navigation: {navigate}}) {
                     flex: 1,
                     flexDirection: 'row',
                     padding: SPACING,
-                    marginBottom: SPACING,
-                    backgroundColor: 'rgba(255,255,255,1)',
+                    marginBottom: SPACING / 2,
+                    backgroundColor: 'rgba(243,243,243,1)',
                     borderRadius: 8,
                     alignItems: 'center',
                     shadowColor: '#000',
@@ -148,11 +250,6 @@ function Community({navigation: {navigate}}) {
                       width: 0,
                       height: 10,
                     },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 20,
-                    opacity,
-                    transform: [{scale}],
-                    elevation: 9,
                   }}>
                   <Image
                     style={styles.group}
@@ -172,11 +269,8 @@ function Community({navigation: {navigate}}) {
         }}
         keyExtractor={item => item.key}
         contentContainerStyle={{
-          padding: SPACING,
+          paddingHorizontal: SPACING,
         }}
-        // onEndReached={() => {
-        //   console.log('End of list reached');
-        // }}
         onEndReachedThreshold={0.5}
       />
     </SafeAreaView>
@@ -185,7 +279,7 @@ function Community({navigation: {navigate}}) {
 
 const styles = StyleSheet.create({
   bestName: {
-    fontWeight: '700',
+    fontWeight: 'bold',
     fontSize: Platform.OS === 'ios' ? 18 : 14,
     marginBottom: 5,
     color: '#fff',
@@ -193,18 +287,20 @@ const styles = StyleSheet.create({
   bestLocation: {
     fontSize: Platform.OS === 'ios' ? 14 : 14,
     marginBottom: 3,
-    color: '#fff',
+    color: 'rgba(231,226,255,1)',
+    fontWeight: 'normal',
   },
   bestGalleryCount: {
     fontSize: Platform.OS === 'ios' ? 14 : 14,
-    opacity: 0.8,
     color: '#fff',
     fontWeight: 'bold',
+    marginRight: 15,
   },
   title: {
-    fontSize: 20,
+    fontSize: 23,
     fontWeight: 'bold',
     marginLeft: 20,
+    marginBottom: 30,
   },
   item: {
     flex: 1,
@@ -230,17 +326,16 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: Platform.OS === 'ios' ? 14 : 14,
-    opacity: 0.7,
+    color: 'rgba(133,136,148,1)',
     marginBottom: 3,
   },
   galleryCount: {
-    fontSize: Platform.OS === 'ios' ? 16 : 12,
-    opacity: 0.8,
+    fontSize: Platform.OS === 'ios' ? 14 : 14,
     color: '#000',
   },
   group: {
-    height: Platform.OS === 'ios' ? 70 : 60,
-    width: Platform.OS === 'ios' ? 70 : 60,
+    height: 50,
+    width: 50,
     borderRadius: 100,
     marginRight: SPACING / 2,
   },
@@ -248,6 +343,27 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     height: '100%',
     width: '100%',
+  },
+  tag: {
+    // backgroundColor: SOCIAL_BLUE,
+    borderColor: '#727477',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    height: 40,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  activeTag: {
+    backgroundColor: '#111',
+  },
+  activeText: {
+    color: '#fff',
   },
 });
 
