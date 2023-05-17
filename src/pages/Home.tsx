@@ -33,7 +33,7 @@ function Home() {
               style={{width: 30, height: 30}}
               source={require('../../assets/image/smallLogo.png')}
             />
-            <View style={{flex: 1, left: 0, right: 0}}>
+            <View style={{flex: 1}}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
                   source={require('../../assets/image/search.png')}
@@ -48,14 +48,14 @@ function Home() {
                 <TextInput
                   style={{
                     height: 35,
-                    width: '90%',
+                    width: 350,
                     marginHorizontal: 10,
                     borderRadius: 20,
                     backgroundColor: '#f5f5f5',
                     fontSize: 15,
-                    color: '#000',
+                    color: '#111',
                     paddingLeft: 40,
-                    padding: 0,
+                    // padding: 0,
                   }}
                   placeholderTextColor={'#757575'}
                   placeholder="다른 학교들과 소통해 보세요!"
