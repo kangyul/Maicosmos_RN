@@ -71,7 +71,7 @@ function HomeScreen() {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'black',
         tabBarShowLabel: false,
-        headerShown: false,
+        headerShown: true,
         tabBarStyle: {
           backgroundColor: '#fff',
         },
@@ -104,21 +104,31 @@ function HomeScreen() {
           return <SvgUri width="25" height="25" uri={iconName} />;
         },
       })}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
       <Tab.Screen
         name="CommunityStackScreen"
         component={CommunityStackScreen}
+        options={{headerShown: false}}
       />
-      <Tab.Screen name="ImageUpload" component={ImageUpload} />
+      <Tab.Screen
+        name="ImageUpload"
+        component={ImageUpload}
+        options={{headerShown: false}}
+      />
       <Tab.Screen
         name="Notification"
         component={Notification}
         options={{
+          title: '알림',
           tabBarBadge: 3,
           tabBarBadgeStyle: {backgroundColor: '#00b9ef', color: '#fff'},
         }}
       />
-      <Tab.Screen name="SettingsStackScreen" component={SettingsStackScreen} />
+      <Tab.Screen
+        name="SettingsStackScreen"
+        component={SettingsStackScreen}
+        options={{headerShown: false}}
+      />
     </Tab.Navigator>
   );
 }
