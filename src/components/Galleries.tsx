@@ -8,8 +8,12 @@ import {
   View,
 } from 'react-native';
 
+const tags = ['전체', '2023', '2022'];
+
 function Galleries(props) {
   const galleries = props.galleries;
+
+  console.log(galleries);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>

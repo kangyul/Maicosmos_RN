@@ -13,8 +13,9 @@ import {
 const tags = ['전체', '2023', '2022'];
 
 function MyGallery(props) {
-  const [galleries, setGalleries] = useState(props.galleries);
-  const [temp, setTemp] = useState(props.galleries);
+  const originalGalleries = props.galleries;
+  const [galleries, setGalleries] = useState([...originalGalleries]);
+  const [temp, setTemp] = useState([...originalGalleries]);
   const galleryCnt = props.galleries.length;
 
   const [activeTagIndex, setActiveTagIndex] = useState(0);
@@ -80,9 +81,6 @@ function MyGallery(props) {
           : null}
       </ScrollView>
     </View>
-    // <View>
-    //   <Text>갤러리</Text>
-    // </View>
   );
 }
 
