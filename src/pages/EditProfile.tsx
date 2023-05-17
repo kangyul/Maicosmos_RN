@@ -32,6 +32,8 @@ function Edit({navigation}) {
   const [nick, setNick] = useState<string>(nickDefault);
   const [about, setAbout] = useState<string>(aboutDefault);
 
+  const [preview, setPreview] = useState<{uri: string}>();
+
   const nameRef = useRef<TextInput | null>(null);
   const nickRef = useRef<TextInput | null>(null);
 
@@ -62,6 +64,7 @@ function Edit({navigation}) {
     formData.append('userId', idDefault);
     formData.append('nick', nick);
     formData.append('about', about);
+    formData.append('name', name);
 
     if (image) {
       formData.append('photo', {
@@ -82,10 +85,10 @@ function Edit({navigation}) {
       );
 
       dispatch(userSlice.actions.setNick(response.data.nick));
-      dispatch(userSlice.actions.setImg(response.data.img));
+      if (response.data.img !== undefined) {
+        dispatch(userSlice.actions.setImg(response.data.img));
+      }
       dispatch(userSlice.actions.setDesc(response.data.about));
-
-      console.log('바뀐 닉네임: ' + nickDefault);
 
       Alert.alert('알림', response.data.message);
 
@@ -98,16 +101,7 @@ function Edit({navigation}) {
     } finally {
       setLoading(false);
     }
-  }, [
-    about,
-    dispatch,
-    idDefault,
-    image,
-    loading,
-    navigation,
-    nick,
-    nickDefault,
-  ]);
+  }, [about, dispatch, idDefault, image, loading, name, navigation, nick]);
 
   const onResponse = useCallback(async response => {
     console.log(response.width, response.height, response.exif);
@@ -148,14 +142,12 @@ function Edit({navigation}) {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => console.log('buttontton')}
-          title="ChangeUserInfo">
+        <TouchableOpacity onPress={onSubmit} title="ChangeUserInfo">
           <Text style={styles.ChangeUserInfo}>완료</Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, onSubmit]);
 
   return (
     <DismissKeyboardView style={styles.backGround}>
