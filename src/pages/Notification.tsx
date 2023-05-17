@@ -1,12 +1,30 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 function Notification() {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>알림</Text>
-    </View>
+    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+      <View style={{padding: 15}}>
+        <Text style={styles.todayText}>오늘</Text>
+      </View>
+      <View style={{padding: 15}}>
+        <Text>알림이 없습니다.</Text>
+      </View>
+      <View style={styles.borderLine} />
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  todayText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  borderLine: {
+    borderBottomWidth: 1,
+    width: '100%',
+    borderColor: 'rgba(218, 218, 218, 1)',
+  },
+});
 
 export default Notification;
