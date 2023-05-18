@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  FlatList,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,42 +13,105 @@ import {
 const tags = ['전체', '2023', '2022'];
 
 function Galleries(props) {
-  const galleries = props.galleries;
+  const [galleries, setGalleries] = useState([]);
+  const [temp, setTemp] = useState([]);
+  const galleryCnt = props.galleries.length;
 
-  console.log(galleries);
+  const [activeTagIndex, setActiveTagIndex] = useState(0);
+
+  const _renderItem = ({item, index}) => {
+    return (
+      <Pressable
+        style={[styles.tag, activeTagIndex === index && styles.activeTag]}
+        onPress={() => {
+          setActiveTagIndex(index);
+          if (tags[index] === '전체') {
+            setGalleries([...temp]);
+          } else {
+            setGalleries(
+              temp.filter(gallery => gallery.date.includes(tags[index])),
+            );
+          }
+        }}
+        key={index}>
+        <Text
+          style={[
+            styles.tagText,
+            activeTagIndex === index && styles.activeText,
+          ]}>
+          {tags[index]}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  useEffect(() => {
+    setGalleries(props.galleries);
+    console.log(galleries);
+    setTemp(props.galleries);
+  }, [props.galleries]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-      <View style={styles.tabTitle}>
-        <Text style={styles.tabTitleText}>학급 갤러리</Text>
-      </View>
-      {galleries.length !== 0 ? (
-        <View style={{paddingHorizontal: 20}}>
-          {galleries.map(gallery => (
-            <TouchableOpacity key={gallery.key} style={{marginBottom: 20}}>
-              <Image
-                style={styles.groupGallery}
-                source={{uri: 'https://www.maicosmos.com' + gallery.thumbnail}}
-              />
-              <View style={{alignItems: 'center'}}>
-                <Text style={styles.galleryNameText}>{gallery.name}</Text>
-                <Text style={styles.galleryOwnerText}>{gallery.owner}</Text>
+    <View style={styles.backGround}>
+      <ScrollView>
+        <FlatList
+          data={tags}
+          renderItem={_renderItem}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{padding: 20}}
+          // keyExtractor={item => item.key}
+        />
+        {galleryCnt > 0
+          ? galleries.map(gallery => (
+              <View key={gallery.key}>
+                <TouchableOpacity
+                // onPress={() =>
+                //   navigate('PersonalGallery', {galleryId: gallery.key})
+                // }
+                >
+                  <Image
+                    style={styles.personalGallery}
+                    source={{
+                      uri: 'https://www.maicosmos.com' + gallery.thumbnail,
+                    }}
+                  />
+                </TouchableOpacity>
+                <View style={styles.galleryInfoContainer}>
+                  <Text style={styles.galleryTitle}>{gallery.name}</Text>
+                  <Text style={styles.galleryDate}>{gallery.date}</Text>
+                </View>
               </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text>학급 갤러리가 없습니다</Text>
-        </View>
-      )}
-    </ScrollView>
+            ))
+          : null}
+      </ScrollView>
+    </View>
   );
 }
 
 export default Galleries;
 
 const styles = StyleSheet.create({
+  backGround: {
+    backgroundColor: '#fff',
+  },
+  personalGallery: {
+    width: '100%',
+    height: 240,
+  },
+  galleryInfoContainer: {
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  galleryTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  galleryDate: {
+    fontSize: 16,
+    color: '#aaa',
+  },
   emptyContainer: {
     backgroundColor: '#fff',
     paddingHorizontal: 20,
@@ -76,5 +141,26 @@ const styles = StyleSheet.create({
     height: 210,
     borderRadius: 20,
     marginBottom: 10,
+  },
+  tag: {
+    // backgroundColor: SOCIAL_BLUE,
+    borderColor: '#727477',
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    height: 40,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  activeTag: {
+    backgroundColor: '#111',
+  },
+  activeText: {
+    color: '#fff',
   },
 });

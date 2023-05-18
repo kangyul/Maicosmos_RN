@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -13,9 +13,8 @@ import {
 const tags = ['전체', '2023', '2022'];
 
 function MyGallery(props) {
-  const originalGalleries = props.galleries;
-  const [galleries, setGalleries] = useState([...originalGalleries]);
-  const [temp, setTemp] = useState([...originalGalleries]);
+  const [galleries, setGalleries] = useState([]);
+  const [temp, setTemp] = useState([]);
   const galleryCnt = props.galleries.length;
 
   const [activeTagIndex, setActiveTagIndex] = useState(0);
@@ -45,6 +44,11 @@ function MyGallery(props) {
       </Pressable>
     );
   };
+
+  useEffect(() => {
+    setGalleries(props.galleries);
+    setTemp(props.galleries);
+  }, [props.galleries]);
 
   return (
     <View style={styles.backGround}>
