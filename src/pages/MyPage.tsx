@@ -16,28 +16,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import SettingIcon from 'react-native-vector-icons/Feather';
 import MyPageTabView from '../components/MyPageTabView';
 
-const numColumns = 3;
-
-const formatData = (data, numColumns) => {
-  let numberOfElementsLastRow = data.length % 3;
-  let cnt = 0;
-  while (
-    numberOfElementsLastRow !== 0 &&
-    numberOfElementsLastRow !== numColumns
-  ) {
-    data.push({
-      key: 'blank',
-      empty: true,
-    });
-    numberOfElementsLastRow++;
-    cnt += 1;
-  }
-
-  console.log('추가 개수: ' + cnt);
-
-  return data;
-};
-
 function MyPage({navigation: {navigate}}) {
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [friendCnt, setFriendCnt] = useState(0);
