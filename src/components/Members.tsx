@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,7 +11,33 @@ import {
 import DismissKeyboardView from './DismissKeyboardView';
 
 function Members(props) {
-  const members = props.members;
+  // const members = props.members;
+  const [members, setMembers] = useState([]);
+  const [temp, setTemp] = useState([]);
+
+  console.log(members.length);
+
+  const onChangeText = useCallback(
+    (text: string) => {
+      if (text === '') {
+        setMembers([...temp]);
+        return;
+      }
+      // setGroups([]);
+      setMembers(
+        temp.filter(
+          member => member.name.includes(text) || member.nick.includes(text),
+        ),
+      );
+      // console.log(groups.filter(group => group.name.includes(text)));
+    },
+    [temp],
+  );
+
+  useEffect(() => {
+    setMembers(props.members);
+    setTemp(props.members);
+  }, [props.members]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
@@ -22,44 +47,21 @@ function Members(props) {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../assets/image/search.png')}
-                style={{
-                  height: 25,
-                  width: 25,
-                  position: 'absolute',
-                  zIndex: 3,
-                  left: 15,
-                }}
+                style={styles.searchIcon}
               />
               <TextInput
-                style={{
-                  flex: 1,
-                  height: 40,
-                  borderRadius: 20,
-                  paddingHorizontal: 10,
-                  backgroundColor: '#f5f5f5',
-                  fontSize: 16,
-                  color: '#111',
-                  paddingLeft: 50,
-                }}
+                style={styles.memberInput}
                 placeholderTextColor={'#757575'}
                 placeholder="검색"
-                // onChangeText={onChangeText}
+                onChangeText={onChangeText}
               />
             </View>
           </View>
           <Text style={styles.memberCntText}>{members.length}명</Text>
-          {members && (
+          {members.length > 0 ? (
             <View>
               {members.map(member => (
-                <View
-                  key={member.gm_id}
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    marginBottom: 20,
-                    backgroundColor: 'rgba(255,255,255,1)',
-                    alignItems: 'center',
-                  }}>
+                <View key={member.gm_id} style={styles.memberView}>
                   <View style={{flex: 1, flexDirection: 'row'}}>
                     <Image
                       style={styles.memberImg}
@@ -76,6 +78,10 @@ function Members(props) {
                 </View>
               ))}
             </View>
+          ) : (
+            <View>
+              <Text>검색 결과가 없습니다.</Text>
+            </View>
           )}
         </View>
       </DismissKeyboardView>
@@ -86,10 +92,34 @@ function Members(props) {
 export default Members;
 
 const styles = StyleSheet.create({
+  searchIcon: {
+    height: 25,
+    width: 25,
+    position: 'absolute',
+    zIndex: 3,
+    left: 15,
+  },
   scrollView: {
     width: '100%',
     height: '100%',
     backgroundColor: '#ffffff',
+  },
+  memberInput: {
+    flex: 1,
+    height: 40,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#f5f5f5',
+    fontSize: 16,
+    color: '#111',
+    paddingLeft: 50,
+  },
+  memberView: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 20,
+    backgroundColor: 'rgba(255,255,255,1)',
+    alignItems: 'center',
   },
   memberImg: {
     height: 50,
