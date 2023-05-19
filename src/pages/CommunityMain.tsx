@@ -92,9 +92,8 @@ function CommunityMain({navigation, route}) {
       <BottomTabView
         galleries={galleries}
         gallerySet={gallerySet}
-        boardAN={boardAN}
-        boardFR={boardFR}
         members={members}
+        groupId={groupId}
       />
     </SafeAreaView>
   );
