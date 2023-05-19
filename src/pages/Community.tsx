@@ -96,197 +96,190 @@ function Community({navigation: {navigate}}) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <DismissKeyboardView>
-        <Animated.FlatList
-          data={groups}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: true},
-          )}
-          ListEmptyComponent={listEmptyComponent}
-          renderItem={({item, index}) => {
-            const inputRange = [
-              -1,
-              0,
-              ITEM_SIZE * index,
-              ITEM_SIZE * (index + 2),
-            ];
+      <Animated.FlatList
+        data={groups}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true},
+        )}
+        ListEmptyComponent={listEmptyComponent}
+        renderItem={({item, index}) => {
+          const inputRange = [
+            -1,
+            0,
+            ITEM_SIZE * index,
+            ITEM_SIZE * (index + 2),
+          ];
 
-            const opacityInputRange = [
-              -1,
-              0,
-              ITEM_SIZE * index,
-              ITEM_SIZE * (index + 1),
-            ];
+          const opacityInputRange = [
+            -1,
+            0,
+            ITEM_SIZE * index,
+            ITEM_SIZE * (index + 1),
+          ];
 
-            const scale = scrollY.interpolate({
-              inputRange,
-              outputRange: [1, 1, 1, 0],
-            });
+          const scale = scrollY.interpolate({
+            inputRange,
+            outputRange: [1, 1, 1, 0],
+          });
 
-            const opacity = scrollY.interpolate({
-              inputRange: opacityInputRange,
-              outputRange: [1, 1, 1, 0],
-            });
+          const opacity = scrollY.interpolate({
+            inputRange: opacityInputRange,
+            outputRange: [1, 1, 1, 0],
+          });
 
-            if (index < 3) {
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigate('CommunityMain', {groupId: item.key})
-                  }>
-                  <Animated.View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      padding: SPACING,
-                      marginBottom: SPACING / 2,
-                      backgroundColor: '#rgba(115,82,255,1)',
-                      borderRadius: 8,
-                      alignItems: 'center',
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 10,
-                      },
-                    }}>
-                    <Image
-                      style={styles.group}
-                      source={{uri: 'https://www.maicosmos.com' + item.logo}}
-                    />
-                    <View>
-                      <Text style={styles.bestName}>{item.name}</Text>
-                      <Text style={styles.bestLocation}>
-                        {item.street_address}
-                      </Text>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={styles.bestGalleryCount}>
-                          갤러리: {item.gallery_cnt}개
-                        </Text>
-                        <Image
-                          style={{width: 20, height: 20, marginRight: 5}}
-                          source={require('../../assets/image/best.png')}
-                        />
-                        <Text
-                          style={{
-                            fontWeight: 'bold',
-                            color: 'rgba(255,193,92,1)',
-                          }}>
-                          BEST
-                        </Text>
-                      </View>
-                    </View>
-                  </Animated.View>
-                </TouchableOpacity>
-              );
-            } else {
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigate('CommunityMain', {groupId: item.key})
-                  }>
-                  <Animated.View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      padding: SPACING,
-                      marginBottom: SPACING / 2,
-                      backgroundColor: 'rgba(243,243,243,1)',
-                      borderRadius: 8,
-                      alignItems: 'center',
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 10,
-                      },
-                    }}>
-                    <Image
-                      style={styles.group}
-                      source={{uri: 'https://www.maicosmos.com' + item.logo}}
-                    />
-                    <View>
-                      <Text style={styles.name}>{item.name}</Text>
-                      <Text style={styles.location}>{item.street_address}</Text>
-                      <Text style={styles.galleryCount}>
+          if (index < 3) {
+            return (
+              <TouchableOpacity
+                onPress={() => navigate('CommunityMain', {groupId: item.key})}>
+                <Animated.View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    padding: SPACING,
+                    marginBottom: SPACING / 2,
+                    backgroundColor: '#rgba(115,82,255,1)',
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                  }}>
+                  <Image
+                    style={styles.group}
+                    source={{uri: 'https://www.maicosmos.com' + item.logo}}
+                  />
+                  <View>
+                    <Text style={styles.bestName}>{item.name}</Text>
+                    <Text style={styles.bestLocation}>
+                      {item.street_address}
+                    </Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Text style={styles.bestGalleryCount}>
                         갤러리: {item.gallery_cnt}개
                       </Text>
+                      <Image
+                        style={{width: 20, height: 20, marginRight: 5}}
+                        source={require('../../assets/image/best.png')}
+                      />
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: 'rgba(255,193,92,1)',
+                        }}>
+                        BEST
+                      </Text>
                     </View>
-                  </Animated.View>
-                </TouchableOpacity>
-              );
-            }
-          }}
-          keyExtractor={item => item.key}
-          contentContainerStyle={{
-            paddingHorizontal: SPACING,
-          }}
-          onEndReachedThreshold={0.5}
-          ListHeaderComponent={
-            <View>
-              <View
-                style={{
-                  flex: 1,
-                  paddingVertical: 20,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  style={{width: 30, height: 30}}
-                  source={require('../../assets/image/smallLogo.png')}
-                />
-                <View style={{flex: 1, left: 0, right: 0}}>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image
-                      source={require('../../assets/image/search.png')}
-                      style={{
-                        height: 25,
-                        width: 25,
-                        position: 'absolute',
-                        zIndex: 3,
-                        left: 20,
-                      }}
-                    />
-                    <TextInput
-                      style={{
-                        height: 35,
-                        width: 350,
-                        marginHorizontal: 10,
-                        borderRadius: 20,
-                        paddingHorizontal: 10,
-                        backgroundColor: '#f5f5f5',
-                        fontSize: 15,
-                        color: '#111',
-                        paddingLeft: 40,
-                      }}
-                      placeholderTextColor={'#757575'}
-                      placeholder="다른 학교들과 소통해 보세요!"
-                      onChangeText={onChangeText}
-                    />
                   </View>
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          } else {
+            return (
+              <TouchableOpacity
+                onPress={() => navigate('CommunityMain', {groupId: item.key})}>
+                <Animated.View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    padding: SPACING,
+                    marginBottom: SPACING / 2,
+                    backgroundColor: 'rgba(243,243,243,1)',
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 10,
+                    },
+                  }}>
+                  <Image
+                    style={styles.group}
+                    source={{uri: 'https://www.maicosmos.com' + item.logo}}
+                  />
+                  <View>
+                    <Text style={styles.name}>{item.name}</Text>
+                    <Text style={styles.location}>{item.street_address}</Text>
+                    <Text style={styles.galleryCount}>
+                      갤러리: {item.gallery_cnt}개
+                    </Text>
+                  </View>
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          }
+        }}
+        keyExtractor={item => item.key}
+        contentContainerStyle={{
+          paddingHorizontal: SPACING,
+        }}
+        onEndReachedThreshold={0.5}
+        ListHeaderComponent={
+          <View>
+            <View
+              style={{
+                flex: 1,
+                paddingVertical: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{width: 30, height: 30}}
+                source={require('../../assets/image/smallLogo.png')}
+              />
+              <View style={{flex: 1, left: 0, right: 0}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../assets/image/search.png')}
+                    style={{
+                      height: 25,
+                      width: 25,
+                      position: 'absolute',
+                      zIndex: 3,
+                      left: 20,
+                    }}
+                  />
+                  <TextInput
+                    style={{
+                      height: 35,
+                      width: 350,
+                      marginHorizontal: 10,
+                      borderRadius: 20,
+                      paddingHorizontal: 10,
+                      backgroundColor: '#f5f5f5',
+                      fontSize: 15,
+                      color: '#111',
+                      paddingLeft: 40,
+                    }}
+                    placeholderTextColor={'#757575'}
+                    placeholder="다른 학교들과 소통해 보세요!"
+                    onChangeText={onChangeText}
+                  />
                 </View>
               </View>
-              <Text style={styles.title}>커뮤니티</Text>
-              <FlatList
-                data={tags}
-                renderItem={_renderItem}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                // keyExtractor={item => item.key}
-              />
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  width: '100%',
-                  marginVertical: 20,
-                  borderColor: 'rgba(218, 218, 218, 1)',
-                }}
-              />
-              <Text style={styles.total}>전체 {groups.length}개</Text>
             </View>
-          }
-        />
-      </DismissKeyboardView>
+            <Text style={styles.title}>커뮤니티</Text>
+            <FlatList
+              data={tags}
+              renderItem={_renderItem}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              // keyExtractor={item => item.key}
+            />
+            <View
+              style={{
+                borderBottomWidth: 1,
+                width: '100%',
+                marginVertical: 20,
+                borderColor: 'rgba(218, 218, 218, 1)',
+              }}
+            />
+            <Text style={styles.total}>전체 {groups.length}개</Text>
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 }

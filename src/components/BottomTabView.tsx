@@ -21,7 +21,12 @@ function BottomTabView(props) {
       })}>
       <Tab.Screen
         name="갤러리"
-        children={() => <Galleries galleries={props.galleries} />}
+        children={() => (
+          <Galleries
+            galleries={props.galleries}
+            gallerySet={props.gallerySet}
+          />
+        )}
       />
       {/* <Tab.Screen name="Boards" component={Boards} /> */}
       <Tab.Screen

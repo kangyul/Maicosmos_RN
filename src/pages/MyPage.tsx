@@ -21,6 +21,7 @@ function MyPage({navigation: {navigate}}) {
   const [friendCnt, setFriendCnt] = useState(0);
   const [imageCnt, setImageCnt] = useState(0);
   const [galleries, setGalleries] = useState([]);
+  const [gallerySet, setGallerySet] = useState([]);
   const [albums, setAlbums] = useState([]);
 
   const userId = useSelector((state: RootState) => state.user.id);
@@ -43,6 +44,7 @@ function MyPage({navigation: {navigate}}) {
         setImageCnt(response.data.imageCnt);
         setGalleries(response.data.gallery);
         setAlbums(response.data.album);
+        setGallerySet(response.data.gallerySet);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -89,7 +91,7 @@ function MyPage({navigation: {navigate}}) {
           <Text style={styles.editBtnText}>프로필 편집</Text>
         </TouchableOpacity>
       </View>
-      <MyPageTabView galleries={galleries} />
+      <MyPageTabView galleries={galleries} gallerySet={gallerySet} />
     </SafeAreaView>
   );
 }

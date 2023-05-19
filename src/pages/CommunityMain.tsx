@@ -1,6 +1,14 @@
 import axios, {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import BottomTabView from '../components/BottomTabView';
 
 function CommunityMain({navigation, route}) {
@@ -15,6 +23,7 @@ function CommunityMain({navigation, route}) {
   const [boardAN, setBoardAN] = useState([]);
   const [boardFR, setBoardFR] = useState([]);
   const [members, setMembers] = useState([]);
+  const [gallerySet, setGallerySet] = useState([]);
 
   useEffect(() => {
     const getGroupInfo = async () => {
@@ -32,6 +41,7 @@ function CommunityMain({navigation, route}) {
         setBoardFR(response.data.board_fr);
         setMembers(response.data.members);
         setSlotCnt(response.data.slotCnt);
+        setGallerySet(response.data.gallerySet);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -46,7 +56,6 @@ function CommunityMain({navigation, route}) {
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <View
         style={{
-          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-around',
         }}>
@@ -62,21 +71,27 @@ function CommunityMain({navigation, route}) {
           )}
           <Text style={styles.groupName}>{name}</Text>
         </View>
-        <View style={styles.groupInfoItem}>
-          <Text style={styles.groupInfoTitle}>{galleryCnt}</Text>
-          <Text style={styles.groupInfoSubTitle}>갤러리</Text>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
+          <View style={styles.groupInfoItem}>
+            <Text style={styles.groupInfoTitle}>{memberCnt}</Text>
+            <Text style={styles.groupInfoSubTitle}>친구</Text>
+          </View>
+          <View style={styles.groupInfoItem}>
+            <Text style={styles.groupInfoTitle}>{galleryCnt}</Text>
+            <Text style={styles.groupInfoSubTitle}>갤러리</Text>
+          </View>
+          <View style={styles.groupInfoItem}>
+            <Text style={styles.groupInfoTitle}>{slotCnt}</Text>
+            <Text style={styles.groupInfoSubTitle}>작품</Text>
+          </View>
         </View>
-        <View style={styles.groupInfoItem}>
-          <Text style={styles.groupInfoTitle}>{memberCnt}</Text>
-          <Text style={styles.groupInfoSubTitle}>구성원</Text>
-        </View>
-        <View style={styles.groupInfoItem}>
-          <Text style={styles.groupInfoTitle}>{slotCnt}</Text>
-          <Text style={styles.groupInfoSubTitle}>작품</Text>
-        </View>
+        <TouchableOpacity style={styles.addBtn}>
+          <Text style={styles.addBtnText}>친구 요청</Text>
+        </TouchableOpacity>
       </View>
       <BottomTabView
         galleries={galleries}
+        gallerySet={gallerySet}
         boardAN={boardAN}
         boardFR={boardFR}
         members={members}
@@ -88,6 +103,20 @@ function CommunityMain({navigation, route}) {
 export default CommunityMain;
 
 const styles = StyleSheet.create({
+  addBtn: {
+    backgroundColor: '#0cb6ea',
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 10,
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  addBtnText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   groupImg: {
     height: 80,
     width: 80,
@@ -98,9 +127,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   groupName: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
+    marginVertical: 20,
     textAlign: 'center',
   },
   groupAddress: {
@@ -111,17 +140,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   groupInfoItem: {
-    justifyContent: 'space-around',
+    marginHorizontal: 20,
   },
   groupInfoTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
     textAlign: 'center',
   },
   groupInfoSubTitle: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 15,
+    color: '#111',
     textAlign: 'center',
   },
   listTitle: {

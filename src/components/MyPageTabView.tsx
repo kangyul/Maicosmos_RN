@@ -20,7 +20,12 @@ function MyPageTabView(props) {
       })}>
       <Tab.Screen
         name="갤러리"
-        children={() => <MyGallery galleries={props.galleries} />}
+        children={() => (
+          <MyGallery
+            galleries={props.galleries}
+            gallerySet={props.gallerySet}
+          />
+        )}
       />
       <Tab.Screen name="작품" component={MyArtWork} />
     </Tab.Navigator>

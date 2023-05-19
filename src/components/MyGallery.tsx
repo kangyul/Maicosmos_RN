@@ -10,11 +10,10 @@ import {
   View,
 } from 'react-native';
 
-const tags = ['전체', '2023', '2022'];
-
 function MyGallery(props) {
   const [galleries, setGalleries] = useState([]);
   const [temp, setTemp] = useState([]);
+  const [gallerySet, setGallerySet] = useState([]);
   const galleryCnt = props.galleries.length;
 
   const [activeTagIndex, setActiveTagIndex] = useState(0);
@@ -25,11 +24,11 @@ function MyGallery(props) {
         style={[styles.tag, activeTagIndex === index && styles.activeTag]}
         onPress={() => {
           setActiveTagIndex(index);
-          if (tags[index] === '전체') {
+          if (gallerySet[index] === '전체') {
             setGalleries([...temp]);
           } else {
             setGalleries(
-              temp.filter(gallery => gallery.date.includes(tags[index])),
+              temp.filter(gallery => gallery.date.includes(gallerySet[index])),
             );
           }
         }}
@@ -39,7 +38,7 @@ function MyGallery(props) {
             styles.tagText,
             activeTagIndex === index && styles.activeText,
           ]}>
-          {tags[index]}
+          {gallerySet[index]}
         </Text>
       </Pressable>
     );
@@ -48,13 +47,15 @@ function MyGallery(props) {
   useEffect(() => {
     setGalleries(props.galleries);
     setTemp(props.galleries);
-  }, [props.galleries]);
+    setGallerySet(props.gallerySet);
+    console.log(props.gallerySet);
+  }, [props.galleries, props.gallerySet]);
 
   return (
     <View style={styles.backGround}>
       <ScrollView>
         <FlatList
-          data={tags}
+          data={gallerySet}
           renderItem={_renderItem}
           horizontal
           showsHorizontalScrollIndicator={false}
