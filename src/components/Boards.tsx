@@ -16,7 +16,6 @@ function Boards(props) {
           },
         );
         setBoard(response.data.board);
-        console.log(response.data.board);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {

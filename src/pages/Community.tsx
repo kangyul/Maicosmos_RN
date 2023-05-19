@@ -138,7 +138,7 @@ function Community({navigation: {navigate}}) {
                     flexDirection: 'row',
                     padding: SPACING,
                     marginBottom: SPACING / 2,
-                    backgroundColor: '#rgba(115,82,255,1)',
+                    backgroundColor: 'rgba(137,50,234,1)',
                     borderRadius: 8,
                     alignItems: 'center',
                     shadowColor: '#000',

@@ -103,7 +103,7 @@ export default CommunityMain;
 
 const styles = StyleSheet.create({
   addBtn: {
-    backgroundColor: '#0cb6ea',
+    backgroundColor: 'rgba(137,50,234,1)',
     paddingHorizontal: 25,
     paddingVertical: 10,
     borderRadius: 8,
