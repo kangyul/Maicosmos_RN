@@ -48,7 +48,6 @@ function MyGallery(props) {
     setGalleries(props.galleries);
     setTemp(props.galleries);
     setGallerySet(props.gallerySet);
-    console.log(props.gallerySet);
   }, [props.galleries, props.gallerySet]);
 
   return (
