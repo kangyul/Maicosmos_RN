@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Alert,
   Text,
@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
+  SafeAreaView,
 } from 'react-native';
 import axios, {AxiosError} from 'axios';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -98,18 +99,18 @@ function ImageUpload({navigation}) {
       name: response.filename,
       type: response.mime,
     });
-    createThumbnail({
-      url: response.path,
-      timeStamp: 0,
-    })
-      .then(thumb => {
-        setThumbnail({
-          uri: thumb.path,
-          name: 'thumbnail.jpeg',
-          type: thumb.mime,
-        });
-      })
-      .catch(err => console.log({err}));
+    // createThumbnail({
+    //   url: response.path,
+    //   timeStamp: 0,
+    // })
+    //   .then(thumb => {
+    //     setThumbnail({
+    //       uri: thumb.path,
+    //       name: 'thumbnail.jpeg',
+    //       type: thumb.mime,
+    //     });
+    //   })
+    //   .catch(err => console.log({err}));
     setIsPhoto(false);
   }, []);
 
@@ -191,88 +192,94 @@ function ImageUpload({navigation}) {
     video,
   ]);
   return (
-    <DismissKeyboardView>
-      <View style={{alignItems: 'center', marginVertical: 20}}>
-        {isPhoto ? (
-          <TouchableOpacity onPress={onChangeImageFile}>
-            <View style={styles.imageView}>
-              <ImageBackground
-                source={{
-                  uri: imageBackGroundURI,
-                }}
-                style={{height: 300, width: 300}}
-                imageStyle={{borderRadius: 15}}>
-                <View style={styles.cameraIconView}>
-                  <Icon
-                    name="camera"
-                    size={50}
-                    color="#fff"
-                    style={styles.cameraIcon}
-                  />
-                </View>
-              </ImageBackground>
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <Video
-            source={{uri: video.uri}}
-            style={{width: 300, height: 300, alignSelf: 'center'}}
-          />
-        )}
-      </View>
-      <View
-        style={{
-          marginHorizontal: 20,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
+    <SafeAreaView>
+      <DismissKeyboardView>
         <View
           style={{
-            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
           }}>
-          <TouchableOpacity style={styles.tag} onPress={onChangeImageFile}>
-            <Text>이미지</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tag} onPress={onChangeVideoFile}>
-            <Text>동영상</Text>
+          {isPhoto ? (
+            <TouchableOpacity onPress={onChangeImageFile}>
+              <View style={styles.imageView}>
+                <ImageBackground
+                  source={{
+                    uri: imageBackGroundURI,
+                  }}
+                  style={{height: 300, width: 300}}
+                  imageStyle={{borderRadius: 15}}>
+                  <View style={styles.cameraIconView}>
+                    <Icon
+                      name="camera"
+                      size={50}
+                      color="#fff"
+                      style={styles.cameraIcon}
+                    />
+                  </View>
+                </ImageBackground>
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <Video
+              source={{uri: video.uri}}
+              style={{width: 300, height: 300, alignSelf: 'center'}}
+            />
+          )}
+        </View>
+        <View
+          style={{
+            marginHorizontal: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity style={styles.tag} onPress={onChangeImageFile}>
+              <Text>이미지</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.tag} onPress={onChangeVideoFile}>
+              <Text>동영상</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.tag} onPress={onFileUpload}>
+            <Text>업로드</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.tag} onPress={onFileUpload}>
-          <Text>업로드</Text>
-        </TouchableOpacity>
-      </View>
-      {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
+        {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
       <Button title="동영상 선택" onPress={onChangeVideoFile} /> */}
-      <View style={styles.inputWrapper}>
-        <Text style={styles.label}>작품 제목</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeTitle}
-          placeholder="예) 별이 빛나는 밤"
-          placeholderTextColor="#666"
-          value={title}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={titleRef}
-          onSubmitEditing={() => descriptionRef.current?.focus()}
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.inputWrapper}>
-        <Text style={styles.label}>작품 설명</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="예) 빈센트 반 고흐의 가장 널리 알려진 작품"
-          placeholderTextColor="#666"
-          onChangeText={onChangeDescription}
-          value={description}
-          returnKeyType="send"
-          clearButtonMode="while-editing"
-          ref={descriptionRef}
-          onSubmitEditing={onFileUpload}
-        />
-      </View>
-    </DismissKeyboardView>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.label}>작품 제목</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={onChangeTitle}
+            placeholder="예) 별이 빛나는 밤"
+            placeholderTextColor="#666"
+            value={title}
+            returnKeyType="next"
+            clearButtonMode="while-editing"
+            ref={titleRef}
+            onSubmitEditing={() => descriptionRef.current?.focus()}
+            blurOnSubmit={false}
+          />
+        </View>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.label}>작품 설명</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="예) 빈센트 반 고흐의 가장 널리 알려진 작품"
+            placeholderTextColor="#666"
+            onChangeText={onChangeDescription}
+            value={description}
+            returnKeyType="send"
+            clearButtonMode="while-editing"
+            ref={descriptionRef}
+            onSubmitEditing={onFileUpload}
+          />
+        </View>
+      </DismissKeyboardView>
+    </SafeAreaView>
   );
 }
 
