@@ -29,7 +29,7 @@ function Boards(props) {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-      {board.length !== 0 ? (
+      {board !== undefined && board.length > 0 ? (
         board.map(bo => (
           <View style={styles.container}>
             <View style={styles.caContainer}>
