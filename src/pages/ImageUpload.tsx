@@ -99,18 +99,18 @@ function ImageUpload({navigation}) {
       name: response.filename,
       type: response.mime,
     });
-    // createThumbnail({
-    //   url: response.path,
-    //   timeStamp: 0,
-    // })
-    //   .then(thumb => {
-    //     setThumbnail({
-    //       uri: thumb.path,
-    //       name: 'thumbnail.jpeg',
-    //       type: thumb.mime,
-    //     });
-    //   })
-    //   .catch(err => console.log({err}));
+    createThumbnail({
+      url: response.path,
+      timeStamp: 0,
+    })
+      .then(thumb => {
+        setThumbnail({
+          uri: thumb.path,
+          name: 'thumbnail.jpeg',
+          type: thumb.mime,
+        });
+      })
+      .catch(err => console.log({err}));
     setIsPhoto(false);
   }, []);
 
@@ -192,8 +192,8 @@ function ImageUpload({navigation}) {
     video,
   ]);
   return (
-    <SafeAreaView>
-      <DismissKeyboardView>
+    <DismissKeyboardView>
+      <SafeAreaView>
         <View
           style={{
             alignItems: 'center',
@@ -278,8 +278,8 @@ function ImageUpload({navigation}) {
             onSubmitEditing={onFileUpload}
           />
         </View>
-      </DismissKeyboardView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </DismissKeyboardView>
   );
 }
 
