@@ -173,7 +173,7 @@ function ImageUpload({navigation}) {
       // setPhoto(null);
       // navigate to Settings.tsx
       navigation.navigate('SettingsStackScreen', {
-        screen: 'Settings',
+        screen: 'MyPage',
       });
       setTitle('');
       setDescription('');
@@ -191,8 +191,19 @@ function ImageUpload({navigation}) {
     userId,
     video,
   ]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity title="Upload" onPress={onFileUpload}>
+          <Text style={styles.uploadText}>업로드</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, onFileUpload]);
+
   return (
-    <DismissKeyboardView>
+    <DismissKeyboardView style={{backgroundColor: '#fff'}}>
       <SafeAreaView>
         <View
           style={{
@@ -254,7 +265,7 @@ function ImageUpload({navigation}) {
           <TextInput
             style={styles.textInput}
             onChangeText={onChangeTitle}
-            placeholder="예) 별이 빛나는 밤"
+            placeholder="작품 제목을 적어주세요"
             placeholderTextColor="#666"
             value={title}
             returnKeyType="next"
@@ -268,7 +279,7 @@ function ImageUpload({navigation}) {
           <Text style={styles.label}>작품 설명</Text>
           <TextInput
             style={styles.textInput}
-            placeholder="예) 빈센트 반 고흐의 가장 널리 알려진 작품"
+            placeholder="작품 설명을 적어주세요"
             placeholderTextColor="#666"
             onChangeText={onChangeDescription}
             value={description}
@@ -287,16 +298,16 @@ export default ImageUpload;
 
 const styles = StyleSheet.create({
   textInput: {
-    padding: 5,
+    paddingBottom: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: 16,
   },
   inputWrapper: {
     padding: 20,
   },
   label: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 20,
+    fontSize: 15,
+    marginBottom: 10,
   },
   cameraIcon: {
     opacity: 0.7,
@@ -328,5 +339,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  uploadText: {
+    fontSize: 18,
+    color: 'rgba(137,50,234,1)',
+    fontWeight: '500',
+    marginRight: 20,
   },
 });
