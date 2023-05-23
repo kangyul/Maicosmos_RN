@@ -113,7 +113,7 @@ function HomeScreen() {
       <Tab.Screen
         name="ImageUpload"
         component={ImageUpload}
-        options={{headerShown: false}}
+        options={{title: '게시물'}}
       />
       <Tab.Screen
         name="Notification"
