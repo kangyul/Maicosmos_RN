@@ -2,7 +2,7 @@ import axios, {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Alert, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
-function Boards(props) {
+function Boards(props: {groupId: string}) {
   const [board, setBoard] = useState([]);
   const groupId = props.groupId;
 
@@ -28,61 +28,55 @@ function Boards(props) {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-      {board !== undefined && board.length > 0 ? (
-        board.map(bo => (
-          <View style={styles.container}>
-            <View style={styles.caContainer}>
-              <Text style={styles.caText}>{bo.ca_name}</Text>
-            </View>
-            <View style={{padding: 20}}>
-              <View style={{flexDirection: 'row', marginBottom: 20}}>
-                <Image
-                  style={styles.writerImage}
-                  source={{
-                    uri: 'https://maicosmos.com/' + bo.wr_img,
-                  }}
-                />
-                <View style={{alignSelf: 'center'}}>
-                  <Text style={styles.nameText}>{bo.wr_name}</Text>
-                  <Text style={styles.dateText}>{bo.wr_datetime}</Text>
-                </View>
-              </View>
-              <View style={{marginBottom: 10}}>
-                <Text style={styles.subjectText}>{bo.wr_subject}</Text>
-              </View>
-              <View>
-                <Text style={styles.contentText}>{bo.wr_content}</Text>
+      {board.map(bo => (
+        <View style={styles.container}>
+          <View style={styles.caContainer}>
+            <Text style={styles.caText}>{bo.ca_name}</Text>
+          </View>
+          <View style={{padding: 20}}>
+            <View style={{flexDirection: 'row', marginBottom: 20}}>
+              <Image
+                style={styles.writerImage}
+                source={{
+                  uri: 'https://maicosmos.com/' + bo.wr_img,
+                }}
+              />
+              <View style={{alignSelf: 'center'}}>
+                <Text style={styles.nameText}>{bo.wr_name}</Text>
+                <Text style={styles.dateText}>{bo.wr_datetime}</Text>
               </View>
             </View>
-            <View style={styles.iconContainer}>
-              <View
-                style={[
-                  styles.iconView,
-                  {
-                    marginRight: 20,
-                  },
-                ]}>
-                <Image
-                  style={styles.icon}
-                  source={require('../../assets/image/chatbox.png')}
-                />
-                <Text style={styles.numberText}>{bo.wr_comment}</Text>
-              </View>
-              <View style={styles.iconView}>
-                <Image
-                  style={styles.icon}
-                  source={require('../../assets/image/view.png')}
-                />
-                <Text style={styles.numberText}>{bo.wr_hit}</Text>
-              </View>
+            <View style={{marginBottom: 10}}>
+              <Text style={styles.subjectText}>{bo.wr_subject}</Text>
+            </View>
+            <View>
+              <Text style={styles.contentText}>{bo.wr_content}</Text>
             </View>
           </View>
-        ))
-      ) : (
-        <View style={{padding: 20, alignItems: 'center'}}>
-          <Text>게시판 글이 없습니다.</Text>
+          <View style={styles.iconContainer}>
+            <View
+              style={[
+                styles.iconView,
+                {
+                  marginRight: 20,
+                },
+              ]}>
+              <Image
+                style={styles.icon}
+                source={require('../../assets/image/chatbox.png')}
+              />
+              <Text style={styles.numberText}>{bo.wr_comment}</Text>
+            </View>
+            <View style={styles.iconView}>
+              <Image
+                style={styles.icon}
+                source={require('../../assets/image/view.png')}
+              />
+              <Text style={styles.numberText}>{bo.wr_hit}</Text>
+            </View>
+          </View>
         </View>
-      )}
+      ))}
     </ScrollView>
   );
 }
