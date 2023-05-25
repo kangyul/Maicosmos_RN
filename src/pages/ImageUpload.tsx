@@ -20,7 +20,7 @@ import DismissKeyboardView from '../components/DismissKeyboardView';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-function ImageUpload({navigation}) {
+function ImageUpload({navigation, route}) {
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [preview, setPreview] = useState<{uri: string}>();
   const [image, setImage] = useState<{
@@ -202,6 +202,14 @@ function ImageUpload({navigation}) {
     });
   }, [navigation, onFileUpload]);
 
+  useEffect(() => {
+    if (route.params.type === 'image') {
+      onResponse(route.params.file);
+    } else {
+      createVideoThumbnail(route.params.file);
+    }
+  }, [route.params.type, route.params.file, onResponse, createVideoThumbnail]);
+
   return (
     <DismissKeyboardView style={{backgroundColor: '#fff'}}>
       <SafeAreaView>
@@ -233,7 +241,7 @@ function ImageUpload({navigation}) {
           ) : (
             <Video
               source={{uri: video.uri}}
-              style={{width: 300, height: 300, alignSelf: 'center'}}
+              style={{width: '100%', height: 300, alignSelf: 'center'}}
             />
           )}
         </View>
@@ -254,9 +262,6 @@ function ImageUpload({navigation}) {
               <Text>동영상</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.tag} onPress={onFileUpload}>
-            <Text>업로드</Text>
-          </TouchableOpacity>
         </View>
         {/* <Button title="이미지 선택" onPress={onChangeImageFile} />
       <Button title="동영상 선택" onPress={onChangeVideoFile} /> */}

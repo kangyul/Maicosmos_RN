@@ -1,5 +1,4 @@
 import React from 'react';
-import Ionic from 'react-native-vector-icons/Ionicons';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Community from './Community';
@@ -12,7 +11,8 @@ import Home from './Home';
 import Notification from './Notification';
 import {SvgUri} from 'react-native-svg';
 import Settings from './Settings';
-import FinishButton from '../components/FinishButton';
+import ImagePicker from 'react-native-image-crop-picker';
+import {SafeAreaView} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -64,7 +64,7 @@ function SettingsStackScreen() {
   );
 }
 
-function HomeScreen() {
+function HomeScreen({navigation}) {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -114,6 +114,30 @@ function HomeScreen() {
         name="ImageUpload"
         component={ImageUpload}
         options={{title: '게시물'}}
+        listeners={({navigation, route}) => ({
+          tabPress: e => {
+            // Prevent default action
+            e.preventDefault();
+            //Any custom code here
+
+            ImagePicker.openPicker({
+              includeExif: true,
+              includeBase64: true,
+            }).then(file => {
+              if (file.mime.includes('image')) {
+                navigation.navigate('ImageUpload', {
+                  file: file,
+                  type: 'image',
+                });
+              } else {
+                navigation.navigate('ImageUpload', {
+                  file: file,
+                  type: 'video',
+                });
+              }
+            });
+          },
+        })}
       />
       <Tab.Screen
         name="Notification"
@@ -127,7 +151,7 @@ function HomeScreen() {
       <Tab.Screen
         name="SettingsStackScreen"
         component={SettingsStackScreen}
-        options={{headerShown: false}}
+        options={{title: '마이페이지', headerShown: true}}
       />
     </Tab.Navigator>
   );
