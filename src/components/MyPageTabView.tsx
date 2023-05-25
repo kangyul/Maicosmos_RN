@@ -3,6 +3,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 
 import MyGallery from './MyGallery';
 import MyArtWork from './MyArtWork';
+import MyFriends from './MyFriends';
 
 function MyPageTabView(props) {
   const Tab = createMaterialTopTabNavigator();
@@ -27,7 +28,11 @@ function MyPageTabView(props) {
           />
         )}
       />
-      <Tab.Screen name="작품" component={MyArtWork} />
+      <Tab.Screen
+        name="작품"
+        children={() => <MyArtWork albums={props.albums} />}
+      />
+      <Tab.Screen name="친구" component={MyFriends} />
     </Tab.Navigator>
   );
 }

@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
+import Icon from 'react-native-vector-icons/Feather';
 
 const numColumns = 3;
 const formatData = (data, numColumns) => {
@@ -37,7 +38,7 @@ const formatData = (data, numColumns) => {
   return data;
 };
 
-function MyArtWork() {
+function MyArtWork(props) {
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isListEnd, setIsListEnd] = useState(false);
@@ -53,6 +54,98 @@ function MyArtWork() {
   const [modalDate, setModalDate] = useState<string>('');
   const [modalDesc, setModalDesc] = useState<string>('');
   const [modalImage, setModalImage] = useState<string>('');
+  const [modalLikes, setModalLikes] = useState<string>('');
+
+  // 앨범
+  const [album, setAlbum] = useState([]);
+  const [activeTagIndex, setActiveTagIndex] = useState(0);
+
+  const allImages = useCallback(async () => {
+    if (isListEnd) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        'https://maicosmos.com/RN/artworks.php',
+        {
+          userId,
+          offset: currentPage,
+        },
+      );
+      if (response.data.listEnd) {
+        setIsListEnd(true);
+      }
+      console.log(response.data.image);
+
+      if (currentPage === 0) {
+        setImages([...response.data.image]);
+      } else {
+        setImages([...images, ...response.data.image]);
+      }
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse) {
+        Alert.alert('알림', errorResponse.data.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, images, isListEnd, userId]);
+
+  const albumSort = useCallback(
+    async albumId => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/albumFilter.php',
+          {
+            albumId: albumId,
+            offset: currentPage,
+          },
+        );
+
+        console.log(response.data.image);
+
+        setImages([...response.data.image]);
+      } catch {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [currentPage],
+  );
+
+  const _renderItem = ({item, index}) => {
+    return (
+      <Pressable
+        style={[styles.tag, activeTagIndex === index && styles.activeTag]}
+        onPress={() => {
+          setActiveTagIndex(index);
+          setCurrentPage(0);
+          if (album[index] === '전체') {
+            allImages();
+          } else {
+            albumSort(album[index].key);
+          }
+        }}
+        key={index}>
+        <Text
+          style={[
+            styles.tagText,
+            activeTagIndex === index && styles.activeText,
+          ]}>
+          {album[index].albumname}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  useEffect(() => {
+    setAlbum(props.albums);
+  }, [props.albums]);
 
   const showModal = useCallback(async (id: string) => {
     console.log('작품 ID: ' + id);
@@ -70,6 +163,7 @@ function MyArtWork() {
       setModalDate(response.data.image.date);
       setModalName(response.data.image.name);
       setModalImage('https://maicosmos.com' + response.data.image.imageurl);
+      setModalLikes(response.data.image.likes);
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
       if (errorResponse) {
@@ -206,6 +300,14 @@ function MyArtWork() {
 
   return (
     <View style={{backgroundColor: '#fff'}}>
+      <FlatList
+        data={album}
+        renderItem={_renderItem}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{padding: 20, marginBottom: 10}}
+        // keyExtractor={item => item.key}
+      />
       <Modal
         animationType="fade"
         transparent={true}
@@ -228,6 +330,10 @@ function MyArtWork() {
               }}
             />
             <View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon size={15} name="heart" />
+                <Text style={{marginLeft: 5}}>{modalLikes}</Text>
+              </View>
               <Text>작품 제목: {modalTitle}</Text>
               <Text>작가 이름: {modalName}</Text>
               <Text>날짜: {modalDate}</Text>
@@ -253,6 +359,7 @@ function MyArtWork() {
         key={3}
         // onRefresh={onRefresh}
         refreshing={refreshing}
+        style={{marginBottom: 100}}
       />
     </View>
   );
@@ -286,7 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -301,6 +408,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    alignSelf: 'center',
   },
   textStyle: {
     color: 'white',
@@ -309,6 +417,27 @@ const styles = StyleSheet.create({
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+  },
+  activeTag: {
+    backgroundColor: '#111',
+  },
+  activeText: {
+    color: '#fff',
+  },
+  tag: {
+    // backgroundColor: SOCIAL_BLUE,
+    borderColor: '#727477',
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    height: 40,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tagText: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
 
