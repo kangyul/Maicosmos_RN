@@ -36,9 +36,6 @@ const CommunityMain: React.FC = ({navigation, route}) => {
   const [galleryCnt, setGalleryCnt] = useState(0);
   const [slotCnt, setSlotCnt] = useState(0);
   const [galleries, setGalleries] = useState([]);
-  const [boardAN, setBoardAN] = useState([]);
-  const [boardFR, setBoardFR] = useState([]);
-  const [members, setMembers] = useState([]);
   const [gallerySet, setGallerySet] = useState([]);
 
   const [isAdmin, setIsAdmin] = useState<boolean>(0);
@@ -57,9 +54,6 @@ const CommunityMain: React.FC = ({navigation, route}) => {
         setMemberCnt(response.data.memberCnt);
         setGalleryCnt(response.data.galleryCnt);
         setGalleries(response.data.gallery);
-        setBoardAN(response.data.board_an);
-        setBoardFR(response.data.board_fr);
-        setMembers(response.data.members);
         setSlotCnt(response.data.slotCnt);
         setGallerySet(response.data.gallerySet);
 
@@ -130,7 +124,7 @@ const CommunityMain: React.FC = ({navigation, route}) => {
       </Tabs.Tab>
       <Tabs.Tab name="구성원">
         <Tabs.ScrollView style={{backgroundColor: '#fff'}}>
-          <Members members={members} isAdmin={isAdmin} groupId={groupId} />
+          <Members isAdmin={isAdmin} groupId={groupId} />
         </Tabs.ScrollView>
       </Tabs.Tab>
     </Tabs.Container>
