@@ -2,7 +2,7 @@ import axios, {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {Alert, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 
-function Boards(props: {groupId: string}) {
+function Boards(props) {
   const [board, setBoard] = useState([]);
   const groupId = props.groupId;
 
