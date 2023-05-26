@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import DismissKeyboardView from './DismissKeyboardView';
 import axios, {AxiosError} from 'axios';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store/reducer';
 
 function Members(props) {
   const isAdmin = props.isAdmin;
@@ -19,6 +21,8 @@ function Members(props) {
   const [temp, setTemp] = useState([]);
 
   const [waitList, setWaitList] = useState([]);
+
+  const userId = useSelector((state: RootState) => state.user.id);
 
   const onChangeText = useCallback(
     (text: string) => {
@@ -35,6 +39,52 @@ function Members(props) {
       // console.log(groups.filter(group => group.name.includes(text)));
     },
     [temp],
+  );
+
+  const declineRequest = useCallback(
+    async (id: string) => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/groupDecline.php',
+          {
+            groupId: groupId,
+            id: id,
+          },
+        );
+
+        setWaitList(response.data.waitList);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [groupId],
+  );
+
+  const acceptRequest = useCallback(
+    async (id: string) => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/groupAccept.php',
+          {
+            groupId: groupId,
+            id: id,
+          },
+        );
+
+        setWaitList(response.data.waitList);
+        setMembers(response.data.members);
+        setTemp(response.data.members);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [groupId],
   );
 
   const removeMember = useCallback(async (id: string) => {
@@ -56,11 +106,27 @@ function Members(props) {
     }
   }, []);
 
-  useEffect(() => {
-    setMembers(props.members);
-    setTemp(props.members);
-    console.log(props.members);
+  const addFriend = useCallback(
+    async (id: string) => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/friendRequest.php',
+          {
+            id: userId,
+            friend: id,
+          },
+        );
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [userId],
+  );
 
+  useEffect(() => {
     const getWaitList = async () => {
       try {
         const response = await axios.post(
@@ -71,6 +137,8 @@ function Members(props) {
         );
 
         setWaitList(response.data.waitlist);
+        setMembers(response.data.members);
+        setTemp(response.data.members);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {
@@ -79,7 +147,7 @@ function Members(props) {
       }
     };
     getWaitList();
-  }, [props.members]);
+  }, [groupId]);
 
   return (
     <DismissKeyboardView style={{backgroundColor: '#fff'}}>
@@ -101,10 +169,14 @@ function Members(props) {
         {isAdmin ? (
           <View style={{marginTop: 20}}>
             <Text style={styles.memberCntText}>
-              받은 요청 ({waitList === null ? 0 : waitList.length}명)
+              받은 요청 (
+              {waitList === null || waitList === undefined
+                ? 0
+                : waitList.length}
+              명)
             </Text>
             <View>
-              {waitList !== null
+              {waitList !== null && waitList !== undefined
                 ? waitList.map(member => (
                     <View key={member.id} style={styles.memberView}>
                       <View style={{flex: 1, flexDirection: 'row'}}>
@@ -123,14 +195,14 @@ function Members(props) {
                         <TouchableOpacity
                           style={styles.noBtn}
                           onPress={() => {
-                            removeMember(member.gm_id);
+                            acceptRequest(member.id);
                           }}>
                           <Text style={styles.delBtnText}>수락</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                           style={styles.yesBtn}
                           onPress={() => {
-                            removeMember(member.gm_id);
+                            declineRequest(member.id);
                           }}>
                           <Text style={styles.delBtnText}>거절</Text>
                         </TouchableOpacity>
@@ -149,8 +221,10 @@ function Members(props) {
             borderColor: 'rgba(218, 218, 218, 1)',
           }}
         />
-        <Text style={styles.memberCntText}>{members.length}명</Text>
-        {members.length > 0 ? (
+        <Text style={styles.memberCntText}>
+          {members === null || members === undefined ? 0 : members.length}명
+        </Text>
+        {members !== null && members !== undefined ? (
           <View>
             {members.map(member => (
               <View key={member.id} style={styles.memberView}>
@@ -173,7 +247,11 @@ function Members(props) {
                     <Text style={styles.delBtnText}>삭제</Text>
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity style={styles.addBtn}>
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      addFriend(member.id);
+                    }}>
                     <Text style={styles.addBtnText}>친구 추가</Text>
                   </TouchableOpacity>
                 )}
