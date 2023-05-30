@@ -145,7 +145,7 @@ function HomeScreen({navigation}) {
         options={{
           title: '알림',
           tabBarBadge: 3,
-          tabBarBadgeStyle: {backgroundColor: '#00b9ef', color: '#fff'},
+          tabBarBadgeStyle: {backgroundColor: '#fd3040', color: '#fff'},
         }}
       />
       <Tab.Screen
