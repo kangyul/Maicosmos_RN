@@ -100,6 +100,12 @@ function Home() {
               />
             </View>
           </Swiper>
+          <View style={{padding: 20}}>
+            <Image
+              style={{width: '100%', height: undefined, aspectRatio: 786 / 648}}
+              source={require('../../assets/image/intro.png')}
+            />
+          </View>
           <View style={(styles.container, {marginHorizontal: 10})}>
             <Text
               style={{
@@ -131,9 +137,7 @@ function Home() {
                   <Text style={styles.imageText}>소풍</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -147,9 +151,7 @@ function Home() {
                   <Text style={styles.imageText}>집</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -165,9 +167,7 @@ function Home() {
               </View>
               <View style={{flex: 1, flexDirection: 'row', marginBottom: 30}}>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -181,9 +181,7 @@ function Home() {
                   <Text style={styles.imageText}>강아지</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -197,9 +195,7 @@ function Home() {
                   <Text style={styles.imageText}>무당벌레</Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
