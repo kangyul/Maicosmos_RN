@@ -100,7 +100,7 @@ const CommunityMain: React.FC = ({navigation, route}) => {
             <Text style={styles.commInfoSubTitle}>작품</Text>
           </View>
         </View>
-        {isAdmin ? (
+        {role >= 1 ? (
           <View style={styles.adminView}>
             <Text style={styles.addBtnText}>관리자</Text>
           </View>
@@ -127,7 +127,7 @@ const CommunityMain: React.FC = ({navigation, route}) => {
       </Tabs.Tab>
       <Tabs.Tab name="구성원">
         <Tabs.ScrollView style={{backgroundColor: '#fff'}}>
-          <Members isAdmin={isAdmin} groupId={groupId} />
+          <Members isAdmin={isAdmin} groupId={groupId} role={role} />
         </Tabs.ScrollView>
       </Tabs.Tab>
     </Tabs.Container>

@@ -23,6 +23,7 @@ import {
 function Members(props) {
   const isAdmin = props.isAdmin;
   const groupId = props.groupId;
+  const role = props.role;
   const [members, setMembers] = useState([]);
   const [temp, setTemp] = useState([]);
 
@@ -32,6 +33,8 @@ function Members(props) {
 
   const onChangeText = useCallback(
     (text: string) => {
+      text = text.toLowerCase();
+
       if (text === '') {
         setMembers([...temp]);
         return;
@@ -39,7 +42,9 @@ function Members(props) {
       // setGroups([]);
       setMembers(
         temp.filter(
-          member => member.name.includes(text) || member.nick.includes(text),
+          member =>
+            member.name.toLowerCase().includes(text) ||
+            member.nick.toLowerCase().includes(text),
         ),
       );
       // console.log(groups.filter(group => group.name.includes(text)));
@@ -82,6 +87,7 @@ function Members(props) {
 
         setWaitList(response.data.waitList);
         setMembers(response.data.members);
+        console.log(response.data.members);
         setTemp(response.data.members);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
@@ -90,7 +96,7 @@ function Members(props) {
         }
       }
     },
-    [groupId],
+    [groupId, members],
   );
 
   const removeMember = useCallback(async (id: string) => {
@@ -111,6 +117,55 @@ function Members(props) {
       }
     }
   }, []);
+
+  const memberUp = useCallback(
+    async (id: string) => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/groupMemberUp.php',
+          {
+            id: id,
+            groupId: groupId,
+            myRole: role,
+          },
+        );
+
+        setMembers(response.data.members);
+        console.log(response.data.members);
+        setTemp(response.data.members);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [groupId, role],
+  );
+
+  const memberDown = useCallback(
+    async (id: string) => {
+      try {
+        const response = await axios.post(
+          'https://maicosmos.com/RN/groupMemberDown.php',
+          {
+            id: id,
+            groupId: groupId,
+          },
+        );
+
+        setMembers(response.data.members);
+        console.log(response.data.members);
+        setTemp(response.data.members);
+      } catch (error) {
+        const errorResponse = (error as AxiosError).response;
+        if (errorResponse) {
+          Alert.alert('알림', errorResponse.data.message);
+        }
+      }
+    },
+    [groupId],
+  );
 
   const addFriend = useCallback(
     async (id: string) => {
@@ -172,7 +227,7 @@ function Members(props) {
             />
           </View>
         </View>
-        {isAdmin ? (
+        {role >= 1 ? (
           <View style={{marginTop: 20}}>
             <Text style={styles.memberCntText}>
               받은 요청 (
@@ -246,30 +301,25 @@ function Members(props) {
                     <Text style={styles.name}>{member.name}</Text>
                   </View>
                 </View>
-                {isAdmin ? (
-                  // <TouchableOpacity
-                  //   style={styles.delBtn}
-                  //   onPress={() => {
-                  //     removeMember(member.gm_id);
-                  //   }}>
-                  //   <Text style={styles.delBtnText}>삭제</Text>
-                  // </TouchableOpacity>
-                  <Menu>
-                    <MenuTrigger style={styles.delBtn} text="관리" />
-                    <MenuOptions optionsContainerStyle={{width: 100}}>
-                      <MenuOption onSelect={() => alert(`Save`)}>
-                        <Text style={styles.manageBtnText}>등업</Text>
-                      </MenuOption>
-                      <MenuOption onSelect={() => alert(`Delete`)}>
-                        <Text style={styles.manageBtnText}>강등</Text>
-                      </MenuOption>
-                      <MenuOption onSelect={() => removeMember(member.gm_id)}>
-                        <Text style={[styles.manageBtnText, {color: 'red'}]}>
-                          삭제
-                        </Text>
-                      </MenuOption>
-                    </MenuOptions>
-                  </Menu>
+                {role >= 1 ? (
+                  role > member.role ? (
+                    <Menu>
+                      <MenuTrigger style={styles.delBtn} text="관리" />
+                      <MenuOptions optionsContainerStyle={{width: 100}}>
+                        <MenuOption onSelect={() => memberUp(member.id)}>
+                          <Text style={styles.manageBtnText}>등업</Text>
+                        </MenuOption>
+                        <MenuOption onSelect={() => memberDown(member.id)}>
+                          <Text style={styles.manageBtnText}>강등</Text>
+                        </MenuOption>
+                        <MenuOption onSelect={() => removeMember(member.gm_id)}>
+                          <Text style={[styles.manageBtnText, {color: 'red'}]}>
+                            삭제
+                          </Text>
+                        </MenuOption>
+                      </MenuOptions>
+                    </Menu>
+                  ) : null
                 ) : (
                   <TouchableOpacity
                     style={styles.addBtn}
