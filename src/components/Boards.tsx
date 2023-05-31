@@ -29,7 +29,7 @@ function Boards(props) {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
       {board.map(bo => (
-        <View style={styles.container}>
+        <View style={styles.container} key={bo.wr_id}>
           <View style={styles.caContainer}>
             <Text style={styles.caText}>{bo.ca_name}</Text>
           </View>
