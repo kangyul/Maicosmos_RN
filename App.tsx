@@ -5,6 +5,7 @@ import AppInner from './AppInner';
 import {useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
 import {Alert} from 'react-native';
+import {MenuProvider} from 'react-native-popup-menu';
 
 function App() {
   useEffect(() => {
@@ -16,9 +17,11 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <AppInner />
-    </Provider>
+    <MenuProvider>
+      <Provider store={store}>
+        <AppInner />
+      </Provider>
+    </MenuProvider>
   );
 }
 

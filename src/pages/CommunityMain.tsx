@@ -39,6 +39,7 @@ const CommunityMain: React.FC = ({navigation, route}) => {
   const [gallerySet, setGallerySet] = useState([]);
 
   const [isAdmin, setIsAdmin] = useState<boolean>(0);
+  const [role, setRole] = useState(0);
 
   const userId = useSelector((state: RootState) => state.user.id);
 
@@ -65,6 +66,8 @@ const CommunityMain: React.FC = ({navigation, route}) => {
           },
         );
         setIsAdmin(responseIsAdmin.data.isAdmin);
+        setRole(responseIsAdmin.data.role);
+        console.log(role);
       } catch (error) {
         const errorResponse = (error as AxiosError).response;
         if (errorResponse) {

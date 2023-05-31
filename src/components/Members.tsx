@@ -13,6 +13,12 @@ import DismissKeyboardView from './DismissKeyboardView';
 import axios, {AxiosError} from 'axios';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 function Members(props) {
   const isAdmin = props.isAdmin;
@@ -234,18 +240,36 @@ function Members(props) {
                     source={{uri: 'https://www.maicosmos.com' + member.img}}
                   />
                   <View style={{alignSelf: 'center'}}>
-                    <Text style={styles.nick}>{member.nick}</Text>
+                    <Text style={styles.nick}>
+                      {member.nick} [{member.roleName}]
+                    </Text>
                     <Text style={styles.name}>{member.name}</Text>
                   </View>
                 </View>
                 {isAdmin ? (
-                  <TouchableOpacity
-                    style={styles.delBtn}
-                    onPress={() => {
-                      removeMember(member.gm_id);
-                    }}>
-                    <Text style={styles.delBtnText}>삭제</Text>
-                  </TouchableOpacity>
+                  // <TouchableOpacity
+                  //   style={styles.delBtn}
+                  //   onPress={() => {
+                  //     removeMember(member.gm_id);
+                  //   }}>
+                  //   <Text style={styles.delBtnText}>삭제</Text>
+                  // </TouchableOpacity>
+                  <Menu>
+                    <MenuTrigger style={styles.delBtn} text="관리" />
+                    <MenuOptions optionsContainerStyle={{width: 100}}>
+                      <MenuOption onSelect={() => alert(`Save`)}>
+                        <Text style={styles.manageBtnText}>등업</Text>
+                      </MenuOption>
+                      <MenuOption onSelect={() => alert(`Delete`)}>
+                        <Text style={styles.manageBtnText}>강등</Text>
+                      </MenuOption>
+                      <MenuOption onSelect={() => removeMember(member.gm_id)}>
+                        <Text style={[styles.manageBtnText, {color: 'red'}]}>
+                          삭제
+                        </Text>
+                      </MenuOption>
+                    </MenuOptions>
+                  </Menu>
                 ) : (
                   <TouchableOpacity
                     style={styles.addBtn}
@@ -271,6 +295,11 @@ function Members(props) {
 export default Members;
 
 const styles = StyleSheet.create({
+  manageBtnText: {
+    fontSize: 16,
+    marginVertical: 8,
+    alignSelf: 'center',
+  },
   searchIcon: {
     height: 25,
     width: 25,
