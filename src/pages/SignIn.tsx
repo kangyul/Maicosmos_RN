@@ -145,8 +145,12 @@ function SignIn({navigation}: SignInScreenProps) {
 
   const canGoNext = userId && password;
   return (
-    <DismissKeyboardView style={styles.backGround}>
-      <View style={{flex: 1}}>
+    <DismissKeyboardView
+      contentContainerStyle={{
+        flex: 1,
+        backgroundColor: '#fff',
+      }}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
         <Image
           style={styles.signInImage}
           source={require('../../assets/image/sign_logo.png')}
