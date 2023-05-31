@@ -43,6 +43,26 @@ const CommunityMain: React.FC = ({navigation, route}) => {
 
   const userId = useSelector((state: RootState) => state.user.id);
 
+  // const requestJoin = useCallback(
+  //   async (id: string) => {
+  //     try {
+  //       const response = await axios.post(
+  //         'https://maicosmos.com/RN/groupRequest.php',
+  //         {
+  //           id: userId,
+  //           groupId: groupId,
+  //         },
+  //       );
+  //     } catch (error) {
+  //       const errorResponse = (error as AxiosError).response;
+  //       if (errorResponse) {
+  //         Alert.alert('알림', errorResponse.data.message);
+  //       }
+  //     }
+  //   },
+  //   [userId],
+  // );
+
   useEffect(() => {
     const getGroupInfo = async () => {
       try {
