@@ -13,6 +13,12 @@ import DismissKeyboardView from './DismissKeyboardView';
 import axios, {AxiosError} from 'axios';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 
 function MyFriends() {
   const [friends, setFriends] = useState([]);
@@ -69,13 +75,17 @@ function MyFriends() {
 
   const onChangeText = useCallback(
     (text: string) => {
+      text = text.toLowerCase();
+
       if (text === '') {
         setFriends([...temp]);
         return;
       }
       setFriends(
         temp.filter(
-          friend => friend.name.includes(text) || friend.nick.includes(text),
+          friend =>
+            friend.name.toLowerCase().includes(text) ||
+            friend.nick.toLowerCase().includes(text),
         ),
       );
       // console.log(groups.filter(group => group.name.includes(text)));
@@ -114,11 +124,43 @@ function MyFriends() {
                   <Text style={styles.name}>{friend.name}</Text>
                 </View>
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.addBtn}
                 onPress={() => unFriend(friend.id)}>
                 <Text style={styles.addBtnText}>친구 취소</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <Menu>
+                <MenuTrigger style={styles.delBtn}>
+                  <Image
+                    style={{width: 4, height: 18}}
+                    source={{
+                      uri: 'https://www.maicosmos.com/img/icons/vertical_more_gray.png',
+                    }}
+                  />
+                </MenuTrigger>
+                <MenuOptions optionsContainerStyle={{width: 100}}>
+                  <MenuOption onSelect={() => memberDown(member.id)}>
+                    <Text style={styles.manageBtnText}>프로필 방문</Text>
+                  </MenuOption>
+                  <MenuOption
+                    onSelect={() =>
+                      Alert.alert('', '친구 관계를 끊으시겠습니까?', [
+                        {
+                          text: '예',
+                          onPress: () => unFriend(friend.id),
+                        },
+                        {
+                          text: '아니오',
+                          onPress: () => console.warn('No Pressed'),
+                        },
+                      ])
+                    }>
+                    <Text style={[styles.manageBtnText, {color: 'red'}]}>
+                      친구 끊기
+                    </Text>
+                  </MenuOption>
+                </MenuOptions>
+              </Menu>
             </View>
           ))}
         </View>
