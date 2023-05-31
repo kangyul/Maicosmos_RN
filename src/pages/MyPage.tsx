@@ -36,7 +36,7 @@ const formatData = (data, numColumns) => {
     cnt += 1;
   }
 
-  console.log('추가 개수: ' + cnt);
+  // console.log('추가 개수: ' + cnt);
 
   return data;
 };
@@ -49,6 +49,10 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
   const [galleriesTemp, setGalleriesTemp] = useState([]);
   const [gallerySet, setGallerySet] = useState([]);
   const [albums, setAlbums] = useState([]);
+
+  const [activeAlbumTagIndex, setActiveAlbumTagIndex] = useState(0);
+  const [activeAlbumKey, setActiveAlbumKey] = useState(0);
+  const [activeGalleryTagIndex, setActiveGalleryTagIndex] = useState(0);
 
   const userId = useSelector((state: RootState) => state.user.id);
   const nick = useSelector((state: RootState) => state.user.nick);
@@ -75,7 +79,6 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
         setFriendCnt(response.data.friendCnt);
         setImageCnt(response.data.imageCnt);
         setGalleries(response.data.gallery);
-        console.log(galleries);
         setGalleriesTemp(response.data.gallery);
         setAlbums(response.data.album);
         setGallerySet(response.data.gallerySet);
@@ -127,17 +130,15 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
 
   useEffect(() => {
     const getUserImages = async () => {
-      if (isListEnd) {
-        return;
-      }
-
       setIsLoading(true);
       try {
+        console.log('key: ' + activeAlbumKey);
         const response = await axios.post(
           'https://maicosmos.com/RN/artworks.php',
           {
             userId,
             offset: currentPage,
+            albumId: activeAlbumKey,
           },
         );
         if (response.data.listEnd) {
@@ -161,7 +162,7 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
       }
     };
     getUserImages();
-  }, [userId, currentPage]);
+  }, [userId, currentPage, activeAlbumKey]);
   ////////////////////////////////////////////////////////////////
   ///////// 작품 렌더링 /////////////////////////////////////////////
 
@@ -203,14 +204,16 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
   // 모달
 
   // 갤러리 연도 표시 탭
-  const [activeTagIndex, setActiveTagIndex] = useState(0);
 
   const renderYear = ({item, index}) => {
     return (
       <Pressable
-        style={[styles.tag, activeTagIndex === index && styles.activeTag]}
+        style={[
+          styles.tag,
+          activeGalleryTagIndex === index && styles.activeTag,
+        ]}
         onPress={() => {
-          setActiveTagIndex(index);
+          setActiveGalleryTagIndex(index);
           if (gallerySet[index] === '전체') {
             setGalleries([...galleriesTemp]);
           } else {
@@ -225,7 +228,7 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
         <Text
           style={[
             styles.tagText,
-            activeTagIndex === index && styles.activeText,
+            activeGalleryTagIndex === index && styles.activeText,
           ]}>
           {gallerySet[index]}
         </Text>
@@ -235,18 +238,25 @@ const MyPage: React.FC = ({navigation: {navigate}}) => {
   // 갤러리 연도 표시 탭
 
   // 앨범
+
   const renderAlbum = ({item, index}) => {
     return (
       <Pressable
-        style={[styles.tag, activeTagIndex === index && styles.activeTag]}
-        onPress={() => {
-          setActiveTagIndex(index);
+        style={[styles.tag, activeAlbumTagIndex === index && styles.activeTag]}
+        onPress={async () => {
+          if (albums[index].key !== activeAlbumKey) {
+            await setIsListEnd(false);
+            await setImages([]);
+            await setCurrentPage(0);
+            await setActiveAlbumTagIndex(index);
+            await setActiveAlbumKey(albums[index].key);
+          }
         }}
         key={index}>
         <Text
           style={[
             styles.tagText,
-            activeTagIndex === index && styles.activeText,
+            activeAlbumTagIndex === index && styles.activeText,
           ]}>
           {albums[index].albumname}
         </Text>
