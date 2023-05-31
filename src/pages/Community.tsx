@@ -64,12 +64,14 @@ function Community({navigation: {navigate}}) {
 
   const onChangeText = useCallback(
     (text: string) => {
+      text = text.toLowerCase();
+
       if (text === '') {
         setGroups([...temp]);
         return;
       }
       // setGroups([]);
-      setGroups(temp.filter(group => group.name.includes(text)));
+      setGroups(temp.filter(group => group.name.toLowerCase().includes(text)));
       // console.log(groups.filter(group => group.name.includes(text)));
     },
     [temp],
@@ -221,15 +223,17 @@ function Community({navigation: {navigate}}) {
             <View
               style={{
                 flex: 1,
+                paddingRight: 10,
                 paddingVertical: 20,
                 flexDirection: 'row',
                 alignItems: 'center',
+                justifyContent: 'space-between',
               }}>
               <Image
                 style={{width: 30, height: 30}}
                 source={require('../../assets/image/smallLogo.png')}
               />
-              <View style={{flex: 1, left: 0, right: 0}}>
+              <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
                     source={require('../../assets/image/search.png')}
@@ -244,7 +248,7 @@ function Community({navigation: {navigate}}) {
                   <TextInput
                     style={{
                       height: 35,
-                      width: 350,
+                      width: '100%',
                       marginHorizontal: 10,
                       borderRadius: 20,
                       paddingHorizontal: 10,

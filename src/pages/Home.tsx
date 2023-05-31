@@ -18,19 +18,20 @@ function Home() {
   const [height2, setHeight2] = useState(0);
 
   return (
-    <SafeAreaView style={{backgroundColor: '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <DismissKeyboardView>
         <ScrollView>
           <View
             style={{
               flex: 1,
-              paddingHorizontal: 20,
+              paddingRight: 30,
               paddingVertical: 20,
               flexDirection: 'row',
               alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
             <Image
-              style={{width: 30, height: 30}}
+              style={{width: 30, height: 30, marginLeft: 20}}
               source={require('../../assets/image/smallLogo.png')}
             />
             <View style={{flex: 1}}>
@@ -48,7 +49,7 @@ function Home() {
                 <TextInput
                   style={{
                     height: 35,
-                    width: 350,
+                    width: '100%',
                     marginHorizontal: 10,
                     borderRadius: 20,
                     backgroundColor: '#f5f5f5',
@@ -275,9 +276,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -291,9 +290,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -307,9 +304,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -325,9 +320,7 @@ function Home() {
               </View>
               <View style={{flex: 1, flexDirection: 'column', marginBottom: 0}}>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -341,9 +334,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -357,9 +348,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
@@ -373,9 +362,7 @@ function Home() {
                   </View>
                 </View>
                 <View style={{flex: 1}}>
-                  <View
-                    onLayout={e => setHeight2(e.nativeEvent.layout.width)}
-                    style={{margin: 10}}>
+                  <View style={{margin: 10}}>
                     <Image
                       style={{
                         flex: 1,
